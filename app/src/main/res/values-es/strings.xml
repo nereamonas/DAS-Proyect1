@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DAS-Proyect1</string>
     <string name="inicioDeSesion">Inicio de Sesión</string>
     <string name="crearUnaCuenta">Crear una cuenta</string>
     <string name="idiomasDisponibles">Idiomas disponibles:</string>
-    <string name="EU">Vasco</string>
-    <string name="ES">Español</string>
     <string name="EN">Inglés</string>
-    <string name="user">Nombre de usuario</string>
-    <string name="pass">Contraseña</string>
+    <string name="ES">Español</string>
+    <string name="EU">Vasco</string>
+    <string name="user">Usuario:</string>
+    <string name="pass">Contraseña:</string>
     <string name="entrar">Entrar</string>
     <string name="crear">Crear</string>
     <string name="editar">Editar</string>
@@ -24,32 +25,24 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_rutinas">Rutinas</string>
     <string name="menu_cambiarIdioma">Cambiar idioma</string>
-    <string name="menu_notificaciones">Notificaciones</string>
-    <string name="menu_ejercicios">Ejercicios</string>
-    <string name="login">login</string>
     <string name="singin">singin</string>
-    <!-- Preference Titles -->
+    <string name="login">login</string>
+    <string name="menu_ejercicios">Ejercicios</string>
+    <string name="menu_notificaciones">Notificaciones</string>
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="menu_ajustes">Ajustes</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email">Email</string>
 </resources>
