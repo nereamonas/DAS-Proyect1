@@ -1,17 +1,27 @@
 package com.example.das_proyect1.rutEjer;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +29,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.helpClass.Ejercicio;
+import com.example.das_proyect1.helpClass.ImgCorrespondiente;
+import com.example.das_proyect1.ui.rutinas.RutinasFragment;
+
+import java.util.ArrayList;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class RutEjerFragment extends Fragment {
     private TextView titulo;
@@ -29,8 +49,12 @@ public class RutEjerFragment extends Fragment {
     private Button btn_next;
     private TextView temporizador;
     private Button btn_startStop;
+    private MiDB db;
 
+    private int posicion;
+    private ArrayList<Ejercicio> ejercicios;
     private CountDownTimer countDownTimer;
+    private ImgCorrespondiente imgCorrespondiente;
     private long tiempoFaltante;
     private boolean encendido;
 
@@ -49,18 +73,34 @@ public class RutEjerFragment extends Fragment {
             }
         });
 
-        imageView=root.findViewById(R.id.image_view);
-        temporizador=root.findViewById(R.id.temporizador);
-        btn_startStop=root.findViewById(R.id.btn_stopStart);
-        titulo=root.findViewById(R.id.tituloEjer);
-        desc=root.findViewById(R.id.descEjer);
-        encendido=true;
-        btn_next=root.findViewById(R.id.btn_next);
-        elemPendientes=root.findViewById(R.id.elemPendientes);
+        int rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
+
+
+        this.imageView=root.findViewById(R.id.image_view);
+        this.temporizador=root.findViewById(R.id.temporizador);
+        this.btn_startStop=root.findViewById(R.id.btn_stopStart);
+        this.titulo=root.findViewById(R.id.tituloEjer);
+        this.desc=root.findViewById(R.id.descEjer);
+        this.encendido=true;
+        this.btn_next=root.findViewById(R.id.btn_next);
+        this.elemPendientes=root.findViewById(R.id.elemPendientes);
 
 
         //insertamos los textos del primer elemento de la base de datos
-        tiempoFaltante=600000;//10mins
+        db=new MiDB(getContext());
+        this.ejercicios= db.getEjerciciosDeLaRutina(rutId);
+        Log.d("Logs"," rutid siguientefrag"+rutId);
+
+        this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
+        this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
+        this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+        this.elemPendientes.setText((this.posicion+1)+"/"+this.ejercicios.size());
+        //La imagen
+        imgCorrespondiente= new ImgCorrespondiente();
+        this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
+
+
+
         empezarTemporizador();
         actualizarTemporizador();
 
@@ -134,5 +174,35 @@ public class RutEjerFragment extends Fragment {
     public void pasarAlSiguienteElemento(){
         //Actualizamos todos los elementos al siguiente de la bbdd
         //hasieratuamos el contador
+        this.posicion++;
+        if(this.posicion<this.ejercicios.size()){
+            this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
+            this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
+            this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+            this.elemPendientes.setText((this.posicion+1)+"/"+this.ejercicios.size());
+            this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
+
+        }else{
+            //Has terminado la rutina. saltar notificacion
+            NotificationManager elManager= (NotificationManager)getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
+            NotificationCompat.Builder elBuilder= new NotificationCompat.Builder(getContext());
+            Intent intent = new Intent(getContext(), RutinasFragment.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
+
+            elBuilder.setSmallIcon(R.drawable.bart)
+            .setContentTitle("Fin entrenamiento")
+            .setContentText("Has superado todo el entrenamiento. Felicidades")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setLights(Color.MAGENTA, 1000, 1000)
+            .setVibrate(new long[]{1000,1000,1000,1000,1000})
+            .setDefaults(Notification.DEFAULT_SOUND)
+            .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
+            .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
+
+            elManager.notify(1, elBuilder.build());
+
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas);
+
+        }
     }
 }

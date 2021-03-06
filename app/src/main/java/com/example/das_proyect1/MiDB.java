@@ -7,8 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.das_proyect1.helpClass.Ejercicio;
+import com.example.das_proyect1.helpClass.Rutina;
 import com.example.das_proyect1.helpClass.Usuario;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MiDB extends SQLiteOpenHelper {
@@ -41,7 +44,8 @@ public class MiDB extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("select * from rutina where id=1",null);
         if(c==null || c.getCount()==0){
             //Añadir elementos a la base de datos
-            añadirRutina(1,"Ejercicios abdominales","rutinaEjerAbdominal");
+            añadirRutina(1,"Todos","todos");
+            añadirRutina(4,"Ejercicios abdominales","rutinaEjerAbdominal");
             añadirRutina(2,"Ejercicios de brazo","rutinaEjerBrazo");
             añadirRutina(3,"Estiramientos","rutinaEstiramiento");
 
@@ -55,13 +59,19 @@ public class MiDB extends SQLiteOpenHelper {
             añadirEjercicio(8,"Reverse Crunch","Haz el movimiento como se indica en la foto","reverseCrunch","45000");
             añadirEjercicio(9,"Sicsors Abs","Haz el movimiento como se indica en la foto","sicsorsAbs","45000");
             añadirEjercicio(10,"Rolling Plank","Haz el movimiento como se indica en la foto","rollingPlank","45000");
-            //añadirEjercicio(7,"Mountain Climber","Haz el movimiento como se indica en la foto","mountainClimber","45000");
+         
 
             añadirRutEjer(1,1);
             añadirRutEjer(1,2);
             añadirRutEjer(1,3);
             añadirRutEjer(1,4);
-            añadirRutEjer(2,1);
+            añadirRutEjer(1,5);
+            añadirRutEjer(1,6);
+            añadirRutEjer(1,7);
+            añadirRutEjer(1,8);
+            añadirRutEjer(1,9);
+            añadirRutEjer(1,10);
+            añadirRutEjer(2,7);
             añadirRutEjer(2,3);
             añadirRutEjer(2,6);
             añadirRutEjer(2,8);
@@ -69,6 +79,10 @@ public class MiDB extends SQLiteOpenHelper {
             añadirRutEjer(3,9);
             añadirRutEjer(3,10);
             añadirRutEjer(3,7);
+            añadirRutEjer(4,1);
+            añadirRutEjer(4,2);
+            añadirRutEjer(4,3);
+            añadirRutEjer(4,4);
         }
 
     }
@@ -164,7 +178,41 @@ public class MiDB extends SQLiteOpenHelper {
         return u;
     }
 
+    public ArrayList<Ejercicio> getEjerciciosDeLaRutina(int rutina){
+        ArrayList<Ejercicio> lista= new ArrayList<Ejercicio>();
+        String select="select * from ejercicio e inner join rutejer r on r.idEjer=e.id where r.idRut="+rutina;
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            do {
+                int id=c.getInt(c.getColumnIndex("id"));
+                String nombre=c.getString(c.getColumnIndex("nombre"));
+                String descripcion=c.getString(c.getColumnIndex("descripcion"));
+                String foto=c.getString(c.getColumnIndex("foto"));
+                String duracion=c.getString(c.getColumnIndex("duracion"));
+                Ejercicio e = new Ejercicio(id,nombre,descripcion,foto,duracion);
+                lista.add(e);
+            }while(c.moveToNext());
+        }
+        return lista;
+    }
 
+    public ArrayList<Rutina> getRutinasDelUsuario(String usuario){
+            ArrayList<Rutina> lista= new ArrayList<Rutina>();
+            String select="select * from Rutina r inner join userRut u on u.idRut=r.id where u.idUser='"+usuario+"'";
+            Cursor c = db.rawQuery(select,null);
+            if(c!=null && c.getCount()>0){
+                c.moveToFirst();
+                do {
+                    int id=c.getInt(c.getColumnIndex("id"));
+                    String nombre=c.getString(c.getColumnIndex("nombre"));
+                    String foto=c.getString(c.getColumnIndex("foto"));
+                    Rutina r = new Rutina(id,nombre,foto);
+                    lista.add(r);
+                }while(c.moveToNext());
+            }
+            return lista;
+        }
 
 
 }

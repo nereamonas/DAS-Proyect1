@@ -14,11 +14,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.helpClass.Ejercicio;
+import com.example.das_proyect1.recycleViewAdapterEjercicios.AdaptadorRecyclerEjercicios;
 import com.example.das_proyect1.recycleViewAdaptersRutinas.AdaptadorRecyclerRutinas;
 
-public class EjerciciosFragment extends Fragment {
+import java.util.ArrayList;
 
+public class EjerciciosFragment extends Fragment {
+    private MiDB db;
     private EjerciciosViewModel ejerciciosViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -35,12 +40,10 @@ public class EjerciciosFragment extends Fragment {
         });
 
         RecyclerView lalista= root.findViewById(R.id.recycleView);
+        db=new MiDB(getContext());
+        ArrayList<Ejercicio> ejercicios= db.getEjerciciosDeLaRutina(1);
 
-        int[] personajes= {R.drawable.bart, R.drawable.edna, R.drawable.homer, R.drawable.lisa,
-                R.drawable.skinner};
-        String[] nombres={"Bart Simpson","Edna Krabappel", "Homer Simpson", "Lisa Simpson",
-                "Seymour Skinner"};
-        AdaptadorRecyclerRutinas eladaptador = new AdaptadorRecyclerRutinas(nombres,personajes);
+        AdaptadorRecyclerEjercicios eladaptador = new AdaptadorRecyclerEjercicios(ejercicios);
         lalista.setAdapter(eladaptador);
 
         GridLayoutManager elLayoutRejillaIgual= new GridLayoutManager(getContext(),2, GridLayoutManager.VERTICAL,false);

@@ -39,6 +39,7 @@ public class LogInActivity extends AppCompatActivity {
             if (usuario != null) {
                 Log.d("Logs", usuario.toString());
                 Intent i = new Intent(this, PrincipalActivity.class);
+                i.putExtra("usuario", user);
                 startActivity(i);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);

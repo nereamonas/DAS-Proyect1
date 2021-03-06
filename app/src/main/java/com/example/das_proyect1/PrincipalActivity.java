@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class PrincipalActivity extends AppCompatActivity {
-
+    private String usuario;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -24,6 +24,8 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        this.usuario=getIntent().getExtras().getString("usuario");
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

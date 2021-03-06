@@ -7,17 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.rutinas.RutinasFragment" >
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
-        android:layout_width="401dp"
-        android:layout_height="666dp"
-        android:scrollbars="vertical"
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="410dp"
+        android:layout_height="543dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.886" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="206dp"
+        android:layout_height="37dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.075" />
 </androidx.constraintlayout.widget.ConstraintLayout>

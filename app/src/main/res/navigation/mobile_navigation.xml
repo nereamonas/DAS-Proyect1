@@ -29,6 +29,10 @@
         android:id="@+id/rutEjerViewPagerFragment"
         android:name="com.example.das_proyect1.rutEjer.RutEjerFragment"
         android:label="fragment_rutejerviewpager"
-        tools:layout="@layout/fragment_rutejerviewpager" />
+        tools:layout="@layout/fragment_rutejerviewpager" >
+        <action
+            android:id="@+id/action_rutEjerViewPagerFragment_to_nav_rutinas"
+            app:destination="@id/nav_rutinas" />
+    </fragment>
 
 </navigation>
