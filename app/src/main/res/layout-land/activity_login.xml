@@ -48,6 +48,7 @@
         android:layout_width="343dp"
         android:layout_height="54dp"
         android:hint="@string/pass"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
