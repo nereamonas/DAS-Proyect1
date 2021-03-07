@@ -6,9 +6,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
 
+import androidx.navigation.Navigation;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import java.util.Locale;
 
@@ -22,8 +26,10 @@ public class AjustesFragment extends PreferenceFragmentCompat
         setPreferencesFromResource(R.xml.fragment_ajustes, rootKey);
         this.db=new MiDB(getContext());
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        this.user=getArguments().getString("usuario");
+        if (this.prefs.contains("username")) {//Comprobamos si existe
+            this.user = this.prefs.getString("username", null);
+        }
+        //this.user=getArguments().getString("usuario");
         SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
         editor.putString("username", this.user);
         editor.putString("email", db.getCorreoConUsuario(this.user));
@@ -32,45 +38,27 @@ public class AjustesFragment extends PreferenceFragmentCompat
         boolean resultado=editor.commit();
         Log.d("Logs", "RESULTADO EDITAR DATOS "+resultado);
 
+
+        Preference infouser=(Preference) findPreference("infouser");
+        infouser.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                int rotacion=getActivity().getWindowManager().getDefaultDisplay().getRotation();
+                if (rotacion== Surface.ROTATION_0 || rotacion==Surface.ROTATION_180) {
+                    //La pantalla está en vertical
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_ajustesGeneralesFragment_to_ajustesUsuarioFragment);
+                }
+                return false;
+            }
+        });
+
+
     }
+
+
     @Override
     public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String s){
         switch (s) {
-            case "username":
-                Log.d("Logs", "ha insertado un nombre");
-
-                String username = "";
-                if (this.prefs.contains("username")) { //Comprobamos si existe
-                    username = this.prefs.getString("username", null);
-                    Log.d("Logs", "nombre nuevo: "+username);
-                    Boolean todobien=this.db.editarNombreDeUsuario(this.user,username);
-                    if (todobien) {
-                        this.user = username;
-                        reload();
-                    }
-
-                }
-                break;
-            case "email":
-                Log.d("Logs", "ha insertado un email");
-                String email = "";
-                if (this.prefs.contains("email")) {//Comprobamos si existe
-                    email = this.prefs.getString("email", null);
-                    Log.d("Logs", "email nuevo: "+email);
-                    this.db.editarEmailDeUsuario(this.user,email);
-                    reload();
-                }
-                break;
-            case "pass":
-                Log.d("Logs", "ha insertado una pass");
-                String pass = "";
-                if (this.prefs.contains("pass")) {  //Comprobamos si existe
-                    pass = this.prefs.getString("pass", null);
-                    Log.d("Logs", "pass nuevo: "+pass);
-                    this.db.editarPassDeUsuario(this.user,pass);
-                    reload();
-                }
-                break;
             case "idioma":
                 Log.d("Logs", "cambio idioma");
 
@@ -96,6 +84,8 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 break;
         }
     }
+
+
     @Override
     public void onResume () {
         super.onResume();
@@ -112,6 +102,8 @@ public class AjustesFragment extends PreferenceFragmentCompat
         i.putExtra("usuario", this.user);
         startActivity(i);
     }
+
+
 
 }
 //https://www.develou.com/como-crear-actividad-preferencias-android/

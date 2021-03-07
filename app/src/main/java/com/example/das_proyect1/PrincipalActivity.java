@@ -63,6 +63,14 @@ public class PrincipalActivity extends AppCompatActivity {
         nombre.setText(this.usuario);
         correo.setText(db.getCorreoConUsuario(this.usuario));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.contains("username")) {//si no existe, insertamos el usuario
+            SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
+            editor.putString("username", this.usuario);
+            editor.apply();
+            editor.commit();
+        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
 
@@ -149,7 +157,7 @@ public class PrincipalActivity extends AppCompatActivity {
     public void open_nav_ajustes(){
         Bundle bundle = new Bundle();
         bundle.putString("usuario", this.usuario);
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_ajustes, bundle);
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_ajustesGeneralesFragment, bundle);
     }
     public void open_nav_entrada(){
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_entrada);

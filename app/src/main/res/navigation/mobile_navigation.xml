@@ -24,7 +24,11 @@
         android:id="@+id/nav_ajustes"
         android:name="com.example.das_proyect1.AjustesFragment"
         android:label="@string/menu_ajustes"
-        tools:layout="@xml/fragment_ajustes" />
+        tools:layout="@xml/fragment_ajustes" >
+        <action
+            android:id="@+id/action_nav_ajustes_to_ajustesUsuarioFragment"
+            app:destination="@id/ajustesUsuarioFragment" />
+    </fragment>
     <fragment
         android:id="@+id/rutEjerViewPagerFragment"
         android:name="com.example.das_proyect1.rutEjer.RutEjerFragment"
@@ -51,5 +55,21 @@
     <action
         android:id="@+id/action_global_nav_entrada"
         app:destination="@id/nav_entrada" />
+    <fragment
+        android:id="@+id/ajustesUsuarioFragment"
+        android:name="com.example.das_proyect1.AjustesUsuarioFragment"
+        android:label="AjustesUsuarioFragment" />
+    <fragment
+        android:id="@+id/ajustesGeneralesFragment"
+        android:name="com.example.das_proyect1.AjustesGeneralesFragment"
+        android:label="fragment_ajustes_generales"
+        tools:layout="@layout/fragment_ajustes_generales" >
+        <action
+            android:id="@+id/action_ajustesGeneralesFragment_to_ajustesUsuarioFragment"
+            app:destination="@id/ajustesUsuarioFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_ajustesGeneralesFragment"
+        app:destination="@id/ajustesGeneralesFragment" />
 
 </navigation>
