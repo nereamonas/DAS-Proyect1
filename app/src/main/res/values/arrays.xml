@@ -22,4 +22,20 @@
         <item>eu</item>
         <item>en</item>
     </string-array>
+
+
+    <!-- Tema Preference -->
+    <string-array name="tema_entries">
+        <item>morado</item>
+        <item>naranja</item>
+        <item>verde</item>
+        <item>azul</item>
+    </string-array>
+
+    <string-array name="tema_values">
+        <item>morado</item>
+        <item>naranja</item>
+        <item>verde</item>
+        <item>azul</item>
+    </string-array>
 </resources>

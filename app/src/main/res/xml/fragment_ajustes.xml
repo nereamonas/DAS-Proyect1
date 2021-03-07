@@ -41,10 +41,10 @@
 
     <PreferenceCategory app:title="Otros ajustes">
         <ListPreference
-            app:defaultValue="es"
-            app:entries="@array/idioma_entries"
-            app:entryValues="@array/idioma_values"
-            app:key="idioma"
+            app:defaultValue="morado"
+            app:entries="@array/tema_entries"
+            app:entryValues="@array/tema_values"
+            app:key="tema"
             app:title="Tema"
             app:useSimpleSummaryProvider="true" />
 

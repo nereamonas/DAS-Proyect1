@@ -1,4 +1,4 @@
-package com.example.das_proyect1;
+package com.example.das_proyect1.ajustes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,10 @@ import android.util.Log;
 
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.PrincipalActivity;
+import com.example.das_proyect1.R;
 
 import java.util.Locale;
 

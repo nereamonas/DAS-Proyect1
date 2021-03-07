@@ -1,4 +1,4 @@
-package com.example.das_proyect1;
+package com.example.das_proyect1.ajustes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.PrincipalActivity;
+import com.example.das_proyect1.R;
 
 import java.util.Locale;
 
@@ -80,6 +84,32 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 Log.d("Logs", "idioma nuevo: " + idioma);
 
                 break;
+            case "tema":
+                Log.d("Logs", "cambio tema");
+
+                String tema = "";
+                if (this.prefs.contains("tema")) {
+                    tema = this.prefs.getString("tema", null);
+                }
+                switch (tema) {
+                    case "morado":
+                        getContext().setTheme(R.style.Theme_DASProyect1);
+                        Log.d("Logs", "color elegido morado");
+                        break;
+                    case "naranja":
+                        getContext().setTheme(R.style.Theme_Naranja);
+                        Log.d("Logs", "color elegido naranja");
+                        break;
+                    case "verde":
+                        getContext().setTheme(R.style.Theme_Verde);
+                        Log.d("Logs", "color elegido verde");
+                        break;
+                    case "azul":
+                        getContext().setTheme(R.style.Theme_Azul);
+                        Log.d("Logs", "color elegido azul");
+                        break;
+                }
+                break;
             default:
                 break;
         }
@@ -102,6 +132,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         i.putExtra("usuario", this.user);
         startActivity(i);
     }
+
 
 
 

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragment2"
-        android:name="com.example.das_proyect1.AjustesFragment"
+        android:name="com.example.das_proyect1.ajustes.AjustesFragment"
         android:layout_width="362dp"
         android:layout_height="270dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.example.das_proyect1.AjustesUsuarioFragment"
+        android:name="com.example.das_proyect1.ajustes.AjustesUsuarioFragment"
         android:layout_width="312dp"
         android:layout_height="286dp"
         app:layout_constraintBottom_toBottomOf="parent"
