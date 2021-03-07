@@ -38,7 +38,12 @@ import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.rutinas.RutinasFragment;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
@@ -54,8 +59,9 @@ public class RutEjerFragment extends Fragment {
     private MiDB db;
 
     private String usuario;
-
+    private int rutId;
     private int posicion;
+
     private ArrayList<Ejercicio> ejercicios;
     private CountDownTimer countDownTimer;
     private ImgCorrespondiente imgCorrespondiente;
@@ -77,7 +83,7 @@ public class RutEjerFragment extends Fragment {
             }
         });
 
-        int rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
+        this.rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
         this.usuario=getArguments().getString("usuario");
 
         this.imageView=root.findViewById(R.id.image_view);
@@ -193,8 +199,6 @@ public class RutEjerFragment extends Fragment {
                 Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
                 Log.d("Logs", "estado notificaciones: "+activadas);
                 if (activadas) {
-
-
                     NotificationManager elManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
                     NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getContext());
                     Intent intent = new Intent(getContext(), RutinasFragment.class);
@@ -211,6 +215,30 @@ public class RutEjerFragment extends Fragment {
                             .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
 
                     elManager.notify(1, elBuilder.build());
+
+                }
+                //Escribiremos en el fichero que ha acabado la rutina
+                Log.d("Logs", "pass ");
+
+                try {
+                    Log.d("Logs", "entra en el try ");
+
+                    OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_PRIVATE));
+                    java.util.Date fecha = new Date();
+                    fichero.write("Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
+                    fichero.close();
+                    Log.d("Logs", "ha entrado a insertar datos ");
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.d("Logs", "file not found ");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d("Logs", "io excepcion ");
+
+                }catch(Exception e){
+                    Log.d("Logs", "error al insertar datos ");
 
                 }
                 Bundle bundle = new Bundle();

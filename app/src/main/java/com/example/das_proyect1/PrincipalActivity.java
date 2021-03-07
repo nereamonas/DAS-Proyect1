@@ -47,7 +47,7 @@ public class PrincipalActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_entrada,R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_ajustes, R.id.nav_contactanos, R.id.nav_logoff)
+                R.id.nav_entrada,R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.nav_ajustes, R.id.nav_contactanos, R.id.nav_logoff)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -86,6 +86,9 @@ public class PrincipalActivity extends AppCompatActivity {
                 } else if (id == R.id.nav_ejercicios) {
                     Log.d("Logs", "nav_ejercicios");
                     open_nav_ejercicios();
+                }else if (id==R.id.nav_rutinasCompletadas){
+                    Log.d("Logs", "nav_rutinasCompletadas");
+                    open_nav_rutinascompletadas();
                 } else if (id == R.id.nav_ajustes) {
                     Log.d("Logs", "nav_ajustes");
                     open_nav_ajustes();
@@ -162,6 +165,10 @@ public class PrincipalActivity extends AppCompatActivity {
     public void open_nav_entrada(){
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_entrada);
     }
+    public void open_nav_rutinascompletadas(){
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_rutinasCompletadasFragment);
+    }
+
 
 
 }

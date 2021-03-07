@@ -18,6 +18,11 @@
             android:title="@string/menu_ejercicios" />
 
         <item
+            android:id="@+id/nav_rutinasCompletadas"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="rutinas completadas" />
+
+        <item
             android:id="@+id/nav_ajustes"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_ajustes" />

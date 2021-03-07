@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_rutinasCompletadas"
         android:layout_width="206dp"
         android:layout_height="37dp"
         app:layout_constraintBottom_toBottomOf="parent"

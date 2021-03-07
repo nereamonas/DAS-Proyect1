@@ -280,6 +280,18 @@ public class MiDB extends SQLiteOpenHelper {
     public void editarPassDeUsuario(String user, String pass) {
         db.execSQL("UPDATE usuario SET pass='"+pass+"' WHERE user='"+user+"'");
     }
+
+    public String getNombreRutina(int id){
+        String nombre="";
+        String select="select nombre from Rutina where id="+id;
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            nombre = c.getString(c.getColumnIndex("nombre"));
+        }
+        return nombre;
+    }
+
 }
 //https://academiaandroid.com/proyecto-ejemplo-de-app-android-con-bbdd-sqlite/
 
