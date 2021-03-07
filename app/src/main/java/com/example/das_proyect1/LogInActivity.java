@@ -2,14 +2,21 @@ package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.das_proyect1.helpClass.Usuario;
+
+import java.util.Locale;
 
 public class LogInActivity extends AppCompatActivity {
     private MiDB db;
@@ -20,6 +27,32 @@ public class LogInActivity extends AppCompatActivity {
 
         db=new MiDB(this);
         db.añadirPrimerosElementos();
+
+        //Comprobamos el idioma de la aplicacion que tenemos guardado para cargarlo
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String idioma = "";
+        if (prefs.contains("idioma")) {
+            idioma = prefs.getString("idioma", null);
+        }
+
+        String idiomaActual=Locale.getDefault().getLanguage();
+        Log.d("Logs", "LANGUAGE de ajustes "+idioma);
+        Log.d("Logs", "LANGUAGE "+idiomaActual);
+        if (!idiomaActual.equals(idioma)) {   //Cuando cierras y vuelves a abrir la app se va el idioma
+/**
+            Locale nuevaloc = new Locale(idioma);
+            Locale.setDefault(nuevaloc);
+            Configuration configuration = this.getBaseContext().getResources().getConfiguration();
+
+            configuration.setLocale(nuevaloc);
+            configuration.setLayoutDirection(nuevaloc);
+
+            Context context = this.getBaseContext().createConfigurationContext(configuration);
+            this.getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+            this.finish();
+            startActivity(this.getIntent());**/
+        }
+
     }
 
 

@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
@@ -51,6 +53,8 @@ public class RutEjerFragment extends Fragment {
     private Button btn_startStop;
     private MiDB db;
 
+    private String usuario;
+
     private int posicion;
     private ArrayList<Ejercicio> ejercicios;
     private CountDownTimer countDownTimer;
@@ -74,7 +78,7 @@ public class RutEjerFragment extends Fragment {
         });
 
         int rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
-
+        this.usuario=getArguments().getString("usuario");
 
         this.imageView=root.findViewById(R.id.image_view);
         this.temporizador=root.findViewById(R.id.temporizador);
@@ -184,24 +188,35 @@ public class RutEjerFragment extends Fragment {
 
         }else{
             //Has terminado la rutina. saltar notificacion
-            NotificationManager elManager= (NotificationManager)getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
-            NotificationCompat.Builder elBuilder= new NotificationCompat.Builder(getContext());
-            Intent intent = new Intent(getContext(), RutinasFragment.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            if (prefs.contains("notif")) { //Comprobamos si existe
+                Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
+                Log.d("Logs", "estado notificaciones: "+activadas);
+                if (activadas) {
 
-            elBuilder.setSmallIcon(R.drawable.bart)
-            .setContentTitle("Fin entrenamiento")
-            .setContentText("Has superado todo el entrenamiento. Felicidades")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setLights(Color.MAGENTA, 1000, 1000)
-            .setVibrate(new long[]{1000,1000,1000,1000,1000})
-            .setDefaults(Notification.DEFAULT_SOUND)
-            .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
-            .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
 
-            elManager.notify(1, elBuilder.build());
+                    NotificationManager elManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
+                    NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getContext());
+                    Intent intent = new Intent(getContext(), RutinasFragment.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
 
-            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas);
+                    elBuilder.setSmallIcon(R.drawable.bart)
+                            .setContentTitle("Fin entrenamiento")
+                            .setContentText("Has superado todo el entrenamiento. Felicidades")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setLights(Color.MAGENTA, 1000, 1000)
+                            .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                            .setDefaults(Notification.DEFAULT_SOUND)
+                            .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
+                            .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
+
+                    elManager.notify(1, elBuilder.build());
+
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("usuario", this.usuario);
+                Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle);
+            }
 
         }
     }

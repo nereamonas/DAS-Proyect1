@@ -1,7 +1,9 @@
 package com.example.das_proyect1.ui.ejercicios;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,14 +41,27 @@ public class EjerciciosFragment extends Fragment {
             }
         });
 
+        String usuario = getArguments().getString("usuario");  //cogemos el id de la rutina
+
+
         RecyclerView lalista= root.findViewById(R.id.recycleView);
         db=new MiDB(getContext());
-        ArrayList<Ejercicio> ejercicios= db.getEjerciciosDeLaRutina(1);
+        ArrayList<Ejercicio> ejercicios= db.getTodosLosEjercicios(usuario);
 
         AdaptadorRecyclerEjercicios eladaptador = new AdaptadorRecyclerEjercicios(ejercicios);
         lalista.setAdapter(eladaptador);
 
-        GridLayoutManager elLayoutRejillaIgual= new GridLayoutManager(getContext(),2, GridLayoutManager.VERTICAL,false);
+        GridLayoutManager elLayoutRejillaIgual;
+        int rotacion=getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        if (rotacion== Surface.ROTATION_0 || rotacion==Surface.ROTATION_180){
+            //La pantalla está en vertical
+            elLayoutRejillaIgual= new GridLayoutManager(getContext(),2, GridLayoutManager.VERTICAL,false);
+        }else{
+            //La pantalla esta en horizontal
+            elLayoutRejillaIgual= new GridLayoutManager(getContext(),3, GridLayoutManager.VERTICAL,false);
+
+        }
+
         lalista.setLayoutManager(elLayoutRejillaIgual);
 
 

@@ -20,6 +20,7 @@ public class MiDB extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private SQLiteDatabase db;
 
+
     public MiDB(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         db=this.getWritableDatabase();
@@ -27,7 +28,7 @@ public class MiDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Crear tablas
-        db.execSQL("CREATE TABLE usuario( user TEXT PRIMARY KEY, email TEXT, pass TEXT)");
+        db.execSQL("CREATE TABLE usuario( user TEXT NOT NULL UNIQUE, email TEXT, pass TEXT)");
         db.execSQL("CREATE TABLE rutina( id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, foto TEXT)");
         db.execSQL("CREATE TABLE ejercicio( id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, foto TEXT, duracion TEXT)");
         db.execSQL("CREATE TABLE rutEjer( idRut INTEGER, idEjer INTEGER, FOREIGN KEY(idRut) REFERENCES rutina(id),FOREIGN KEY(idEjer) REFERENCES ejercicio(id) )");
@@ -197,24 +198,88 @@ public class MiDB extends SQLiteOpenHelper {
         return lista;
     }
 
-    public ArrayList<Rutina> getRutinasDelUsuario(String usuario){
-            ArrayList<Rutina> lista= new ArrayList<Rutina>();
-            String select="select * from Rutina r inner join userRut u on u.idRut=r.id where u.idUser='"+usuario+"'";
-            Cursor c = db.rawQuery(select,null);
-            if(c!=null && c.getCount()>0){
-                c.moveToFirst();
-                do {
-                    int id=c.getInt(c.getColumnIndex("id"));
-                    String nombre=c.getString(c.getColumnIndex("nombre"));
-                    String foto=c.getString(c.getColumnIndex("foto"));
-                    Rutina r = new Rutina(id,nombre,foto);
-                    lista.add(r);
-                }while(c.moveToNext());
-            }
-            return lista;
+    public ArrayList<Rutina> getRutinasDelUsuario(String usuario) {
+        ArrayList<Rutina> lista = new ArrayList<Rutina>();
+        String select = "select * from Rutina r inner join userRut u on u.idRut=r.id where u.idUser='" + usuario + "'";
+        Cursor c = db.rawQuery(select, null);
+        if (c != null && c.getCount() > 0) {
+            c.moveToFirst();
+            do {
+                int id = c.getInt(c.getColumnIndex("id"));
+                String nombre = c.getString(c.getColumnIndex("nombre"));
+                String foto = c.getString(c.getColumnIndex("foto"));
+                Rutina r = new Rutina(id, nombre, foto);
+                lista.add(r);
+            } while (c.moveToNext());
         }
+        return lista;
+    }
+
+    public ArrayList<Ejercicio> getTodosLosEjercicios(String usuario){
+        ArrayList<Ejercicio> lista= new ArrayList<Ejercicio>();
+        String select="select distinct e.id,e.nombre,e.descripcion,e.foto,e.duracion from ejercicio e inner join rutEjer r on r.idEjer=e.id inner join userRut u on u.idRut=r.idRut where u.idUser='"+usuario+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            do {
+                int id=c.getInt(c.getColumnIndex("id"));
+                String nombre=c.getString(c.getColumnIndex("nombre"));
+                String descripcion=c.getString(c.getColumnIndex("descripcion"));
+                String foto=c.getString(c.getColumnIndex("foto"));
+                String duracion=c.getString(c.getColumnIndex("duracion"));
+                Ejercicio e = new Ejercicio(id,nombre,descripcion,foto,duracion);
+                lista.add(e);
+            }while(c.moveToNext());
+        }
+        return lista;
+    }
+
+    public String getCorreoConUsuario(String usuario){
+        String correo="";
+        String select="select email from usuario where user='"+usuario+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            correo = c.getString(c.getColumnIndex("email"));
+        }
+        return correo;
+    }
+
+    public String getPassConUsuario(String usuario){
+        String correo="";
+        String select="select pass from usuario where user='"+usuario+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            correo = c.getString(c.getColumnIndex("pass"));
+        }
+        return correo;
+    }
 
 
+    public boolean editarNombreDeUsuario(String userViejo, String userNuevo) {
+        //Comprobar si existe el usuario nuevo:
+        String select="select user from usuario where user='"+userNuevo+"'";
+        Cursor c = db.rawQuery(select,null);
+        String existe="";
+        boolean todobien=false;
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            existe=c.getString(c.getColumnIndex("user"));
+            todobien=true;
+        }
+        if (existe!=""){
+            db.execSQL("UPDATE usuario SET user='"+userNuevo+"' WHERE user='"+userViejo+"'");
+        }
+        return todobien;
+    }
+
+    public void editarEmailDeUsuario(String user, String email) {
+        db.execSQL("UPDATE usuario SET email='"+email+"' WHERE user='"+user+"'");
+    }
+    public void editarPassDeUsuario(String user, String pass) {
+        db.execSQL("UPDATE usuario SET pass='"+pass+"' WHERE user='"+user+"'");
+    }
 }
 //https://academiaandroid.com/proyecto-ejemplo-de-app-android-con-bbdd-sqlite/
 

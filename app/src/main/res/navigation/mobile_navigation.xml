@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_rutinas">
+    app:startDestination="@id/nav_entrada">
 
     <fragment
         android:id="@+id/nav_rutinas"
@@ -34,5 +34,22 @@
             android:id="@+id/action_rutEjerViewPagerFragment_to_nav_rutinas"
             app:destination="@id/nav_rutinas" />
     </fragment>
+    <action
+        android:id="@+id/action_global_nav_ajustes"
+        app:destination="@id/nav_ajustes" />
+    <action
+        android:id="@+id/action_global_nav_ejercicios"
+        app:destination="@id/nav_ejercicios" />
+    <action
+        android:id="@+id/action_global_nav_rutinas"
+        app:destination="@id/nav_rutinas" />
+    <fragment
+        android:id="@+id/nav_entrada"
+        android:name="com.example.das_proyect1.EntradaFragment"
+        android:label="nav_entrada"
+        tools:layout="@layout/fragment_entrada" />
+    <action
+        android:id="@+id/action_global_nav_entrada"
+        app:destination="@id/nav_entrada" />
 
 </navigation>

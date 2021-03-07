@@ -41,14 +41,6 @@ public class SingUpActivity extends AppCompatActivity {
                 if (resultado) {
                     Log.d("Logs", "Usuario creado");
 
-                    String email= mail;
-                    String subject = "Bienvenido";
-                    String body = "Tu registro en la aplicacion se ha realizado correctamente.";
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+email));
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-                    startActivity(Intent.createChooser(emailIntent, "Título del ‘chooser’"));
-
-
                     Intent i = new Intent(this, PrincipalActivity.class);
                     startActivity(i);
                 } else {

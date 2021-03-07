@@ -51,7 +51,9 @@ public class RutinasFragment extends Fragment {
         });
 
         db=new MiDB(getContext());
-        ArrayList<Rutina> rutinas= db.getRutinasDelUsuario("nerea");
+        String usuario = getArguments().getString("usuario");  //cogemos el id de la rutina
+
+        ArrayList<Rutina> rutinas= db.getRutinasDelUsuario(usuario);
 
 
         ListView lalista= (ListView) root.findViewById(R.id.listView);
@@ -64,6 +66,7 @@ public class RutinasFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
                 bundle.putString("idRut", (String.valueOf(eladap.getItemId(position))));
+                bundle.putString("usuario", usuario);
                 Navigation.findNavController(view).navigate(R.id.action_nav_rutinas_to_rutEjerViewPagerFragment, bundle);
             }
 
