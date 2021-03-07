@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class SingUpActivity extends AppCompatActivity {
     private MiDB db;
@@ -16,6 +17,9 @@ public class SingUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singup);
+
+        ImageView img= findViewById(R.id.img2);
+        img.setImageResource(R.mipmap.avatar);
     }
 
     public void clickCrearCuenta(View v){
@@ -32,6 +36,7 @@ public class SingUpActivity extends AppCompatActivity {
         String passAgain=editView_passAgain.getText().toString();
         String mail=editView_mail.getText().toString();
 
+
         if (user!="" && pass!=""&& passAgain!=""&& mail!="") {
             Log.d("Logs", "Usuario: "+user+ " Mail: "+mail+" Contraseña: "+pass+" Contraseña again: "+passAgain);
 
@@ -42,6 +47,7 @@ public class SingUpActivity extends AppCompatActivity {
                     Log.d("Logs", "Usuario creado");
 
                     Intent i = new Intent(this, PrincipalActivity.class);
+                    i.putExtra("usuario", user);
                     startActivity(i);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);

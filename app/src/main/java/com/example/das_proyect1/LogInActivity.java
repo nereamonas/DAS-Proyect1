@@ -13,6 +13,7 @@ import android.os.LocaleList;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.das_proyect1.helpClass.Usuario;
 
@@ -27,6 +28,9 @@ public class LogInActivity extends AppCompatActivity {
 
         db=new MiDB(this);
         db.añadirPrimerosElementos();
+
+        ImageView img= findViewById(R.id.img);
+        img.setImageResource(R.mipmap.avatar);
 
         //Comprobamos el idioma de la aplicacion que tenemos guardado para cargarlo
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
