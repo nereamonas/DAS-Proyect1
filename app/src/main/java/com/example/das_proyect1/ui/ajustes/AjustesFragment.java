@@ -1,13 +1,17 @@
-package com.example.das_proyect1.ajustes;
+package com.example.das_proyect1.ui.ajustes;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.Locale;
 
@@ -94,18 +99,26 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 switch (tema) {
                     case "morado":
                         getContext().setTheme(R.style.Theme_DASProyect1);
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DA6CED")));
+                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
                         Log.d("Logs", "color elegido morado");
                         break;
                     case "naranja":
                         getContext().setTheme(R.style.Theme_Naranja);
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF9800")));
+                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
                         Log.d("Logs", "color elegido naranja");
                         break;
                     case "verde":
                         getContext().setTheme(R.style.Theme_Verde);
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8BC34A")));
+                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
                         Log.d("Logs", "color elegido verde");
                         break;
                     case "azul":
                         getContext().setTheme(R.style.Theme_Azul);
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#86E9F6")));
+                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
                         Log.d("Logs", "color elegido azul");
                         break;
                 }
@@ -132,6 +145,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         i.putExtra("usuario", this.user);
         startActivity(i);
     }
+
 
 
 

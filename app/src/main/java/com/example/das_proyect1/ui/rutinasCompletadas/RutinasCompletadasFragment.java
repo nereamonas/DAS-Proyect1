@@ -45,7 +45,7 @@ public class RutinasCompletadasFragment extends Fragment {
             String linea= ficherointerno.readLine();
             Log.d("Logs", "linea: "+linea);
             while (linea!=null){
-                text.setText(text.getText()+linea);
+                text.setText(text.getText()+"\n"+linea);
                 linea= ficherointerno.readLine();
             }
 

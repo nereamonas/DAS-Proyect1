@@ -38,6 +38,7 @@ import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.rutinas.RutinasFragment;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -109,8 +110,6 @@ public class RutEjerFragment extends Fragment {
         imgCorrespondiente= new ImgCorrespondiente();
         this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
 
-
-
         empezarTemporizador();
         actualizarTemporizador();
 
@@ -126,7 +125,6 @@ public class RutEjerFragment extends Fragment {
                 startStop();
             }
         });
-
 
         return root;
     }
@@ -194,58 +192,74 @@ public class RutEjerFragment extends Fragment {
 
         }else{
             //Has terminado la rutina. saltar notificacion
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            if (prefs.contains("notif")) { //Comprobamos si existe
-                Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
-                Log.d("Logs", "estado notificaciones: "+activadas);
-                if (activadas) {
-                    NotificationManager elManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
-                    NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getContext());
-                    Intent intent = new Intent(getContext(), RutinasFragment.class);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
+            mostrarNotificacion();
 
-                    elBuilder.setSmallIcon(R.drawable.bart)
-                            .setContentTitle("Fin entrenamiento")
-                            .setContentText("Has superado todo el entrenamiento. Felicidades")
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            .setLights(Color.MAGENTA, 1000, 1000)
-                            .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
-                            .setDefaults(Notification.DEFAULT_SOUND)
-                            .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
-                            .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
+            //Escribiremos en el fichero que ha acabado la rutina
+            escribirEnFichero();
 
-                    elManager.notify(1, elBuilder.build());
+            //Volvemos al menu de rutinas
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", this.usuario);
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle);
 
-                }
-                //Escribiremos en el fichero que ha acabado la rutina
-                Log.d("Logs", "pass ");
-
-                try {
-                    Log.d("Logs", "entra en el try ");
-
-                    OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_PRIVATE));
-                    java.util.Date fecha = new Date();
-                    fichero.write("Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
-                    fichero.close();
-                    Log.d("Logs", "ha entrado a insertar datos ");
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Log.d("Logs", "file not found ");
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d("Logs", "io excepcion ");
-
-                }catch(Exception e){
-                    Log.d("Logs", "error al insertar datos ");
-
-                }
-                Bundle bundle = new Bundle();
-                bundle.putString("usuario", this.usuario);
-                Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle);
-            }
 
         }
     }
+
+    public void mostrarNotificacion(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (prefs.contains("notif")) { //Comprobamos si existe
+            Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
+            Log.d("Logs", "estado notificaciones: "+activadas);
+            if (activadas) {
+                NotificationManager elManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
+                NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getContext());
+                Intent intent = new Intent(getContext(), RutinasFragment.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
+
+                elBuilder.setSmallIcon(R.drawable.bart)
+                        .setContentTitle("Fin entrenamiento")
+                        .setContentText("Has superado todo el entrenamiento. Felicidades")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setLights(Color.MAGENTA, 1000, 1000)
+                        .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
+                        .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
+
+                elManager.notify(1, elBuilder.build());
+            }
+        }
+    }
+
+    public void escribirEnFichero(){
+        try {
+            Log.d("Logs", "entra en el try ");
+
+            OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_APPEND));
+
+            java.util.Date fecha = new Date();
+            //fichero.append(this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
+
+            fichero.write(this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
+            fichero.close();
+            Log.d("Logs", "ha entrado a insertar datos ");
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("Logs", "file not found ");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("Logs", "io excepcion ");
+
+        }catch(Exception e){
+            Log.d("Logs", "error al insertar datos ");
+
+        }
+    }
+
 }
+
+

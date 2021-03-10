@@ -1,4 +1,4 @@
-package com.example.das_proyect1.ajustes;
+package com.example.das_proyect1.ui.ajustes;
 
 import android.content.Context;
 import android.content.Intent;
