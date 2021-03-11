@@ -77,4 +77,8 @@
     <string name="alert_aceptar">Ok</string>
     <string name="alert_lascontraseñasnocoinciden">Passwords do not match</string>
     <string name="alert_nosehapodidocrealelusuario">The user could not be created</string>
+    <string name="alert_cerrarSesion">Log out</string>
+    <string name="alert_estasseguroquequierescerrarsesion">Are you sure you want to log out?</string>
+    <string name="email_dudaValoracionaplicacion">Doubt / Appraisal</string>
+    <string name="email_mandanosmensaje">Send us your message</string>
 </resources>

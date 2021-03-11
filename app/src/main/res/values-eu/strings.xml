@@ -77,4 +77,8 @@
     <string name="alert_aceptar">Ados</string>
     <string name="alert_lascontraseñasnocoinciden">Pasahitzak ez datoz bat</string>
     <string name="alert_nosehapodidocrealelusuario">Erabiltzailea ezin izan da sortu</string>
+    <string name="alert_cerrarSesion">Saioa itxi</string>
+    <string name="alert_estasseguroquequierescerrarsesion">Ziur zaude saioa amaitu nahi duzula?</string>
+    <string name="email_dudaValoracionaplicacion">Zalantza / Aplikazioen balorazioa</string>
+    <string name="email_mandanosmensaje">Bidali zure mezua</string>
 </resources>

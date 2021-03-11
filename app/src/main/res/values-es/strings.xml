@@ -77,4 +77,8 @@
     <string name="alert_aceptar">Aceptar</string>
     <string name="alert_lascontraseñasnocoinciden">Las contraseñas no coinciden</string>
     <string name="alert_nosehapodidocrealelusuario">No se ha podido crear el usuario</string>
+    <string name="alert_cerrarSesion">Cerrar sesión</string>
+    <string name="alert_estasseguroquequierescerrarsesion">¿Estás seguro que quieres cerrar la sesión?</string>
+    <string name="email_dudaValoracionaplicacion">Duda / Valoración aplicación</string>
+    <string name="email_mandanosmensaje">Mandanos tu mensaje</string>
 </resources>

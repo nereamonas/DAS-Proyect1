@@ -115,8 +115,8 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                     Log.d("Logs", "nav_contactanos");
 
                     String email= "nereamonasterio99@gmail.com";
-                    String subject = "Duda/Valoracion aplicacion";
-                    String body = "Mandanos tu mensaje";
+                    String subject = getString(R.string.email_dudaValoracionaplicacion);
+                    String body = getString(R.string.email_mandanosmensaje);
                     Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+email));
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);  //No m escribe el subject y el body
                     emailIntent.putExtra(Intent.EXTRA_TEXT, body);
@@ -126,16 +126,16 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                 } else if (id == R.id.nav_logoff) {
                     Log.d("Logs", "nav_logoff");
                     AlertDialog.Builder dialogo = new AlertDialog.Builder(vi.getContext());
-                    dialogo.setTitle("Cerrar sesión");
-                    dialogo.setMessage("Estas seguro que quieres cerrar la sesión?");
+                    dialogo.setTitle(getString(R.string.alert_cerrarSesion));
+                    dialogo.setMessage(getString(R.string.alert_estasseguroquequierescerrarsesion));
                     //dialogo.setCancelable(false);
-                    dialogo.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
                             Intent i = new Intent(getApplication(), LogInActivity.class);
                             startActivity(i);
                         }
                     });
-                    dialogo.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
 
                             Log.d("Logs", "no cerrar sesion");
