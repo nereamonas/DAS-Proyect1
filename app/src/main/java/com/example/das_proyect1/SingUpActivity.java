@@ -1,20 +1,20 @@
 package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class SingUpActivity extends AppCompatActivity {
+import com.example.das_proyect1.controlarCambios.ControlarCambios;
+
+public class SingUpActivity extends ControlarCambios {
     private MiDB db;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singup);
 
@@ -48,21 +48,22 @@ public class SingUpActivity extends AppCompatActivity {
 
                     Intent i = new Intent(this, PrincipalActivity.class);
                     i.putExtra("usuario", user);
+                    i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(i);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Error");
-                    builder.setMessage("No se ha podido crear el usuario");
-                    builder.setPositiveButton("Aceptar", null);
+                    builder.setTitle(getString(R.string.alert_error));
+                    builder.setMessage(getString(R.string.alert_nosehapodidocrealelusuario));
+                    builder.setPositiveButton(getString(R.string.alert_aceptar), null);
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
             }else{
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Error");
-                builder.setMessage("Las contraseñas no coinciden");
-                builder.setPositiveButton("Aceptar", null);
+                builder.setTitle(getString(R.string.alert_error));
+                builder.setMessage(getString(R.string.alert_lascontraseñasnocoinciden));
+                builder.setPositiveButton(getString(R.string.alert_aceptar), null);
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -72,7 +73,7 @@ public class SingUpActivity extends AppCompatActivity {
 
     public void clickIniciarSesion(View v){
         Intent i = new Intent(this, LogInActivity.class);
-
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);
     }
 }

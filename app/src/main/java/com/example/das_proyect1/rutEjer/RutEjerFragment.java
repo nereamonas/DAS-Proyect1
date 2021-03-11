@@ -16,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager2.widget.CompositePageTransformer;
@@ -30,10 +31,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.rutinas.RutinasFragment;
@@ -49,7 +52,7 @@ import java.util.Date;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
-public class RutEjerFragment extends Fragment {
+public class RutEjerFragment extends ControlarCambiosFragment {
     private TextView titulo;
     private TextView desc;
     private TextView elemPendientes;
@@ -150,13 +153,13 @@ public class RutEjerFragment extends Fragment {
 
             }
         }.start();
-        btn_startStop.setText("Pause");
+        btn_startStop.setText(getString(R.string.pause));
         encendido=true;
     }
 
     public void pararTemporizador(){
         countDownTimer.cancel();
-        btn_startStop.setText("Start");
+        btn_startStop.setText(getString(R.string.reanudar));
         encendido=false;
     }
 
@@ -191,7 +194,11 @@ public class RutEjerFragment extends Fragment {
             this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
 
         }else{
-            //Has terminado la rutina. saltar notificacion
+            //Has terminado la rutina. lanzar un toast
+            Toast toast = Toast.makeText(getContext(), getString(R.string.notif_cuerpo_hassuperadoelentrena), Toast.LENGTH_LONG);
+            toast.show();
+
+            // saltar notificacion
             mostrarNotificacion();
 
             //Escribiremos en el fichero que ha acabado la rutina
@@ -200,7 +207,11 @@ public class RutEjerFragment extends Fragment {
             //Volvemos al menu de rutinas
             Bundle bundle = new Bundle();
             bundle.putString("usuario", this.usuario);
-            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle);
+            NavOptions options = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.nav_rutinas,false)
+                    .build();
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle,options);
 
 
         }
@@ -217,15 +228,16 @@ public class RutEjerFragment extends Fragment {
                 Intent intent = new Intent(getContext(), RutinasFragment.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
 
-                elBuilder.setSmallIcon(R.drawable.bart)
-                        .setContentTitle("Fin entrenamiento")
-                        .setContentText("Has superado todo el entrenamiento. Felicidades")
+
+                elBuilder.setSmallIcon(R.drawable.ic_rutinas)
+                        .setContentTitle(getString(R.string.notif_titulo_finEntrenamiento))
+                        .setContentText(getString(R.string.notif_cuerpo_hassuperadoelentrena))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setLights(Color.MAGENTA, 1000, 1000)
                         .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setAutoCancel(true) //para q desaparezca una vez hacer click sobre ella
-                        .addAction(R.drawable.bart, "Iniciar otra rutina", pendingIntent);  //no funciona el q abra otra rutina pero bueno
+                        .addAction(R.drawable.ic_rutinas, getString(R.string.notif_boton_iniciarOtraRutina), pendingIntent);  //no funciona el q abra otra rutina pero bueno
 
                 elManager.notify(1, elBuilder.build());
             }
@@ -241,7 +253,7 @@ public class RutEjerFragment extends Fragment {
             java.util.Date fecha = new Date();
             //fichero.append(this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
 
-            fichero.write(this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
+            fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n\n");
             fichero.close();
             Log.d("Logs", "ha entrado a insertar datos ");
 

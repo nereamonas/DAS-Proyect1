@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/rutEjerViewPagerFragment"
         android:name="com.example.das_proyect1.rutEjer.RutEjerFragment"
-        android:label="fragment_rutejerviewpager"
+        android:label="@string/ejercicio"
         tools:layout="@layout/fragment_rutejerviewpager" >
         <action
             android:id="@+id/action_rutEjerViewPagerFragment_to_nav_rutinas"
@@ -56,7 +56,7 @@
     <fragment
         android:id="@+id/nav_entrada"
         android:name="com.example.das_proyect1.EntradaFragment"
-        android:label="nav_entrada"
+        android:label="@string/menu_entrada"
         tools:layout="@layout/fragment_entrada" />
     <action
         android:id="@+id/action_global_nav_entrada"
@@ -64,11 +64,11 @@
     <fragment
         android:id="@+id/ajustesUsuarioFragment"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesUsuarioFragment"
-        android:label="AjustesUsuarioFragment" />
+        android:label="@string/ajustes_usuario" />
     <fragment
         android:id="@+id/ajustesGeneralesFragment"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesGeneralesFragment"
-        android:label="fragment_ajustes_generales"
+        android:label="@string/menu_ajustes"
         tools:layout="@layout/fragment_ajustes_generales" >
         <action
             android:id="@+id/action_ajustesGeneralesFragment_to_ajustesUsuarioFragment"
@@ -83,7 +83,7 @@
     <fragment
         android:id="@+id/nav_rutinasCompletadas"
         android:name="com.example.das_proyect1.ui.rutinasCompletadas.RutinasCompletadasFragment"
-        android:label="fragment_rutinas_completadas"
+        android:label="@string/menu_rutinasCompletada"
         tools:layout="@layout/fragment_rutinas_completadas" />
     <action
         android:id="@+id/action_global_rutinasCompletadasFragment"

@@ -26,10 +26,10 @@
 
     <!-- Tema Preference -->
     <string-array name="tema_entries">
-        <item>morado</item>
-        <item>naranja</item>
-        <item>verde</item>
-        <item>azul</item>
+        <item>@string/ajustes_morado</item>
+        <item>@string/ajustes_naranja</item>
+        <item>@string/ajustes_verde</item>
+        <item>@string/ajustes_azul</item>
     </string-array>
 
     <string-array name="tema_values">

@@ -25,13 +25,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_entrada">Entrada</string>
+    <string name="menu_gallery">Entrada</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_rutinas">Rutinas</string>
     <string name="menu_cambiarIdioma">Cambiar idioma</string>
     <string name="menu_notificaciones">Notificaciones</string>
-    <string name="menu_ejercicios">Ejercicios</string>
+    <string name="menu_ejercicios">Todos los ejercicios</string>
     <string name="login">login</string>
     <string name="singin">singin</string>
     <!-- Preference Titles -->
@@ -48,8 +48,40 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="menu_ajustes">Ajustes</string>
+    <string name="menu_ajustes">Ezarpenak</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email">Email</string>
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="menu_contactanos">Contactanos</string>
+    <string name="menu_rutinasCompletada">Ver rutinas completadas</string>
+    <string name="ejercicio">Ejercicio</string>
+    <string name="ajustes_usuario">Ajustes usuario</string>
+    <string name="pause">Pause</string>
+    <string name="reanudar">Reanudar</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="ajustes_tema">Tema</string>
+    <string name="ajustes_infoUsuario">Información de usuario</string>
+    <string name="ajustes_idioma">Idioma</string>
+    <string name="ajustes_configurar_notificaciones">Configurar notificaciones</string>
+    <string name="ajustes_notificaciones">Notificaciones</string>
+    <string name="ajustes_notificacionesActivadas">Notificaciones activadas</string>
+    <string name="ajustes_notificacionesDesactivadas">Notificaciones desactivadas</string>
+    <string name="ajustes_cambiaInfoUsuario">Cambia la información de tu usuario</string>
+    <string name="ajustes_azul">Azul</string>
+    <string name="ajustes_naranja">Naranja</string>
+    <string name="ajustes_verde">Verde</string>
+    <string name="ajustes_morado">Morado</string>
+    <string name="ajustes_otros">Otros ajustes</string>
+    <string name="ajustes_nombreUsuario">Nombre de usuario</string>
+    <string name="ajustes_correo">Correo electrónico</string>
+    <string name="ajustes_contraseña">Contraseña</string>
+    <string name="notif_titulo_finEntrenamiento">Fin entrenamiento</string>
+    <string name="notif_cuerpo_hassuperadoelentrena">Has superado todo el entrenamiento. ¡Felicidades!</string>
+    <string name="notif_boton_iniciarOtraRutina">Iniciar otra rutina</string>
+    <string name="alert_error">Error</string>
+    <string name="alert_useropassincorrecto">El usuario o la contraseña son incorrectos</string>
+    <string name="alert_aceptar">Aceptar</string>
+    <string name="alert_lascontraseñasnocoinciden">Las contraseñas no coinciden</string>
+    <string name="alert_nosehapodidocrealelusuario">No se ha podido crear el usuario</string>
 </resources>

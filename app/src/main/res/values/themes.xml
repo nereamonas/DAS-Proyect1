@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.DASProyect1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#D85CED</item>
+        <item name="colorPrimary">#FFFEFE</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -10,10 +10,10 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <!-- <item name="android:statusBarColor">@color/teal_200</item>-->
+         <!--<item name="android:statusBarColor">@color/teal_200</item>-->
        <item name="android:colorForeground">@color/teal_200</item>
        <item name="android:navigationBarColor">#D85CED</item>
-       <!-- <item name="colorPrimaryDark">@color/teal_200</item>-->
+        <!--<item name="colorPrimaryDark">@color/teal_200</item>-->
        <!-- Customize your theme here. -->
         </style>
     <style name="Theme.DASProyect1.NoActionBar">
@@ -23,6 +23,26 @@
     <style name="Theme.DASProyect1.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.DASProyect1.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Theme.Morado" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#F44336</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <!--<item name="android:statusBarColor">@color/teal_200</item>-->
+        <item name="android:colorForeground">@color/teal_200</item>
+        <item name="android:navigationBarColor">#D85CED</item>
+        <!--<item name="colorPrimaryDark">@color/teal_200</item>-->
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="Theme.Morado.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
         <style name="Theme.Naranja" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
             <!-- Primary brand color. -->
@@ -40,7 +60,10 @@
             <item name="colorPrimaryDark">#FF9800</item>
         <!-- Customize your theme here. -->
     </style>
-
+    <style name="Theme.Naranja.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
     <style name="Theme.Verde" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#8BC34A</item>
@@ -57,6 +80,11 @@
         <item name="android:navigationBarColor">#8BC34A</item>
         <item name="colorPrimaryDark">#8BC34A</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">true</item>
+    </style>
+    <style name="Theme.Verde.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.Azul" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -74,6 +102,10 @@
         <item name="android:navigationBarColor">#86E9F6</item>
         <item name="colorPrimaryDark">#86E9F6</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="Theme.Azul.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 

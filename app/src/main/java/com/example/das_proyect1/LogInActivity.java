@@ -1,28 +1,25 @@
 package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.LocaleList;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.das_proyect1.controlarCambios.ControlarCambios;
 import com.example.das_proyect1.helpClass.Usuario;
 
 import java.util.Locale;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends ControlarCambios {
     private MiDB db;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -31,31 +28,6 @@ public class LogInActivity extends AppCompatActivity {
 
         ImageView img= findViewById(R.id.img);
         img.setImageResource(R.mipmap.avatar);
-
-        //Comprobamos el idioma de la aplicacion que tenemos guardado para cargarlo
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String idioma = "";
-        if (prefs.contains("idioma")) {
-            idioma = prefs.getString("idioma", null);
-        }
-
-        String idiomaActual=Locale.getDefault().getLanguage();
-        Log.d("Logs", "LANGUAGE de ajustes "+idioma);
-        Log.d("Logs", "LANGUAGE "+idiomaActual);
-        if (!idiomaActual.equals(idioma)) {   //Cuando cierras y vuelves a abrir la app se va el idioma
-/**
-            Locale nuevaloc = new Locale(idioma);
-            Locale.setDefault(nuevaloc);
-            Configuration configuration = this.getBaseContext().getResources().getConfiguration();
-
-            configuration.setLocale(nuevaloc);
-            configuration.setLayoutDirection(nuevaloc);
-
-            Context context = this.getBaseContext().createConfigurationContext(configuration);
-            this.getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
-            this.finish();
-            startActivity(this.getIntent());**/
-        }
 
     }
 
@@ -69,7 +41,7 @@ public class LogInActivity extends AppCompatActivity {
         String user=editView_user.getText().toString();
         String pass=editView_pass.getText().toString();
 
-        if (user!="" && pass!="") {
+        if (!user.equals("") && !pass.equals("")) {
             Log.d("Logs", "Usuario"+user+ " Contraseña"+pass);
             Usuario usuario = db.comprobarUsuario(user, pass);
 
@@ -77,22 +49,29 @@ public class LogInActivity extends AppCompatActivity {
                 Log.d("Logs", usuario.toString());
                 Intent i = new Intent(this, PrincipalActivity.class);
                 i.putExtra("usuario", user);
+                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(i);
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Error");
-                builder.setMessage("El usuario o la contraseña son incorrectos");
-                builder.setPositiveButton("Aceptar", null);
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                saltarAlerta();
             }
+        }else {
+            saltarAlerta();
         }
+    }
+
+    public void saltarAlerta(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alert_error));
+        builder.setMessage(getString(R.string.alert_useropassincorrecto));
+        builder.setPositiveButton(getString(R.string.alert_aceptar), null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void clickCrearCuenta(View v){
         Intent i = new Intent(this, SingUpActivity.class);
-
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);
     }
 }

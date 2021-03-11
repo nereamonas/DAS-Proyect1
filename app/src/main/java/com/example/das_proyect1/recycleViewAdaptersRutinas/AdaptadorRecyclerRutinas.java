@@ -36,7 +36,7 @@ public class AdaptadorRecyclerRutinas extends RecyclerView.Adapter<ViewHolderNew
     @Override
     public void onBindViewHolder(@NonNull ViewHolderNewRutinas holder, int position) {
         holder.eltexto.setText(this.rutinas.get(position).getNombre());
-        holder.laimagen.setImageResource(R.drawable.edna);
+        //holder.laimagen.setImageResource(R.drawable.edna);
 
 
         /**holder.v.setOnLongClickListener(new View.OnLongClickListener(){

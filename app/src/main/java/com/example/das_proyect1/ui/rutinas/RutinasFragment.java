@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.example.das_proyect1.LogInActivity;
 import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.Rutina;
 import com.example.das_proyect1.recycleViewAdaptersRutinas.AdaptadorRecyclerRutinas;
@@ -33,7 +35,7 @@ import com.example.das_proyect1.rutEjer.RutEjerFragment;
 
 import java.util.ArrayList;
 
-public class RutinasFragment extends Fragment {
+public class RutinasFragment extends ControlarCambiosFragment {
     private MiDB db;
     private RutinasViewModel rutinasViewModel;
 
@@ -67,7 +69,10 @@ public class RutinasFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("idRut", (String.valueOf(eladap.getItemId(position))));
                 bundle.putString("usuario", usuario);
-                Navigation.findNavController(view).navigate(R.id.action_nav_rutinas_to_rutEjerViewPagerFragment, bundle);
+                NavOptions options = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .build();
+                Navigation.findNavController(view).navigate(R.id.action_nav_rutinas_to_rutEjerViewPagerFragment, bundle,options);
             }
 
         });

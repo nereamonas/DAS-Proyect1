@@ -1,18 +1,21 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="User Information">
+    <PreferenceCategory app:title="@string/ajustes_usuario">
 
         <EditTextPreference
             app:key="username"
-            app:title="username"
+            app:title="@string/ajustes_nombreUsuario"
+            app:icon="@drawable/ic_user"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             app:key="email"
-            app:title="email"
+            app:title="@string/ajustes_correo"
+            app:icon="@drawable/ic_email"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
             app:key="pass"
-            app:title="pass"
+            app:title="@string/ajustes_contraseña"
+            app:icon="@drawable/ic_pass"
             app:useSimpleSummaryProvider="true" />
 
 

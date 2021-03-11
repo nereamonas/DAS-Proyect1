@@ -9,9 +9,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -62,6 +67,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         });
 
 
+
     }
 
 
@@ -70,6 +76,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         switch (s) {
             case "idioma":
                 Log.d("Logs", "cambio idioma");
+
 
                 String idioma = "";
                 if (this.prefs.contains("idioma")) {
@@ -98,27 +105,32 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 }
                 switch (tema) {
                     case "morado":
-                        getContext().setTheme(R.style.Theme_DASProyect1);
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DA6CED")));
-                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
-                        Log.d("Logs", "color elegido morado");
+                        //getContext().setTheme(R.style.Theme_Morado);
+                        //getActivity().setTheme(R.style.Theme_Morado);
+                        //((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DA6CED")));
+                        navigate();
+                        //Log.d("Logs", "color elegido morado");
                         break;
                     case "naranja":
                         getContext().setTheme(R.style.Theme_Naranja);
+                        getActivity().setTheme(R.style.Theme_Naranja);
                         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF9800")));
-                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
+                        navigate();
                         Log.d("Logs", "color elegido naranja");
                         break;
                     case "verde":
                         getContext().setTheme(R.style.Theme_Verde);
+                        getActivity().setTheme(R.style.Theme_Verde);
                         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8BC34A")));
-                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
+                        navigate();
                         Log.d("Logs", "color elegido verde");
                         break;
                     case "azul":
                         getContext().setTheme(R.style.Theme_Azul);
+                        getActivity().setTheme(R.style.Theme_Azul);
                         ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#86E9F6")));
-                        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
+                        //Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
+                        navigate();
                         Log.d("Logs", "color elegido azul");
                         break;
                 }
@@ -144,6 +156,15 @@ public class AjustesFragment extends PreferenceFragmentCompat
         Intent i = new Intent(getActivity(), PrincipalActivity.class);
         i.putExtra("usuario", this.user);
         startActivity(i);
+    }
+
+    public void navigate(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self,null,options);
+
     }
 
 

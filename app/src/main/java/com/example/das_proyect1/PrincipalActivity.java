@@ -11,33 +11,52 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.das_proyect1.controlarCambios.ControlarCambios;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 import androidx.preference.PreferenceManager;
 
-public class PrincipalActivity extends AppCompatActivity {
+public class PrincipalActivity extends ControlarCambios {//ControlarCambios   AppCompatActivity
     private String usuario;
     private AppBarConfiguration mAppBarConfiguration;
     private MiDB db;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        String tema=super.returnTema();
+
+        switch (tema) {
+            case "morado":
+                this.setTheme(R.style.Theme_Morado_NoActionBar);
+                break;
+            case "naranja":
+                this.setTheme(R.style.Theme_Naranja_NoActionBar);
+                break;
+            case "verde":
+                this.setTheme(R.style.Theme_Verde_NoActionBar);
+                break;
+            case "azul":
+                this.setTheme(R.style.Theme_Azul_NoActionBar);
+                break;
+        }
         setContentView(R.layout.activity_principal);
+        //getSupportActionBar().hide();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         this.usuario = getIntent().getExtras().getString("usuario");
 
@@ -142,6 +161,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
@@ -150,23 +170,43 @@ public class PrincipalActivity extends AppCompatActivity {
     public void open_nav_rutinas(){
         Bundle bundle = new Bundle();
         bundle.putString("usuario", this.usuario);
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_rutinas, bundle);
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_rutinas, bundle,options);
     }
     public void open_nav_ejercicios(){
         Bundle bundle = new Bundle();
         bundle.putString("usuario", this.usuario);
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_ejercicios, bundle);
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_ejercicios, bundle,options);
     }
     public void open_nav_ajustes(){
         Bundle bundle = new Bundle();
         bundle.putString("usuario", this.usuario);
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_ajustesGeneralesFragment, bundle);
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_ajustesGeneralesFragment, bundle,options);
     }
     public void open_nav_entrada(){
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_entrada);
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_entrada,null,options);
     }
     public void open_nav_rutinascompletadas(){
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_rutinasCompletadasFragment);
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_rutinasCompletadasFragment,null,options);
     }
 
 

@@ -18,13 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.recycleViewAdapterEjercicios.AdaptadorRecyclerEjercicios;
 import com.example.das_proyect1.recycleViewAdaptersRutinas.AdaptadorRecyclerRutinas;
 
 import java.util.ArrayList;
 
-public class EjerciciosFragment extends Fragment {
+public class EjerciciosFragment extends ControlarCambiosFragment {
     private MiDB db;
     private EjerciciosViewModel ejerciciosViewModel;
 

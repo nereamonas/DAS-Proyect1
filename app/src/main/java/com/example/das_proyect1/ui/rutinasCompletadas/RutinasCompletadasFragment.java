@@ -15,13 +15,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RutinasCompletadasFragment extends Fragment {
+public class RutinasCompletadasFragment extends ControlarCambiosFragment {
     private RutinasCompletadasViewModel rutinasCompletadasViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
