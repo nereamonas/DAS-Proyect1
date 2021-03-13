@@ -90,12 +90,12 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
         correo.setText(db.getCorreoConUsuario(this.usuario));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.contains("username")) {//si no existe, insertamos el usuario
+        //if (!prefs.contains("username")) {//si no existe, insertamos el usuario. siempre. por si hay cambio de usuario
             SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
             editor.putString("username", this.usuario);
             editor.apply();
             editor.commit();
-        }
+        //}
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 

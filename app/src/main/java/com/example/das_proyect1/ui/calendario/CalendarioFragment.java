@@ -1,5 +1,6 @@
-package com.example.das_proyect1.calendario;
+package com.example.das_proyect1.ui.calendario;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
@@ -24,6 +26,7 @@ import java.util.Calendar;
 
 public class CalendarioFragment extends ControlarCambiosFragment {
     private CalendarioViewModel calendarioViewModel;
+    String user=" ";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,17 +45,21 @@ public class CalendarioFragment extends ControlarCambiosFragment {
         String YEAR = String.valueOf(cal.get(Calendar.YEAR));
         String MONTH = String.valueOf(cal.get(Calendar.MONTH));
         String date=" "+DAY+"/"+MONTH+"/"+YEAR+" ";
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        if (prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
+            this.user = " "+prefs.getString("username", null)+":";
+        }
 
         TextView text= root.findViewById(R.id.textrutCompletadasDelDia);
-        text.setText("Rutinas completadas del día: "+date+"\n");
+        text.setText("Rutinas completadas del día: "+date);
         try {
             BufferedReader ficherointerno= new BufferedReader(new InputStreamReader(getContext().openFileInput("rutinasCompletadas.txt")));
             String linea= ficherointerno.readLine();
             Log.d("Logs", "linea: "+linea);
             while (linea!=null){
-               if(linea.contains(date)) {
-                    text.setText(text.getText() + "\n" + linea);
+               if(linea.contains(date) && linea.contains(this.user)) {
+                    text.setText(text.getText() + "\n\n" + linea);
                 }
                 linea = ficherointerno.readLine();
             }
@@ -79,8 +86,8 @@ public class CalendarioFragment extends ControlarCambiosFragment {
                     String linea= ficherointerno.readLine();
                     Log.d("Logs", "linea: "+linea);
                     while (linea!=null){
-                        if(linea.contains(date)) {
-                            text.setText(text.getText() + "\n" + linea);
+                        if(linea.contains(date) && linea.contains(getUser())) {
+                            text.setText(text.getText() + "\n\n" + linea);
                         }
                         linea = ficherointerno.readLine();
                     }
@@ -96,6 +103,10 @@ public class CalendarioFragment extends ControlarCambiosFragment {
 
 
         return root;
+    }
+
+    public String getUser(){
+        return this.user;
     }
 
 

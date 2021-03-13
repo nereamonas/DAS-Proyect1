@@ -70,6 +70,9 @@
     <string name="ajustes_nombreUsuario">Username</string>
     <string name="ajustes_correo">Email</string>
     <string name="ajustes_contraseña">Password</string>
+    <string name="ajustes_toast">Toast</string>
+    <string name="ajustes_toastActivadas">Toast activated</string>
+    <string name="ajustes_toastDesactivadas">Toast disables</string>
     <string name="notif_titulo_finEntrenamiento">End of training</string>
     <string name="notif_cuerpo_hassuperadoelentrena">You have passed all training. Congratulations!</string>
     <string name="notif_boton_iniciarOtraRutina">Start another routine</string>
@@ -83,4 +86,10 @@
     <string name="email_dudaValoracionaplicacion">Doubt / Appraisal</string>
     <string name="email_mandanosmensaje">Send us your message</string>
     <string name="toast_siguienteEjercicio">Very good. We go to the next exercise</string>
+    <string name="toast_usuarioCambiadoCorrectamente">User updated successfully </string>
+    <string name="toast_emailCambiadoCorrectamente">Email updated successfully </string>
+    <string name="toast_contraseñaCambiadoCorrectamente">Password updated successfully </string>
+    <string name="toast_usuarionoCambiadoCorrectamente">Unable to update username</string>
+    <string name="toast_emailnoCambiadoCorrectamente">Unable to update email</string>
+    <string name="toast_contraseñanoCambiadoCorrectamente">Unable to update password</string>
 </resources>

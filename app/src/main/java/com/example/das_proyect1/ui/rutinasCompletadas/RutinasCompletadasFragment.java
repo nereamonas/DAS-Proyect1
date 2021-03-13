@@ -1,5 +1,6 @@
 package com.example.das_proyect1.ui.rutinasCompletadas;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
@@ -36,7 +38,12 @@ public class RutinasCompletadasFragment extends ControlarCambiosFragment {
             }
         });
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        String user=" ";
+        if (prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
+            user = " "+prefs.getString("username", null)+":";
+        }
         TextView text= root.findViewById(R.id.textrutCompletadasDelDia);
         text.setText("Rutinas completadas: \n");
         try {
@@ -44,8 +51,10 @@ public class RutinasCompletadasFragment extends ControlarCambiosFragment {
             String linea= ficherointerno.readLine();
             Log.d("Logs", "linea: "+linea);
             while (linea!=null){
-                text.setText(text.getText()+"\n"+linea);
-                linea= ficherointerno.readLine();
+                if(linea.contains(user)) {
+                    text.setText(text.getText() + "\n" + linea);
+                }
+                linea = ficherointerno.readLine();
             }
 
             ficherointerno.close();

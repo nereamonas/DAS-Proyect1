@@ -70,6 +70,9 @@
     <string name="ajustes_nombreUsuario">Erabiltzaile izena</string>
     <string name="ajustes_correo">Posta elektronikoa</string>
     <string name="ajustes_contraseña">Pasahitza</string>
+    <string name="ajustes_toast">Toast</string>
+    <string name="ajustes_toastActivadas">Toast aktibatuta daude</string>
+    <string name="ajustes_toastDesactivadas">Toast desgaituta daude</string>
     <string name="notif_titulo_finEntrenamiento">Entramenduaren amaiera</string>
     <string name="notif_cuerpo_hassuperadoelentrena">Prestakuntza guztia gainditu duzu. Zorionak!</string>
     <string name="notif_boton_iniciarOtraRutina">Hasi beste errutina bat</string>
@@ -83,4 +86,10 @@
     <string name="email_dudaValoracionaplicacion">Zalantza / Aplikazioen balorazioa</string>
     <string name="email_mandanosmensaje">Bidali zure mezua</string>
     <string name="toast_siguienteEjercicio">Oso ondo. Hurrengo ariketara goaz</string>
+    <string name="toast_usuarioCambiadoCorrectamente">Erabiltzailea behar bezala eguneratu da</string>
+    <string name="toast_emailCambiadoCorrectamente">Posta elektronikoa behar bezala eguneratu da</string>
+    <string name="toast_contraseñaCambiadoCorrectamente">Pasahitza behar bezala eguneratu da</string>
+    <string name="toast_usuarionoCambiadoCorrectamente">Ezin izan da erabiltzailea eguneratu</string>
+    <string name="toast_emailnoCambiadoCorrectamente">Ezin izan da posta elektronikoa eguneratu</string>
+    <string name="toast_contraseñanoCambiadoCorrectamente">Ezin da izan pasahitza eguneratu</string>
 </resources>

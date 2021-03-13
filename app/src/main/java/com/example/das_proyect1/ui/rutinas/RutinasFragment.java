@@ -1,38 +1,24 @@
 package com.example.das_proyect1.ui.rutinas;
 
-import android.content.Intent;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.das_proyect1.ListViewAdapterRutinas.ListViewAdapter;
-import com.example.das_proyect1.LogInActivity;
 import com.example.das_proyect1.MiDB;
-import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
-import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.Rutina;
-import com.example.das_proyect1.recycleViewAdaptersRutinas.AdaptadorRecyclerRutinas;
-import com.example.das_proyect1.rutEjer.RutEjerFragment;
 
 import java.util.ArrayList;
 

@@ -33,11 +33,11 @@
             app:title="@string/ajustes_notificaciones" />
 
         <SwitchPreferenceCompat
-            app:dependency="notif"
-            app:key="notifbaj"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:key="notiftoast"
+            app:summaryOff="@string/ajustes_toastDesactivadas"
+            app:summaryOn="@string/ajustes_toastActivadas"
+            app:icon="@drawable/ic_notif"
+            app:title="@string/ajustes_toast" />
 
     </PreferenceCategory>
 

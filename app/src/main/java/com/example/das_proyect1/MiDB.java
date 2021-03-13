@@ -263,22 +263,40 @@ public class MiDB extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(select,null);
         String existe="";
         boolean todobien=false;
-        if(c!=null && c.getCount()>0){
+        if(c!=null && c.getCount()>0) {//Ya esta en uso
+            Log.d("Logs","ya está en uso el usuario "+c);
             c.moveToFirst();
-            existe=c.getString(c.getColumnIndex("user"));
-            todobien=true;
-        }
-        if (existe!=""){
-            db.execSQL("UPDATE usuario SET user='"+userNuevo+"' WHERE user='"+userViejo+"'");
+            existe = c.getString(c.getColumnIndex("user"));
+        }else{
+            try{
+                db.execSQL("UPDATE usuario SET user='"+userNuevo+"' WHERE user='"+userViejo+"'");
+                todobien=true;
+            }catch (Exception e){
+                Log.d("Logs","ERROR AL ACTUALIZAR USUARIO");
+            }
         }
         return todobien;
     }
 
-    public void editarEmailDeUsuario(String user, String email) {
-        db.execSQL("UPDATE usuario SET email='"+email+"' WHERE user='"+user+"'");
+    public boolean editarEmailDeUsuario(String user, String email) {
+        boolean bien=false;
+        try{
+            db.execSQL("UPDATE usuario SET email='"+email+"' WHERE user='"+user+"'");
+            bien=true;
+        }catch(Exception e){
+            Log.d("Logs","ERROR AL ACTUALIZAR EMAIL");
+        }
+        return bien;
     }
-    public void editarPassDeUsuario(String user, String pass) {
-        db.execSQL("UPDATE usuario SET pass='"+pass+"' WHERE user='"+user+"'");
+    public boolean editarPassDeUsuario(String user, String pass) {
+        boolean bien=false;
+        try{
+            db.execSQL("UPDATE usuario SET pass='"+pass+"' WHERE user='"+user+"'");
+            bien=true;
+        }catch(Exception e){
+            Log.d("Logs","ERROR AL ACTUALIZAR CONTRASEÑA");
+        }
+        return bien;
     }
 
     public String getNombreRutina(int id){

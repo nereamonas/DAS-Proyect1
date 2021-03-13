@@ -147,6 +147,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         Intent i = new Intent(getActivity(), PrincipalActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         i.putExtra("ajustes", true);
+        i.putExtra("usuario", this.user);
         startActivity(i);
     }
 

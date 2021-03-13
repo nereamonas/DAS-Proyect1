@@ -86,7 +86,7 @@
         app:destination="@id/nav_rutinasCompletadas" />
     <fragment
         android:id="@+id/nav_calendar"
-        android:name="com.example.das_proyect1.calendario.CalendarioFragment"
+        android:name="com.example.das_proyect1.ui.calendario.CalendarioFragment"
         android:label="@string/menu_calendario"
         tools:layout="@layout/fragment_calendario" />
     <action

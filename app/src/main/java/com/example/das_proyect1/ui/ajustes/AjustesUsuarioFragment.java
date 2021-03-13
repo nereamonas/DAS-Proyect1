@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -26,7 +27,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
         setPreferencesFromResource(R.xml.fragment_ajustes_usuario, rootKey);
         this.db=new MiDB(getContext());
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (this.prefs.contains("username")) {//Comprobamos si existe
+        if (this.prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
             this.user = this.prefs.getString("username", null);
         }
 
@@ -48,12 +49,36 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                 String username = "";
                 if (this.prefs.contains("username")) { //Comprobamos si existe
                     username = this.prefs.getString("username", null);
-                    Log.d("Logs", "nombre nuevo: "+username);
-                    Boolean todobien=this.db.editarNombreDeUsuario(this.user,username);
-                    if (todobien) {
-                        this.user = username;
-                        reload();
+
+                    Log.d("Logs", "nombre nuevo: "+username+" viejo"+this.user);
+                    if (!this.user.equals(username)&&this.prefs.contains("notiftoast")) {
+                        Boolean todobien = this.db.editarNombreDeUsuario(this.user, username);
+                        if (todobien) {
+                            Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            Log.d("Logs", "estado notificaciones toast: " + activadas);
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_usuarioCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                toast.show();
+                                this.user = username;
+                            }
+                            reload();
+                        }else{
+                            Log.d("Logs","No se puede actualizar xq son iguales");
+                            SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
+                            editor.putString("username", this.user);
+                            editor.apply();
+                            if (this.prefs.contains("notiftoast")) {
+                                boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                                Log.d("Logs", "NO-estado notificaciones toast: " + activadas);
+                                if (activadas) {
+                                    Toast toast = Toast.makeText(getContext(), getString(R.string.toast_usuarionoCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    this.user = username;
+                                }
+                            }
+                        }
                     }
+
 
                 }
                 break;
@@ -63,8 +88,64 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                 if (this.prefs.contains("email")) {//Comprobamos si existe
                     email = this.prefs.getString("email", null);
                     Log.d("Logs", "email nuevo: "+email);
-                    this.db.editarEmailDeUsuario(this.user,email);
-                    reload();
+                    boolean todobien=this.db.editarEmailDeUsuario(this.user,email);
+                    if (todobien){
+                        if (this.prefs.contains("notiftoast")) {
+                            boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            Log.d("Logs", "estado notificaciones toast: " + activadas);
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_emailCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                        reload();
+                    }else{ //Volvemos el valor al estado anterior
+                        SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
+                        editor.putString("email", db.getCorreoConUsuario(this.user));
+                        editor.apply();
+                        if (this.prefs.contains("notiftoast")) {
+                            boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            Log.d("Logs", "NO-estado notificaciones toast: " + activadas);
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_emailnoCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    }
+
+                }
+                break;
+            case "pass":
+                Log.d("Logs", "ha insertado un pass");
+                String pass = "";
+                if (this.prefs.contains("pass")) {//Comprobamos si existe
+                    pass = this.prefs.getString("pass", null);
+                    Log.d("Logs", "pass nuevo: "+pass);
+                    boolean todobien=this.db.editarPassDeUsuario(this.user,pass);
+                    if (todobien){
+                        if (this.prefs.contains("notiftoast")) {
+                            boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            Log.d("Logs", "estado notificaciones toast: " + activadas);
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_contraseñaCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                        reload();
+                    }else{ //Volvemos el valor al estado anterior
+                        SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
+                        editor.putString("pass", db.getPassConUsuario(this.user));
+                        editor.apply();
+                        if (this.prefs.contains("notiftoast")) {
+                            boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            Log.d("Logs", "NO - estado notificaciones toast: " + activadas);
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_contraseñanoCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    }
+
                 }
                 break;
 
@@ -84,7 +165,11 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
     }
 
     public void reload(){
+        getActivity().finish();
+        startActivity(getActivity().getIntent());
         Intent i = new Intent(getActivity(), PrincipalActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.putExtra("ajustes", true);
         i.putExtra("usuario", this.user);
         startActivity(i);
     }

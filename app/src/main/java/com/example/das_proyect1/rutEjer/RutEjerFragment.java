@@ -154,6 +154,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             public void onTick(long l) {
                 tiempoFaltante=l;
                 actualizarTemporizador();
+
             }
 
             @Override
@@ -197,6 +198,8 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //Actualizamos todos los elementos al siguiente de la bbdd
         //hasieratuamos el contador
         this.posicion++;
+        this.countDownTimer.cancel();
+        this.countDownTimer=null;
         if(this.posicion<this.ejercicios.size()){
             //Recargo la pagina
             Bundle bundle = new Bundle();
@@ -210,6 +213,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_self, bundle,options);
 
         }else{
+
             //Has terminado la rutina. lanzar un toast
             Toast toast = Toast.makeText(getContext(), getString(R.string.notif_cuerpo_hassuperadoelentrena), Toast.LENGTH_LONG);
             toast.show();
@@ -310,5 +314,3 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     }
 
 }
-
-
