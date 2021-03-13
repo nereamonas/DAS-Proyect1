@@ -1,14 +1,14 @@
-package com.example.das_proyect1.ui.entrada;
+package com.example.das_proyect1.calendario;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class EntradaViewModel extends ViewModel {
+public class CalendarioViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public EntradaViewModel() {
+    public CalendarioViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

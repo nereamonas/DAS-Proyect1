@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -64,7 +65,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
 
     private String usuario;
     private int rutId;
-    private int posicion;
+    private int posicion=0;
 
     private ArrayList<Ejercicio> ejercicios;
     private CountDownTimer countDownTimer;
@@ -103,18 +104,24 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //insertamos los textos del primer elemento de la base de datos
         db=new MiDB(getContext());
         this.ejercicios= db.getEjerciciosDeLaRutina(rutId);
+        if (savedInstanceState != null) {
+            Log.d("Logs","POSICItiempoON RECUPERADA: "+savedInstanceState.getLong("tiempoFaltante"));
+            this.posicion=savedInstanceState.getInt("posicion");
+            this.tiempoFaltante=savedInstanceState.getLong("tiempoFaltante");
+        }else{
+            this.posicion=getArguments().getInt("posicion");
+            this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+        }
         Log.d("Logs"," rutid siguientefrag"+rutId);
-
         this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
         this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
-        this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+        Log.d("Logs"," tiempo faltante inicial"+this.tiempoFaltante);
         this.elemPendientes.setText((this.posicion+1)+"/"+this.ejercicios.size());
         //La imagen
         imgCorrespondiente= new ImgCorrespondiente();
         this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
 
         empezarTemporizador();
-        actualizarTemporizador();
 
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +148,8 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     }
 
     public void empezarTemporizador(){
-        countDownTimer= new CountDownTimer(tiempoFaltante,1000) {
+        this.countDownTimer=null;
+        this.countDownTimer= new CountDownTimer(this.tiempoFaltante,1000) {
             @Override
             public void onTick(long l) {
                 tiempoFaltante=l;
@@ -164,8 +172,9 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     }
 
     public void actualizarTemporizador(){
-        int minutos=(int) tiempoFaltante/60000;
-        int segundos=(int) tiempoFaltante % 60000 / 1000;
+        int minutos=(int) this.tiempoFaltante/60000;
+        int segundos=(int) this.tiempoFaltante % 60000 / 1000;
+        //Log.d("Logs","ACTUALIZAR "+this.tiempoFaltante);
 
         String texto;
 
@@ -175,8 +184,10 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         }
         texto+=segundos;
 
-        if(texto=="00:00"){
+        if("0:01".equals(texto)){
             //El contador a llegado al final, hay que pasar de elemento
+            Toast toast = Toast.makeText(getContext(), getString(R.string.toast_siguienteEjercicio), Toast.LENGTH_SHORT);
+            toast.show();
             pasarAlSiguienteElemento();
         }
 
@@ -187,11 +198,16 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //hasieratuamos el contador
         this.posicion++;
         if(this.posicion<this.ejercicios.size()){
-            this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
-            this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
-            this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
-            this.elemPendientes.setText((this.posicion+1)+"/"+this.ejercicios.size());
-            this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
+            //Recargo la pagina
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", this.usuario);
+            bundle.putString("idRut", (String.valueOf(this.rutId)));
+            bundle.putInt("posicion",this.posicion);
+            NavOptions options = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.nav_rutinas,false)
+                    .build();
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_self, bundle,options);
 
         }else{
             //Has terminado la rutina. lanzar un toast
@@ -246,16 +262,19 @@ public class RutEjerFragment extends ControlarCambiosFragment {
 
     public void escribirEnFichero(){
         try {
-            Log.d("Logs", "entra en el try ");
 
             OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_APPEND));
 
             java.util.Date fecha = new Date();
-            //fichero.append(this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n");
+            Calendar cal = Calendar.getInstance();
+            String DAY = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+            String YEAR = String.valueOf(cal.get(Calendar.YEAR));
+            String MONTH = String.valueOf(cal.get(Calendar.MONTH));
+            Log.d("Logs","El dia "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes());
 
-            fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" con fecha: "+fecha+"\n\n");
+            fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
             fichero.close();
-            Log.d("Logs", "ha entrado a insertar datos ");
+            Log.d("Logs", "Ha insertado los datos en el fichero ");
 
 
         } catch (FileNotFoundException e) {
@@ -270,6 +289,24 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             Log.d("Logs", "error al insertar datos ");
 
         }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("posicion",this.posicion);
+        outState.putLong("tiempoFaltante",this.tiempoFaltante);
+
+    }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        //se coge en el create
+        super.onActivityCreated(savedInstanceState);
+
     }
 
 }

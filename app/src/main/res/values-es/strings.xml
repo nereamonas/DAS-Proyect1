@@ -34,6 +34,7 @@
     <string name="login">login</string>
     <string name="menu_ejercicios">Todos los ejercicios</string>
     <string name="menu_notificaciones">Notificaciones</string>
+    <string name="menu_calendario">Calendario</string>
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
     <string name="signature_title">Your signature</string>
@@ -81,4 +82,5 @@
     <string name="alert_estasseguroquequierescerrarsesion">¿Estás seguro que quieres cerrar la sesión?</string>
     <string name="email_dudaValoracionaplicacion">Duda / Valoración aplicación</string>
     <string name="email_mandanosmensaje">Mandanos tu mensaje</string>
+    <string name="toast_siguienteEjercicio">Muy bien. Pasamos al siguiente ejercicio</string>
 </resources>

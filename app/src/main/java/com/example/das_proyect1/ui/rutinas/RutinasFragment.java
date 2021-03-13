@@ -1,6 +1,7 @@
 package com.example.das_proyect1.ui.rutinas;
 
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class RutinasFragment extends ControlarCambiosFragment {
     private MiDB db;
     private RutinasViewModel rutinasViewModel;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         rutinasViewModel =
@@ -53,7 +55,7 @@ public class RutinasFragment extends ControlarCambiosFragment {
         });
 
         db=new MiDB(getContext());
-        String usuario = getArguments().getString("usuario");  //cogemos el id de la rutina
+        String usuario = getArguments().getString("usuario");
 
         ArrayList<Rutina> rutinas= db.getRutinasDelUsuario(usuario);
 

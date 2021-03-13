@@ -19,6 +19,7 @@ public class ControlarCambios extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             // Gets the saved theme ID from SharedPrefs,
             // or uses default_theme if no theme ID has been saved
+
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String tema = "";
             if (prefs.contains("tema")) {
@@ -39,6 +40,10 @@ public class ControlarCambios extends AppCompatActivity {
                     break;
                 case "azul":
                     this.setTheme(R.style.Theme_Azul);
+                    super.onCreate(savedInstanceState);
+                    break;
+                default:
+                    this.setTheme(R.style.Theme_Morado);
                     super.onCreate(savedInstanceState);
                     break;
             }

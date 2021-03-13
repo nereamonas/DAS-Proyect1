@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.886" />
 
     <TextView
-        android:id="@+id/text_rutinasCompletadas"
+        android:id="@+id/textrutCompletadasDelDia"
         android:layout_width="206dp"
         android:layout_height="37dp"
         app:layout_constraintBottom_toBottomOf="parent"

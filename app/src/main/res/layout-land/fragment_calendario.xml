@@ -4,17 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.rutinasCompletadas.RutinasCompletadasFragment" >
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="324dp"
-        android:layout_height="539dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="240dp"
+        android:layout_height="267dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.938"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92">
+        app:layout_constraintVertical_bias="0.736">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,4 +30,14 @@
         </LinearLayout>
     </ScrollView>
 
+    <CalendarView
+        android:id="@+id/calendario"
+        android:layout_width="363dp"
+        android:layout_height="263dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.668" />
 </androidx.constraintlayout.widget.ConstraintLayout>

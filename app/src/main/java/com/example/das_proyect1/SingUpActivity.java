@@ -50,6 +50,7 @@ public class SingUpActivity extends ControlarCambios {
                     i.putExtra("usuario", user);
                     i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(i);
+                    finish();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.alert_error));
@@ -75,5 +76,6 @@ public class SingUpActivity extends ControlarCambios {
         Intent i = new Intent(this, LogInActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);
+        finish();
     }
 }

@@ -5,9 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_entrada"
-            android:icon="@drawable/icentrada"
-            android:title="@string/menu_entrada" />
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendario"
+            android:title="@string/menu_calendario" />
         <item
             android:id="@+id/nav_rutinas"
             android:icon="@drawable/ic_rutinas"
@@ -35,6 +35,7 @@
             android:id="@+id/nav_logoff"
             android:icon="@drawable/ic_poweroff"
             android:title="@string/menu_logout" />
+
 
     </group>
 </menu>

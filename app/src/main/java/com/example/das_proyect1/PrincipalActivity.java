@@ -38,6 +38,8 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
         super.onCreate(savedInstanceState);
         String tema=super.returnTema();
 
+
+
         switch (tema) {
             case "morado":
                 this.setTheme(R.style.Theme_Morado_NoActionBar);
@@ -58,15 +60,20 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
         setSupportActionBar(toolbar);
 
 
-        this.usuario = getIntent().getExtras().getString("usuario");
-
+        this.usuario = "";
+        if (getIntent().hasExtra("usuario")) {
+            this.usuario = getIntent().getExtras().getString("usuario");
+        }
+        if (getIntent().hasExtra("ajustes")) {  //si viene de ajustes
+            open_nav_ajustes();
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_entrada,R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff)
+                R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff,R.id.nav_calendar)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -96,10 +103,7 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.nav_entrada) {
-                    Log.d("Logs", "nav_entrada");
-                    open_nav_entrada();
-                }else if (id == R.id.nav_rutinas) {
+                if (id == R.id.nav_rutinas) {
                     Log.d("Logs", "nav_rutinas");
                     open_nav_rutinas();
                 } else if (id == R.id.nav_ejercicios) {
@@ -133,6 +137,7 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                         public void onClick(DialogInterface dialogo1, int id) {
                             Intent i = new Intent(getApplication(), LogInActivity.class);
                             startActivity(i);
+                            finish();
                         }
                     });
                     dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -142,6 +147,9 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                         }
                     });
                     dialogo.show();
+                }else if (id == R.id.nav_calendar) {
+                    Log.d("Logs", "calendar");
+                    open_calendar();
                 }
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -194,19 +202,19 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_ajustesGeneralesFragment, bundle,options);
     }
-    public void open_nav_entrada(){
-        NavOptions options = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
-                .build();
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_entrada,null,options);
-    }
     public void open_nav_rutinascompletadas(){
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setPopUpTo(R.id.nav_rutinas,false)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_rutinasCompletadasFragment,null,options);
+    }
+    public void open_calendar(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.nav_rutinas,false)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_fragment_calen,null,options);
     }
 
 

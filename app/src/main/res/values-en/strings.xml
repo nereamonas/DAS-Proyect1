@@ -34,6 +34,7 @@
     <string name="menu_cambiarIdioma">Change language</string>
     <string name="menu_notificaciones">Notifications</string>
     <string name="menu_ejercicios">All exercises</string>
+    <string name="menu_calendario">Calendar</string>
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
     <string name="signature_title">Your signature</string>
@@ -81,4 +82,5 @@
     <string name="alert_estasseguroquequierescerrarsesion">Are you sure you want to log out?</string>
     <string name="email_dudaValoracionaplicacion">Doubt / Appraisal</string>
     <string name="email_mandanosmensaje">Send us your message</string>
+    <string name="toast_siguienteEjercicio">Very good. We go to the next exercise</string>
 </resources>

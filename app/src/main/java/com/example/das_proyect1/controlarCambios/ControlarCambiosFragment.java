@@ -53,6 +53,11 @@ public class ControlarCambiosFragment extends Fragment {
                 //((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#86E9F6")));
                 super.onCreate(savedInstanceState);
                 break;
+            default:
+                getContext().setTheme(R.style.Theme_Morado);
+                getActivity().setTheme(R.style.Theme_Morado);
+                super.onCreate(savedInstanceState);
+                break;
         }
 
 

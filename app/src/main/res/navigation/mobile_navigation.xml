@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_entrada">
+    app:startDestination="@id/nav_calendar">
 
     <fragment
         android:id="@+id/nav_rutinas"
@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_rutEjerViewPagerFragment_to_nav_rutinas"
             app:destination="@id/nav_rutinas" />
+        <action
+            android:id="@+id/action_rutEjerViewPagerFragment_self"
+            app:destination="@id/rutEjerViewPagerFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_nav_ajustes"
@@ -53,14 +56,7 @@
     <action
         android:id="@+id/action_global_nav_rutinas"
         app:destination="@id/nav_rutinas" />
-    <fragment
-        android:id="@+id/nav_entrada"
-        android:name="com.example.das_proyect1.EntradaFragment"
-        android:label="@string/menu_entrada"
-        tools:layout="@layout/fragment_entrada" />
-    <action
-        android:id="@+id/action_global_nav_entrada"
-        app:destination="@id/nav_entrada" />
+
     <fragment
         android:id="@+id/ajustesUsuarioFragment"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesUsuarioFragment"
@@ -88,5 +84,14 @@
     <action
         android:id="@+id/action_global_rutinasCompletadasFragment"
         app:destination="@id/nav_rutinasCompletadas" />
+    <fragment
+        android:id="@+id/nav_calendar"
+        android:name="com.example.das_proyect1.calendario.CalendarioFragment"
+        android:label="@string/menu_calendario"
+        tools:layout="@layout/fragment_calendario" />
+    <action
+        android:id="@+id/action_global_fragment_calen"
+        app:destination="@id/nav_calendar" />
+
 
 </navigation>

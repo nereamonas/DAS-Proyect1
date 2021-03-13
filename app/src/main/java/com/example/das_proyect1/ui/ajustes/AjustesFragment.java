@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.das_proyect1.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.SingUpActivity;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.Locale;
@@ -66,18 +67,13 @@ public class AjustesFragment extends PreferenceFragmentCompat
             }
         });
 
-
-
     }
-
 
     @Override
     public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String s){
         switch (s) {
             case "idioma":
                 Log.d("Logs", "cambio idioma");
-
-
                 String idioma = "";
                 if (this.prefs.contains("idioma")) {
                     idioma = this.prefs.getString("idioma", null);
@@ -90,8 +86,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
 
                 Context context =getActivity().getBaseContext().createConfigurationContext(configuration);
                 getActivity().getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+                reload();
 
                 Log.d("Logs", "idioma nuevo: " + idioma);
 
@@ -105,32 +100,27 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 }
                 switch (tema) {
                     case "morado":
-                        //getContext().setTheme(R.style.Theme_Morado);
-                        //getActivity().setTheme(R.style.Theme_Morado);
-                        //((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DA6CED")));
-                        navigate();
-                        //Log.d("Logs", "color elegido morado");
+                        getContext().setTheme(R.style.Theme_Morado);
+                        getActivity().setTheme(R.style.Theme_Morado);
+                        reload();
+                        Log.d("Logs", "color elegido morado");
                         break;
                     case "naranja":
                         getContext().setTheme(R.style.Theme_Naranja);
                         getActivity().setTheme(R.style.Theme_Naranja);
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF9800")));
-                        navigate();
+                        reload();
                         Log.d("Logs", "color elegido naranja");
                         break;
                     case "verde":
                         getContext().setTheme(R.style.Theme_Verde);
                         getActivity().setTheme(R.style.Theme_Verde);
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8BC34A")));
-                        navigate();
+                        reload();
                         Log.d("Logs", "color elegido verde");
                         break;
                     case "azul":
                         getContext().setTheme(R.style.Theme_Azul);
                         getActivity().setTheme(R.style.Theme_Azul);
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#86E9F6")));
-                        //Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self);
-                        navigate();
+                        reload();
                         Log.d("Logs", "color elegido azul");
                         break;
                 }
@@ -139,7 +129,6 @@ public class AjustesFragment extends PreferenceFragmentCompat
                 break;
         }
     }
-
 
     @Override
     public void onResume () {
@@ -153,22 +142,13 @@ public class AjustesFragment extends PreferenceFragmentCompat
     }
 
     public void reload(){
+        getActivity().finish();
+        startActivity(getActivity().getIntent());
         Intent i = new Intent(getActivity(), PrincipalActivity.class);
-        i.putExtra("usuario", this.user);
+        i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.putExtra("ajustes", true);
         startActivity(i);
     }
-
-    public void navigate(){
-        NavOptions options = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
-                .build();
-        Navigation.findNavController(getView()).navigate(R.id.action_ajustesGeneralesFragment_self,null,options);
-
-    }
-
-
-
 
 
 }
