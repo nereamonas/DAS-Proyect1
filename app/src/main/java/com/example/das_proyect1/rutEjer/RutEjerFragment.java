@@ -73,6 +73,8 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     private long tiempoFaltante;
     private boolean encendido;
 
+    private SharedPreferences prefs;
+
     private RutEjerViewModel rutEjerViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,6 +89,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
                 //textView.setText(s);
             }
         });
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         this.rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
         this.usuario=getArguments().getString("usuario");
@@ -135,7 +138,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
                 startStop();
             }
         });
-
         return root;
     }
 
@@ -154,7 +156,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             public void onTick(long l) {
                 tiempoFaltante=l;
                 actualizarTemporizador();
-
             }
 
             @Override
@@ -176,7 +177,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         int minutos=(int) this.tiempoFaltante/60000;
         int segundos=(int) this.tiempoFaltante % 60000 / 1000;
         //Log.d("Logs","ACTUALIZAR "+this.tiempoFaltante);
-
         String texto;
 
         texto=""+minutos+":";
@@ -187,8 +187,15 @@ public class RutEjerFragment extends ControlarCambiosFragment {
 
         if("0:01".equals(texto)){
             //El contador a llegado al final, hay que pasar de elemento
-            Toast toast = Toast.makeText(getContext(), getString(R.string.toast_siguienteEjercicio), Toast.LENGTH_SHORT);
-            toast.show();
+            if (this.prefs.contains("notiftoast")) {
+                Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                Log.d("Logs", "estado notificaciones toast: " + activadas);
+                if (activadas) {
+                    Toast toast = Toast.makeText(getContext(), getString(R.string.toast_siguienteEjercicio), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+            this.countDownTimer=null;
             pasarAlSiguienteElemento();
         }
 
@@ -213,10 +220,15 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_self, bundle,options);
 
         }else{
-
             //Has terminado la rutina. lanzar un toast
-            Toast toast = Toast.makeText(getContext(), getString(R.string.notif_cuerpo_hassuperadoelentrena), Toast.LENGTH_LONG);
-            toast.show();
+            if (this.prefs.contains("notiftoast")) {
+                Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                Log.d("Logs", "estado notificaciones toast: " + activadas);
+                if (activadas) {
+                    Toast toast = Toast.makeText(getContext(), getString(R.string.notif_cuerpo_hassuperadoelentrena), Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
 
             // saltar notificacion
             mostrarNotificacion();
@@ -238,8 +250,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     }
 
     public void mostrarNotificacion(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (prefs.contains("notif")) { //Comprobamos si existe
+        if (this.prefs.contains("notif")) { //Comprobamos si existe
             Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
             Log.d("Logs", "estado notificaciones: "+activadas);
             if (activadas) {
@@ -280,7 +291,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             fichero.close();
             Log.d("Logs", "Ha insertado los datos en el fichero ");
 
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.d("Logs", "file not found ");
@@ -299,7 +309,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putInt("posicion",this.posicion);
         outState.putLong("tiempoFaltante",this.tiempoFaltante);
 
@@ -310,7 +319,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         //se coge en el create
         super.onActivityCreated(savedInstanceState);
-
     }
 
 }
