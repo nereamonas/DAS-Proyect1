@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
+import com.example.das_proyect1.base.BaseFragment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 
-public class CalendarioFragment extends ControlarCambiosFragment {
+public class CalendarioFragment extends BaseFragment {
     private CalendarioViewModel calendarioViewModel;
     String user=" ";
 

@@ -1,4 +1,4 @@
-package com.example.das_proyect1.rutEjer;
+package com.example.das_proyect1.ui.rutEjer;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

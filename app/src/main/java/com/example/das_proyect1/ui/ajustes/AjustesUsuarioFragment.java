@@ -1,9 +1,7 @@
 package com.example.das_proyect1.ui.ajustes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,11 +9,9 @@ import android.widget.Toast;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
-
-import java.util.Locale;
 
 public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -36,6 +32,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
         editor.putString("email", db.getCorreoConUsuario(this.user));
         editor.putString("pass", db.getPassConUsuario(this.user));
         editor.apply();
+
         boolean resultado=editor.commit();
         Log.d("Logs", "RESULTADO EDITAR DATOS "+resultado);
 

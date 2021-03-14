@@ -1,4 +1,4 @@
-package com.example.das_proyect1.recycleViewAdapterEjercicios;
+package com.example.das_proyect1.adaptadores.RecycleViewAdapterEjercicios;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
-import com.example.das_proyect1.helpClass.Rutina;
 
 import java.util.ArrayList;
 

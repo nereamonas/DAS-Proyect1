@@ -14,15 +14,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import com.example.das_proyect1.ListViewAdapterRutinas.ListViewAdapter;
-import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.adaptadores.ListViewAdapterRutinas.ListViewAdapter;
+import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
+import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Rutina;
 
 import java.util.ArrayList;
 
-public class RutinasFragment extends ControlarCambiosFragment {
+public class RutinasFragment extends BaseFragment {
     private MiDB db;
     private RutinasViewModel rutinasViewModel;
 
@@ -44,7 +44,7 @@ public class RutinasFragment extends ControlarCambiosFragment {
         String usuario = getArguments().getString("usuario");
 
         ArrayList<Rutina> rutinas= db.getRutinasDelUsuario(usuario);
-
+        this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
         ListView lalista= (ListView) root.findViewById(R.id.listView);
         ListViewAdapter eladap= new ListViewAdapter(getContext(),rutinas);

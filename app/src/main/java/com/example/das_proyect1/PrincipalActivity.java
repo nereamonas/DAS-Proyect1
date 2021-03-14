@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
 
-import com.example.das_proyect1.controlarCambios.ControlarCambios;
+import com.example.das_proyect1.base.BaseActivity;
+import com.example.das_proyect1.helpClass.MiDB;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.preference.PreferenceManager;
 
-public class PrincipalActivity extends ControlarCambios {//ControlarCambios   AppCompatActivity
+public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCompatActivity
     private String usuario;
     private AppBarConfiguration mAppBarConfiguration;
     private MiDB db;
@@ -86,7 +87,7 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
         db = new MiDB(this);
         nombre.setText(this.usuario);
         correo.setText(db.getCorreoConUsuario(this.usuario));
-
+        this.db.cerrarConexion();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //if (!prefs.contains("username")) {//si no existe, insertamos el usuario. siempre. por si hay cambio de usuario
             SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd

@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.das_proyect1.controlarCambios.ControlarCambios;
+import com.example.das_proyect1.base.BaseActivity;
+import com.example.das_proyect1.helpClass.MiDB;
 
-public class SingUpActivity extends ControlarCambios {
+public class SingUpActivity extends BaseActivity {
     private MiDB db;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class SingUpActivity extends ControlarCambios {
 
                 if (resultado) {
                     Log.d("Logs", "Usuario creado");
-
+                    this.db.cerrarConexion();
                     Intent i = new Intent(this, PrincipalActivity.class);
                     i.putExtra("usuario", user);
                     i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -70,6 +71,7 @@ public class SingUpActivity extends ControlarCambios {
                 dialog.show();
             }
         }
+        this.db.cerrarConexion();
     }
 
     public void clickIniciarSesion(View v){

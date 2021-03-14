@@ -15,14 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
+import com.example.das_proyect1.base.BaseFragment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RutinasCompletadasFragment extends ControlarCambiosFragment {
+public class RutinasCompletadasFragment extends BaseFragment {
     private RutinasCompletadasViewModel rutinasCompletadasViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -45,14 +45,14 @@ public class RutinasCompletadasFragment extends ControlarCambiosFragment {
             user = " "+prefs.getString("username", null)+":";
         }
         TextView text= root.findViewById(R.id.textrutCompletadasDelDia);
-        text.setText("Rutinas completadas: \n");
+        text.setText("Rutinas completadas:");
         try {
             BufferedReader ficherointerno= new BufferedReader(new InputStreamReader(getContext().openFileInput("rutinasCompletadas.txt")));
             String linea= ficherointerno.readLine();
             Log.d("Logs", "linea: "+linea);
             while (linea!=null){
                 if(linea.contains(user)) {
-                    text.setText(text.getText() + "\n" + linea);
+                    text.setText(text.getText() + "\n\n" + linea);
                 }
                 linea = ficherointerno.readLine();
             }

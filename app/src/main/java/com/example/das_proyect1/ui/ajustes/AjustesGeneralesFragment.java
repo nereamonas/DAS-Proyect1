@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
+import com.example.das_proyect1.base.BaseFragment;
 
-public class AjustesGeneralesFragment extends ControlarCambiosFragment {
+public class AjustesGeneralesFragment extends BaseFragment {
     private MutableLiveData<String> mText;
 
     @Override

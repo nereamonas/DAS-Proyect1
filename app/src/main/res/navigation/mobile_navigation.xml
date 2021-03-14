@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/rutEjerViewPagerFragment"
-        android:name="com.example.das_proyect1.rutEjer.RutEjerFragment"
+        android:name="com.example.das_proyect1.ui.rutEjer.RutEjerFragment"
         android:label="@string/ejercicio"
         tools:layout="@layout/fragment_rutejerviewpager" >
         <action

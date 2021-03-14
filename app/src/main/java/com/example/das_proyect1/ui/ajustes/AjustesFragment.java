@@ -4,30 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.SingUpActivity;
-import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.Locale;
 
@@ -52,7 +40,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         editor.apply();
         boolean resultado=editor.commit();
         Log.d("Logs", "RESULTADO EDITAR DATOS "+resultado);
-
+        this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
         Preference infouser=(Preference) findPreference("infouser");
         infouser.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

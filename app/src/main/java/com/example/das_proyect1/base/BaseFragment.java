@@ -1,22 +1,14 @@
-package com.example.das_proyect1.controlarCambios;
+package com.example.das_proyect1.base;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
 
-import java.util.Locale;
-
-public class ControlarCambiosFragment extends Fragment {
+public class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

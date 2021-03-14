@@ -1,4 +1,4 @@
-package com.example.das_proyect1.ListViewAdapterRutinas;
+package com.example.das_proyect1.adaptadores.ListViewAdapterRutinas;
 
 import android.content.Context;
 import android.net.Uri;

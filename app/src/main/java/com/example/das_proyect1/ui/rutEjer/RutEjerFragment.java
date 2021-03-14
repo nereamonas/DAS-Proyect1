@@ -1,4 +1,4 @@
-package com.example.das_proyect1.rutEjer;
+package com.example.das_proyect1.ui.rutEjer;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -28,9 +28,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.das_proyect1.MiDB;
+import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
-import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
+import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.rutinas.RutinasFragment;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class RutEjerFragment extends ControlarCambiosFragment {
+public class RutEjerFragment extends BaseFragment {
     private TextView titulo;
     private TextView desc;
     private TextView elemPendientes;
@@ -98,6 +98,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //insertamos los textos del primer elemento de la base de datos
         db = new MiDB(getContext());
         this.ejercicios = db.getEjerciciosDeLaRutina(rutId);
+        this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
         if (savedInstanceState != null) {
             Log.d("Logs", "POSICItiempoON RECUPERADA: " + savedInstanceState.getLong("tiempoFaltante"));
             this.posicion = savedInstanceState.getInt("posicion");
@@ -300,9 +301,11 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             String YEAR = String.valueOf(cal.get(Calendar.YEAR));
             String MONTH = String.valueOf(cal.get(Calendar.MONTH));
             Log.d("Logs","El dia "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes());
-
+            db = new MiDB(getContext());
             fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
             fichero.close();
+
+            this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
             Log.d("Logs", "Ha insertado los datos en el fichero ");
 
         } catch (FileNotFoundException e) {

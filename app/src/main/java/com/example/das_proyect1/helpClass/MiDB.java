@@ -1,4 +1,4 @@
-package com.example.das_proyect1;
+package com.example.das_proyect1.helpClass;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,6 +24,9 @@ public class MiDB extends SQLiteOpenHelper {
     public MiDB(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         db=this.getWritableDatabase();
+    }
+    public void cerrarConexion(){
+        db.close();
     }
     @Override
     public void onCreate(SQLiteDatabase db) {

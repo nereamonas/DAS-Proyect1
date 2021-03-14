@@ -1,4 +1,4 @@
-package com.example.das_proyect1.recycleViewAdapterEjercicios;
+package com.example.das_proyect1.adaptadores.RecycleViewAdapterEjercicios;
 
 import android.view.View;
 import android.widget.ImageView;

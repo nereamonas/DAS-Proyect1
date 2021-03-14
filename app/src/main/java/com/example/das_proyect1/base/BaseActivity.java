@@ -1,6 +1,5 @@
-package com.example.das_proyect1.controlarCambios;
+package com.example.das_proyect1.base;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import com.example.das_proyect1.R;
 
 import java.util.Locale;
 
-public class ControlarCambios extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
