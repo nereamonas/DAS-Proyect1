@@ -48,6 +48,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     private TextView elemPendientes;
     private ImageView imageView;
     private Button btn_next;
+    private Button btn_atras;
     private TextView temporizador;
     private Button btn_startStop;
     private MiDB db;
@@ -90,6 +91,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         this.desc = root.findViewById(R.id.descEjer);
         this.encendido = true;
         this.btn_next = root.findViewById(R.id.btn_next);
+        this.btn_atras = root.findViewById(R.id.button_atras);
         this.elemPendientes = root.findViewById(R.id.elemPendientes);
 
 
@@ -127,7 +129,28 @@ public class RutEjerFragment extends ControlarCambiosFragment {
                 startStop();
             }
         });
+        btn_atras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calcelarCounter();
+                Bundle bundle = new Bundle();
+                bundle.putString("usuario", getUsuario());
+                NavOptions options = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(R.id.nav_rutinas,false)
+                        .build();
+                Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle,options);
+
+            }
+        });
         return root;
+    }
+    private String getUsuario(){
+        return this.usuario;
+    }
+    private void calcelarCounter(){
+        this.countDownTimer.cancel();
+        this.countDownTimer=null;
     }
 
     public void startStop(){
@@ -139,12 +162,13 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     }
 
     public void empezarTemporizador(){
-        this.countDownTimer=null;
+        if(this.countDownTimer!=null){
+            calcelarCounter();
+        }
         this.countDownTimer= new CountDownTimer(this.tiempoFaltante,1000) {
             @Override
             public void onTick(long l) {
                 tiempoFaltante=l;
-                Log.d("Logs","EEEEEEEEEEE");
                 actualizarTemporizador();
             }
 
@@ -185,7 +209,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
                     toast.show();
                 }
             }
-            this.countDownTimer=null;
+
             pasarAlSiguienteElemento();
         }
 
@@ -195,8 +219,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //Actualizamos todos los elementos al siguiente de la bbdd
         //hasieratuamos el contador
         this.posicion++;
-        this.countDownTimer.cancel();
-        this.countDownTimer=null;
+        calcelarCounter();
         if(this.posicion<this.ejercicios.size()){
             //Recargo la pagina
             Bundle bundle = new Bundle();
@@ -299,6 +322,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        calcelarCounter();
         outState.putInt("posicion",this.posicion);
         outState.putLong("tiempoFaltante",this.tiempoFaltante);
 

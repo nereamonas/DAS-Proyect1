@@ -99,4 +99,5 @@
     <string name="toast_usuarionoCambiadoCorrectamente">No se ha podido actualizar el usuario</string>
     <string name="toast_emailnoCambiadoCorrectamente">No se ha podido actualizar el correo</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">No se ha podido actualizar la contraseña</string>
+    <string name="btn_atras">Atras</string>
 </resources>
