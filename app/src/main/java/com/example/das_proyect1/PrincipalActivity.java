@@ -37,7 +37,7 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        String tema=super.returnTema();
+        String tema=super.returnTema();  //Hemos creado un BaseActivity para controlar los temas y el idioma. pero, en el principal tenemos q desactivar el action bar, por lo q habria q ponerle otro tema. asique vamos a cambiar aqui el tema
 
         switch (tema) {
             case "morado":
@@ -59,10 +59,11 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         setSupportActionBar(toolbar);
 
 
-        this.usuario = "";
+        this.usuario = "";  //Cogemos el usuario que le hemos pasado del intent anterior
         if (getIntent().hasExtra("usuario")) {
             this.usuario = getIntent().getExtras().getString("usuario");
         }
+        //En ajustes al cambiar el idioma y el tema, tenemos q resetear el intent, entonces si le pasamos el aldagai ajustes significa que venimos desde ajustes y nos abrira ajustes en vez d quedarse en la principal
         if (getIntent().hasExtra("ajustes")) {  //si viene de ajustes
             open_nav_ajustes();
         }
@@ -84,11 +85,11 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         TextView nombre = (TextView) vi.findViewById(R.id.nombre);
         TextView correo = (TextView) vi.findViewById(R.id.correo);
 
-        db = new MiDB(this);
+        db = new MiDB(this);  //En el menu arriba a la derecha, queremos ponerle el nombre del usuario y el correo
         nombre.setText(this.usuario);
         correo.setText(db.getCorreoConUsuario(this.usuario));
         this.db.cerrarConexion();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);  //Editaremos las preferencias, para ponerle el usuario con el que ha iniciado sesion. Es importante actualizarlo cuando se inicia sesion, porq sino en preferencias se guarda el anterior q estaba
         //if (!prefs.contains("username")) {//si no existe, insertamos el usuario. siempre. por si hay cambio de usuario
             SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
             editor.putString("username", this.usuario);
@@ -96,13 +97,13 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
             editor.commit();
         //}
 
+        //Controlaremos todos los botones del menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.nav_rutinas) {
+                if (id == R.id.nav_rutinas) {  //Si clicamos en rutinas, abriremos con navigation, la ventana donde se muestran las rutinas. he igual con todos
                     Log.d("Logs", "nav_rutinas");
                     open_nav_rutinas();
                 } else if (id == R.id.nav_ejercicios) {
@@ -114,9 +115,8 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                 } else if (id == R.id.nav_ajustes) {
                     Log.d("Logs", "nav_ajustes");
                     open_nav_ajustes();
-                } else if (id == R.id.nav_contactanos) {
+                } else if (id == R.id.nav_contactanos) {  //Si vamos a contactanos, queremos q nos abra el gmail o outlook o lo q sea para enviar un email, le pasaremos el email destino, un asunto y un texto
                     Log.d("Logs", "nav_contactanos");
-
                     String to= "nereamonasterio99@gmail.com";
                     String subject = getString(R.string.email_dudaValoracionaplicacion);
                     String body = getString(R.string.email_mandanosmensaje);
@@ -133,10 +133,7 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                     emailIntent.setData(uri);
                     startActivity(Intent.createChooser(emailIntent,"Send email"));
 
-
-
-
-                } else if (id == R.id.nav_logoff) {
+                } else if (id == R.id.nav_logoff) {  //En logoff mostraremos una alerta, para asegurarnos q el usuario quiere cerrar su sesión. si dice q si, la llevaremos al intent iniciar sesion, y si dice q no se quedara tal cual
                     Log.d("Logs", "nav_logoff");
                     AlertDialog.Builder dialogo = new AlertDialog.Builder(vi.getContext());
                     dialogo.setTitle(getString(R.string.alert_cerrarSesion));
@@ -151,7 +148,6 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                     });
                     dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
-
                             Log.d("Logs", "no cerrar sesion");
                         }
                     });
@@ -178,20 +174,20 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
 
     @Override
     public boolean onSupportNavigateUp() {
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     public void open_nav_rutinas(){
+        //Creamos un bundle, para insertar los datos q queremos pasar entre los diferentes fragmentos
         Bundle bundle = new Bundle();
         bundle.putString("usuario", this.usuario);
         NavOptions options = new NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
+                .setLaunchSingleTop(true)  //Queremos q siga el modelo singleTop. es decir q si es el fragment de arriba, coga ese y no lo vuelva a crear
+                .setPopUpTo(R.id.nav_rutinas,false)  //Aqui decimos q al ir atras nos llevara al nav_rutinas siempre
                 .build();
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_rutinas, bundle,options);
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_rutinas, bundle,options); //Navegamos
     }
     public void open_nav_ejercicios(){
         Bundle bundle = new Bundle();

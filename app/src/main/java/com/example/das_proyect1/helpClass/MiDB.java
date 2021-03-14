@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MiDB extends SQLiteOpenHelper {
+    //Crearemos la conexion con la base de datos y todos los insert, update...
 
     private static final String DB_NAME = "db.sqlite";
     private static final int DB_VERSION = 1;
@@ -30,7 +31,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //Crear tablas
+        //Crear tablas cuando se cree por primera vez la base de datos
         db.execSQL("CREATE TABLE usuario( user TEXT NOT NULL UNIQUE, email TEXT, pass TEXT)");
         db.execSQL("CREATE TABLE rutina( id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, foto TEXT)");
         db.execSQL("CREATE TABLE ejercicio( id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, descripcion TEXT, foto TEXT, duracion TEXT)");
@@ -45,6 +46,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public void añadirPrimerosElementos(){
+        //Añadiremos los primeros elementos.
         Cursor c = db.rawQuery("select * from rutina where id=1",null);
         if(c==null || c.getCount()==0){
             //Añadir elementos a la base de datos
@@ -98,6 +100,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public boolean añadirRutina(int id, String nombre, String foto){
+        //Añadiremos una nueva rutina a la base de datos
         ContentValues cv = new ContentValues();
         //cv.put("id", id);
         Log.d("Logs","Añadir rutina "+nombre);
@@ -114,6 +117,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public boolean añadirEjercicio(int id, String nombre, String descripcion, String foto, String duracion){
+        //Añadiremos un nuevo ejercicio a la bbdd
         ContentValues cv = new ContentValues();
         //cv.put("id", id);
         cv.put("nombre", nombre);
@@ -130,6 +134,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public boolean añadirUserRut(String idUser, int idRut){
+        //Añadimos a la clase de conexion entre usuario y rutina
         ContentValues cv = new ContentValues();
         cv.put("idUser", idUser);
         cv.put("idRut", idRut);
@@ -143,6 +148,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public boolean añadirRutEjer(int idRut, int idEjer){
+        //Añadimos a la clase de conexion entre rutina y ejercicio
         ContentValues cv = new ContentValues();
         cv.put("idRut", idRut);
         cv.put("idEjer", idEjer);
@@ -157,6 +163,7 @@ public class MiDB extends SQLiteOpenHelper {
 
 
     public boolean crearUsuario(String usuario, String email, String pass){
+        //Crearemos un nuevo usuario
         boolean todoCorrecto=true;
         ContentValues cv = new ContentValues();
         cv.put("user", usuario);
@@ -179,6 +186,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public Usuario comprobarUsuario(String usuario, String pass){
+        //Comprobamos is existe un usuario con ese usuario y contraseña. si es asi devolvemos el usaurio
         Usuario u=null;
         String select="select * from usuario where user='"+usuario+"' and pass='"+pass+"'";
         Cursor c = db.rawQuery(select,null);
@@ -192,6 +200,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public ArrayList<Ejercicio> getEjerciciosDeLaRutina(int rutina){
+        //devolvemos en un array list todos los ejercicios que pertenecen a esa rutina
         ArrayList<Ejercicio> lista= new ArrayList<Ejercicio>();
         String select="select * from ejercicio e inner join rutejer r on r.idEjer=e.id where r.idRut="+rutina;
         Cursor c = db.rawQuery(select,null);
@@ -203,14 +212,15 @@ public class MiDB extends SQLiteOpenHelper {
                 String descripcion=c.getString(c.getColumnIndex("descripcion"));
                 String foto=c.getString(c.getColumnIndex("foto"));
                 String duracion=c.getString(c.getColumnIndex("duracion"));
-                Ejercicio e = new Ejercicio(id,nombre,descripcion,foto,duracion);
-                lista.add(e);
+                Ejercicio e = new Ejercicio(id,nombre,descripcion,foto,duracion); //Cogemos todos los datos y creamos un ejercicio
+                lista.add(e); //Añadimos a la lista ese ejercicio
             }while(c.moveToNext());
         }
         return lista;
     }
 
     public ArrayList<Rutina> getRutinasDelUsuario(String usuario) {
+        //devolvemos en un arraylist de rutinas todas las rutinas que pertenecen a ese usuario
         ArrayList<Rutina> lista = new ArrayList<Rutina>();
         String select = "select * from Rutina r inner join userRut u on u.idRut=r.id where u.idUser='" + usuario + "'";
         Cursor c = db.rawQuery(select, null);
@@ -220,14 +230,15 @@ public class MiDB extends SQLiteOpenHelper {
                 int id = c.getInt(c.getColumnIndex("id"));
                 String nombre = c.getString(c.getColumnIndex("nombre"));
                 String foto = c.getString(c.getColumnIndex("foto"));
-                Rutina r = new Rutina(id, nombre, foto);
-                lista.add(r);
+                Rutina r = new Rutina(id, nombre, foto); //Cogemos todos los elementos y con ellos creamos una rutina
+                lista.add(r); //Añadimos a la lista la rutina
             } while (c.moveToNext());
         }
         return lista;
     }
 
     public ArrayList<Ejercicio> getTodosLosEjercicios(String usuario){
+        //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
         ArrayList<Ejercicio> lista= new ArrayList<Ejercicio>();
         String select="select distinct e.id,e.nombre,e.descripcion,e.foto,e.duracion from ejercicio e inner join rutEjer r on r.idEjer=e.id inner join userRut u on u.idRut=r.idRut where u.idUser='"+usuario+"'";
         Cursor c = db.rawQuery(select,null);
@@ -247,6 +258,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public String getCorreoConUsuario(String usuario){
+        //Pasando el usuario, vamos a coger el correo que le pertenece a dicho usuario
         String correo="";
         String select="select email from usuario where user='"+usuario+"'";
         Cursor c = db.rawQuery(select,null);
@@ -258,6 +270,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public String getPassConUsuario(String usuario){
+        //Pasando el usuario vamos a coger la contraseña que le pertenece. no hay mucha seguridad pero bnuenoa ajjajajja
         String correo="";
         String select="select pass from usuario where user='"+usuario+"'";
         Cursor c = db.rawQuery(select,null);
@@ -270,16 +283,15 @@ public class MiDB extends SQLiteOpenHelper {
 
 
     public boolean editarNombreDeUsuario(String userViejo, String userNuevo) {
+        //Cambiaremos el nom bre de usuario
         //Comprobar si existe el usuario nuevo:
         String select="select user from usuario where user='"+userNuevo+"'";
         Cursor c = db.rawQuery(select,null);
         String existe="";
         boolean todobien=false;
-        if(c!=null && c.getCount()>0) {//Ya esta en uso
+        if(c!=null && c.getCount()>0) {//Ya esta en uso ese usuario por lo q no se va a poder crear
             Log.d("Logs","ya está en uso el usuario "+c);
-            c.moveToFirst();
-            existe = c.getString(c.getColumnIndex("user"));
-        }else{
+        }else{//El usuario no existe, asiq modificamos su valor
             try{
                 db.execSQL("UPDATE usuario SET user='"+userNuevo+"' WHERE user='"+userViejo+"'");
                 todobien=true;
@@ -291,6 +303,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public boolean editarEmailDeUsuario(String user, String email) {
+        //Editamos el mail del usuario. y devolvemos si se ha ejecutado bien o no
         boolean bien=false;
         try{
             db.execSQL("UPDATE usuario SET email='"+email+"' WHERE user='"+user+"'");
@@ -301,6 +314,7 @@ public class MiDB extends SQLiteOpenHelper {
         return bien;
     }
     public boolean editarPassDeUsuario(String user, String pass) {
+        //Editamos la contraseña del usuario y devolvemos si se ha ejecutado bnien o no
         boolean bien=false;
         try{
             db.execSQL("UPDATE usuario SET pass='"+pass+"' WHERE user='"+user+"'");
@@ -312,6 +326,7 @@ public class MiDB extends SQLiteOpenHelper {
     }
 
     public String getNombreRutina(int id){
+        //Cogemos el nombre de la rutina
         String nombre="";
         String select="select nombre from Rutina where id="+id;
         Cursor c = db.rawQuery(select,null);

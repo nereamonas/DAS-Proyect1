@@ -5,6 +5,8 @@ import android.util.Log;
 import com.example.das_proyect1.R;
 
 public class ImgCorrespondiente {
+
+    //Como tengo las imagenes en R.mipmap.tal  / eso devuelve un numero, y no puedo concatenar el nombre d la bd con R.mipmap para q m de directamente el numero q corresponde. es un poco ñapa esto pero bueno...
     public ImgCorrespondiente(){
 
     }

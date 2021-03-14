@@ -42,6 +42,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
         Log.d("Logs", "RESULTADO EDITAR DATOS "+resultado);
         this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
+        //Vamos a configurar q depende la rotacion de pantalla funcione de una forma o otra. si esta en vertical y se clica en info usuario devera pasar a otro fragment
         Preference infouser=(Preference) findPreference("infouser");
         infouser.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -61,57 +62,16 @@ public class AjustesFragment extends PreferenceFragmentCompat
     public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String s){
         switch (s) {
             case "idioma":
+                //A cambiado el valor del idioma. Pues aplicamos la configuracion para cambiar el idioma
+                //Como hemos creado esa clase de herencia, solo tenemos q reiniciar el intent y ya se aplican los cambios. puesto q cada vez q se crea, mirara en los ajustes el idioma establecido
                 Log.d("Logs", "cambio idioma");
-                String idioma = "";
-                if (this.prefs.contains("idioma")) {
-                    idioma = this.prefs.getString("idioma", null);
-                }
-                Locale nuevaloc = new Locale(idioma);
-                Locale.setDefault(nuevaloc);
-                Configuration configuration = getActivity().getBaseContext().getResources().getConfiguration();
-                configuration.setLocale(nuevaloc);
-                configuration.setLayoutDirection(nuevaloc);
-
-                Context context =getActivity().getBaseContext().createConfigurationContext(configuration);
-                getActivity().getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
                 reload();
-
-                Log.d("Logs", "idioma nuevo: " + idioma);
-
                 break;
             case "tema":
+                //A cambiado el tema
+                //Lo mismo q el idioma, realmente, solo tenemos q reiniciar el intent porq ya aplicamos la configuracion al crearlo. sino esa configuracions  aplica aqui
                 Log.d("Logs", "cambio tema");
-
-                String tema = "";
-                if (this.prefs.contains("tema")) {
-                    tema = this.prefs.getString("tema", null);
-                }
-                switch (tema) {
-                    case "morado":
-                        getContext().setTheme(R.style.Theme_Morado);
-                        getActivity().setTheme(R.style.Theme_Morado);
-                        reload();
-                        Log.d("Logs", "color elegido morado");
-                        break;
-                    case "naranja":
-                        getContext().setTheme(R.style.Theme_Naranja);
-                        getActivity().setTheme(R.style.Theme_Naranja);
-                        reload();
-                        Log.d("Logs", "color elegido naranja");
-                        break;
-                    case "verde":
-                        getContext().setTheme(R.style.Theme_Verde);
-                        getActivity().setTheme(R.style.Theme_Verde);
-                        reload();
-                        Log.d("Logs", "color elegido verde");
-                        break;
-                    case "azul":
-                        getContext().setTheme(R.style.Theme_Azul);
-                        getActivity().setTheme(R.style.Theme_Azul);
-                        reload();
-                        Log.d("Logs", "color elegido azul");
-                        break;
-                }
+                reload();
                 break;
             default:
                 break;
@@ -130,6 +90,7 @@ public class AjustesFragment extends PreferenceFragmentCompat
     }
 
     public void reload(){
+        //Reiniciamos el intent. y le pasamos el parametro ajustes, para q lo inicialice en este fragment
         getActivity().finish();
         startActivity(getActivity().getIntent());
         Intent i = new Intent(getActivity(), PrincipalActivity.class);

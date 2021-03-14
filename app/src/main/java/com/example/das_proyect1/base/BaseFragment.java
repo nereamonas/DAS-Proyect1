@@ -9,12 +9,16 @@ import androidx.preference.PreferenceManager;
 import com.example.das_proyect1.R;
 
 public class BaseFragment extends Fragment {
+    //Vamos a crear esta clase que será la base de los fragmentos. Cada vez q se cree un fragment, en vez d heredar directamente de Fragment
+    //heredara de BaseFragment, asi podemos editar la creacion conjunta. Queremos kudeatuar el tema y el idioma
+    //Lo que conseguimos es, que al apagar la app y volver a arrancarla, se mantengan todas las configuraciones que ha indicado el usuario en las prefereencias. y que estas preferencias se apliquen a todas los fragmentos cuando se crean
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Gets the saved theme ID from SharedPrefs,
         // or uses default_theme if no theme ID has been saved
 
+        //Cogemos de sharedPreferences el tema que tiene el usuario guardado. Y dependiendo del valor, le asignamos al fragmento un tema u otro
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String tema = "";
         if (prefs.contains("tema")) {

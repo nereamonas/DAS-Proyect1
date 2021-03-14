@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class RutinasCompletadasFragment extends BaseFragment {
+    //Sera una lista un poco fea, que muestra todas las rutinas que ha completado el usuario. Nombre de la rutina + fecha + hora.
+    //Coge la informacion del fichero que se genera dentro d la app.
+    //Funciona igual q el calendario, pero cogiendo todas las fechas.
     private RutinasCompletadasViewModel rutinasCompletadasViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,

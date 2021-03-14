@@ -23,9 +23,9 @@ import com.example.das_proyect1.helpClass.Rutina;
 import java.util.ArrayList;
 
 public class RutinasFragment extends BaseFragment {
+    //Creara una list view de rutinas, q al pulsar en una te lleva al fragment RutEjerFragment, parandole la rutina seleccionada
     private MiDB db;
     private RutinasViewModel rutinasViewModel;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -43,18 +43,18 @@ public class RutinasFragment extends BaseFragment {
         db=new MiDB(getContext());
         String usuario = getArguments().getString("usuario");
 
-        ArrayList<Rutina> rutinas= db.getRutinasDelUsuario(usuario);
+        ArrayList<Rutina> rutinas= db.getRutinasDelUsuario(usuario);  //Llamamos a la base de datos apra q devuelva las rutinas q tiene ese usuario asignadas
         this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
         ListView lalista= (ListView) root.findViewById(R.id.listView);
         ListViewAdapter eladap= new ListViewAdapter(getContext(),rutinas);
         lalista.setAdapter(eladap);
 
-
+        //Cuando se clicke en un elemento de la lista saltará a este metodo. Que cambiara la navegacion a rutEjerFragment. Le apsara el usuario y el identificador de la rutina seleccionada
         lalista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
+                Bundle bundle = new Bundle(); //Con el bundle podemos pasar datos
                 bundle.putString("idRut", (String.valueOf(eladap.getItemId(position))));
                 bundle.putString("usuario", usuario);
                 NavOptions options = new NavOptions.Builder()

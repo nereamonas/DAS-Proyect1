@@ -15,13 +15,15 @@ import com.example.das_proyect1.R;
 
 public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+    //Aqui cambairemos la informacion  del usuario. username, pass y correo
     private MiDB db;
     private SharedPreferences prefs;
     private String user;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.fragment_ajustes_usuario, rootKey);
-        this.db=new MiDB(getContext());
+        this.db=new
+                MiDB(getContext());
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (this.prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
             this.user = this.prefs.getString("username", null);
@@ -45,32 +47,34 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
 
                 String username = "";
                 if (this.prefs.contains("username")) { //Comprobamos si existe
-                    username = this.prefs.getString("username", null);
+                    username = this.prefs.getString("username", null);  //Cogemos el usuaario nuevo
 
                     Log.d("Logs", "nombre nuevo: "+username+" viejo"+this.user);
-                    if (!this.user.equals(username)&&this.prefs.contains("notiftoast")) {
-                        Boolean todobien = this.db.editarNombreDeUsuario(this.user, username);
+                    if (!this.user.equals(username)) { //Miramos si tiene las notificaciones toast activadas
+                        boolean todobien = this.db.editarNombreDeUsuario(this.user, username);
                         if (todobien) {
-                            Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
-                            Log.d("Logs", "estado notificaciones toast: " + activadas);
-                            if (activadas) {
-                                Toast toast = Toast.makeText(getContext(), getString(R.string.toast_usuarioCambiadoCorrectamente), Toast.LENGTH_SHORT);
-                                toast.show();
-                                this.user = username;
+                            this.user = username;
+                            if(this.prefs.contains("notiftoast")) { //Comprobamos si las notificaciones toast estan activadas, para mandarle una notificacion
+                                boolean activadas = prefs.getBoolean("notiftoast", true);
+                                Log.d("Logs", "estado notificaciones toast: " + activadas);
+                                if (activadas) {
+                                    Toast toast = Toast.makeText(getContext(), getString(R.string.toast_usuarioCambiadoCorrectamente), Toast.LENGTH_SHORT);
+                                    toast.show();
+
+                                }
                             }
                             reload();
-                        }else{
+                        }else{ //No se ha podido actualizar
                             Log.d("Logs","No se puede actualizar xq son iguales");
                             SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
-                            editor.putString("username", this.user);
+                            editor.putString("username", this.user);  //Devolvemos el valor q estaba anteriormente
                             editor.apply();
-                            if (this.prefs.contains("notiftoast")) {
+                            if (this.prefs.contains("notiftoast")) {///Miramos si estan activadas las notificaciones
                                 boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                                 Log.d("Logs", "NO-estado notificaciones toast: " + activadas);
                                 if (activadas) {
                                     Toast toast = Toast.makeText(getContext(), getString(R.string.toast_usuarionoCambiadoCorrectamente), Toast.LENGTH_SHORT);
                                     toast.show();
-                                    this.user = username;
                                 }
                             }
                         }
@@ -162,6 +166,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
     }
 
     public void reload(){
+        //Reiniciamos. porq si se ha actualizado bien. en el intent principal en el menu arriba a la derecha sale el nombre de usuario y el correo, entonces hay q actualizar esos. por eso se reinicia
         getActivity().finish();
         startActivity(getActivity().getIntent());
         Intent i = new Intent(getActivity(), PrincipalActivity.class);

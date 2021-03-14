@@ -43,6 +43,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class RutEjerFragment extends BaseFragment {
+    //Aviso - es un poco locurote de clase porq hace muchas cosas.
+    //TIENE UN ERROR - Cuando le das al boton atras, no consigo para el CountDownTimer, por lo q posiblemente de error al de unos minutos la aplicacion y se cierre
+    //He intentado con herencia y asi controlar el onBackClick, pero no puedo... en los fragment no es tan facil como en los intent porq no cuentan con ese metodo. Y hay una manera desde el intent que lo kudeatua, pero me lo hace en todos los fragmentos no solo este. Continuare investigando pero... M ha llevamo mazo tiempo intentaar arreglarlo pero nada... :(
     private TextView titulo;
     private TextView desc;
     private TextView elemPendientes;
@@ -79,11 +82,10 @@ public class RutEjerFragment extends BaseFragment {
                 //textView.setText(s);
             }
         });
+        //Inicializamos todas las variables necesarias
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         this.rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
         this.usuario = getArguments().getString("usuario");
-
         this.imageView = root.findViewById(R.id.image_view);
         this.temporizador = root.findViewById(R.id.temporizador);
         this.btn_startStop = root.findViewById(R.id.btn_stopStart);
@@ -97,42 +99,43 @@ public class RutEjerFragment extends BaseFragment {
 
         //insertamos los textos del primer elemento de la base de datos
         db = new MiDB(getContext());
-        this.ejercicios = db.getEjerciciosDeLaRutina(rutId);
+        this.ejercicios = db.getEjerciciosDeLaRutina(rutId); //Cogemos los ejercicios de esa rutina y los guardamos en la lista
         this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
-        if (savedInstanceState != null) {
-            Log.d("Logs", "POSICItiempoON RECUPERADA: " + savedInstanceState.getLong("tiempoFaltante"));
+        if (savedInstanceState != null) { //Si viene de la rotacion de pantalla q tiene cosas guardadas. el tiempo y la posicion lo ogera de ahi
             this.posicion = savedInstanceState.getInt("posicion");
             this.tiempoFaltante = savedInstanceState.getLong("tiempoFaltante");
-        } else {
-            this.posicion = getArguments().getInt("posicion");
-            this.tiempoFaltante = Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+        } else { //Si no tiene elemen guardados, es la primera vez x lo q:
+            this.posicion = getArguments().getInt("posicion"); //Cogemos d la info q se le pasa la posicion del elemento en el q está.  Cada vez q acaba uno para pasar al otro hay q reiniciar, porq sino el Counter este se queda de fondo arrancado y salta error y se cierra la app
+            this.tiempoFaltante = Long.parseLong(this.ejercicios.get(this.posicion).getDuracion()); //Y el tiempo lo cogemos d la base de datos ya q tendria q empezar desde el principio.
         }
-        Log.d("Logs", " rutid siguientefrag" + rutId);
+        //El resto de elementos los cogemos normal de la bbdd
         this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
         this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
-        Log.d("Logs", " tiempo faltante inicial" + this.tiempoFaltante);
         this.elemPendientes.setText((this.posicion + 1) + "/" + this.ejercicios.size());
-        //La imagen
         imgCorrespondiente = new ImgCorrespondiente();
         this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
 
+        //Empezamos el temporizador
         empezarTemporizador();
 
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Si clicamos en el boton next, pasaremos al siguiente elemento
                 pasarAlSiguienteElemento();
             }
         });
         btn_startStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Si clicamos en el boton StartStop, pararemos o arrancaremos de nuevo el contador
                 startStop();
             }
         });
         btn_atras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Si vamos atras, cancela el counter (importante)(he metido este boton ya q al darle al atras del movil no consigo cambiarlo, asi se puede ir atras correctamente sin recibir errores) y va al fragment d rutina
                 calcelarCounter();
                 Bundle bundle = new Bundle();
                 bundle.putString("usuario", getUsuario());
@@ -149,12 +152,15 @@ public class RutEjerFragment extends BaseFragment {
     private String getUsuario(){
         return this.usuario;
     }
+
     private void calcelarCounter(){
+        //Cancelamos el counter activo
         this.countDownTimer.cancel();
         this.countDownTimer=null;
     }
 
     public void startStop(){
+        //Dependiendo del estado del contador, lo pararemos lo lo arrancamos
         if(encendido){
             pararTemporizador();
         }else{
@@ -163,6 +169,7 @@ public class RutEjerFragment extends BaseFragment {
     }
 
     public void empezarTemporizador(){
+        //Empieza el contador
         if(this.countDownTimer!=null){
             calcelarCounter();
         }
@@ -172,10 +179,9 @@ public class RutEjerFragment extends BaseFragment {
                 tiempoFaltante=l;
                 actualizarTemporizador();
             }
-
             @Override
             public void onFinish() {
-
+                calcelarCounter(); //Cuando le daws a back con el mvl, aunq este esto, no s cancela, da error
             }
         }.start();
         btn_startStop.setText(getString(R.string.pause));
@@ -193,29 +199,25 @@ public class RutEjerFragment extends BaseFragment {
         int segundos=(int) this.tiempoFaltante % 60000 / 1000;
         //Log.d("Logs","ACTUALIZAR "+this.tiempoFaltante);
         String texto;
-
         texto=""+minutos+":";
         if(segundos<10){
             texto+="0";
         }
         texto+=segundos;
-
         if("0:01".equals(texto)){
             //El contador a llegado al final, hay que pasar de elemento
-
             pasarAlSiguienteElemento();
         }
-
         temporizador.setText(texto);
     }
     public void pasarAlSiguienteElemento(){
         //Actualizamos todos los elementos al siguiente de la bbdd
         //hasieratuamos el contador
         this.posicion++;
-        calcelarCounter();
+        calcelarCounter(); //Cancelamos el counter activo. improtante
         if(this.posicion<this.ejercicios.size()){
             //Lanzar un toast
-            if (this.prefs.contains("notiftoast")) {
+            if (this.prefs.contains("notiftoast")) { //si estan activadas las notificaciones toast, lanzamos una
                 Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                 Log.d("Logs", "estado notificaciones toast: " + activadas);
                 if (activadas) {
@@ -265,6 +267,7 @@ public class RutEjerFragment extends BaseFragment {
     }
 
     public void mostrarNotificacion(){
+        //Si las notificaciones estan activadas en ajustes, salta una notificacion de q has completado la rutina
         if (this.prefs.contains("notif")) { //Comprobamos si existe
             Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
             Log.d("Logs", "estado notificaciones: "+activadas);
@@ -291,8 +294,8 @@ public class RutEjerFragment extends BaseFragment {
     }
 
     public void escribirEnFichero(){
+        //Cuardara en un fichero el usuario, la rutina y la fecha y hora en la q se ha compeltado
         try {
-
             OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_APPEND));
 
             java.util.Date fecha = new Date();
@@ -304,18 +307,14 @@ public class RutEjerFragment extends BaseFragment {
             db = new MiDB(getContext());
             fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
             fichero.close();
-
             this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
             Log.d("Logs", "Ha insertado los datos en el fichero ");
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Log.d("Logs", "file not found ");
-
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("Logs", "io excepcion ");
-
         }catch(Exception e){
             Log.d("Logs", "error al insertar datos ");
 
@@ -325,6 +324,7 @@ public class RutEjerFragment extends BaseFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        //Cuando se rota la pantalla tendremos q guardar x informacion. la posicion en la que estamos y el tiempo q falta del contador para accabar
         super.onSaveInstanceState(outState);
         calcelarCounter();
         outState.putInt("posicion",this.posicion);
@@ -335,7 +335,7 @@ public class RutEjerFragment extends BaseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        //se coge en el create
+        //lo he añadido en el create asiq
         super.onActivityCreated(savedInstanceState);
     }
 }

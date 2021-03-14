@@ -24,35 +24,34 @@ public class SingUpActivity extends BaseActivity {
     }
 
     public void clickCrearCuenta(View v){
-        //Iniciamos el controlador de la base de datos
-        db=new MiDB(this);
-
         EditText editView_user = (EditText)findViewById(R.id.editView_user2);
         EditText editView_mail = (EditText)findViewById(R.id.editView_mail);
         EditText editView_pass = (EditText)findViewById(R.id.editView_pass2);
         EditText editView_passAgain = (EditText)findViewById(R.id.editView_passAgain);
-
+        //Cogemos los 4 valores insertados por el usuario
         String user=editView_user.getText().toString();
         String pass=editView_pass.getText().toString();
         String passAgain=editView_passAgain.getText().toString();
         String mail=editView_mail.getText().toString();
 
 
-        if (user!="" && pass!=""&& passAgain!=""&& mail!="") {
+        if (user!="" && pass!=""&& passAgain!=""&& mail!="") {  //Si todos son distintos de null
             Log.d("Logs", "Usuario: "+user+ " Mail: "+mail+" Contraseña: "+pass+" Contraseña again: "+passAgain);
 
-            if(passAgain.equals(pass)) {
-                Boolean resultado = db.crearUsuario(user,mail,pass);
-
-                if (resultado) {
+            if(passAgain.equals(pass)) {  //Ski las contraseñas son iguales
+                //Iniciamos el controlador de la base de datos
+                db=new MiDB(this);
+                boolean resultado = db.crearUsuario(user,mail,pass);  //Creamos el usuario
+                this.db.cerrarConexion();   //Cerramos conexion con bbdd
+                if (resultado) {  //Si se ha creado bien el usuario
                     Log.d("Logs", "Usuario creado");
-                    this.db.cerrarConexion();
+                    //Cerramos el intent actual y abrimos el principal
                     Intent i = new Intent(this, PrincipalActivity.class);
                     i.putExtra("usuario", user);
                     i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(i);
-                    finish();
-                } else {
+                    finish();  //Lo cerramos para q no s pueda volver atras
+                } else { //El usuario no se ha creado bnien por lo q mostramos una alerta al usuario nformando de ello
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(getString(R.string.alert_error));
                     builder.setMessage(getString(R.string.alert_nosehapodidocrealelusuario));
@@ -61,7 +60,7 @@ public class SingUpActivity extends BaseActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-            }else{
+            }else{//Las contraseñas no son iguales por lo q mostraremos una alerta para informar al usuario de ello
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.alert_error));
                 builder.setMessage(getString(R.string.alert_lascontraseñasnocoinciden));
@@ -71,10 +70,9 @@ public class SingUpActivity extends BaseActivity {
                 dialog.show();
             }
         }
-        this.db.cerrarConexion();
     }
 
-    public void clickIniciarSesion(View v){
+    public void clickIniciarSesion(View v){ //Si el usuario clica en iniciar sesion. abriremos ese intent y cerramos el actual
         Intent i = new Intent(this, LogInActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);

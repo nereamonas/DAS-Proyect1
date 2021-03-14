@@ -14,6 +14,9 @@ import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import java.util.ArrayList;
 
 public class AdaptadorRecyclerEjercicios extends RecyclerView.Adapter<ViewHolderNewEjercicios> implements View.OnClickListener{
+
+    //Esta clase es el adaptador para crear la recycle view de todos los ejercicios. será un array list de ejercicios
+
     private ArrayList<Ejercicio> ejercicios;
     private View.OnClickListener listener;
 

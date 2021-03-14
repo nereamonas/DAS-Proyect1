@@ -25,7 +25,10 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 
 public class CalendarioFragment extends BaseFragment {
+    //Es un calendario, que cuando tu clicas en un día te muestra las rutinas q has completado en ese dia por ese usuario
+
     private CalendarioViewModel calendarioViewModel;
+    private TextView text;
     String user=" ";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -40,25 +43,48 @@ public class CalendarioFragment extends BaseFragment {
                 //textView.setText(s);
             }
         });
+        //Cogemos el usuario con el q se ha iniciado sesion
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
+            this.user = " "+prefs.getString("username", null)+":";
+        }
+
+        //Cogemos la fecha actual
         Calendar cal = Calendar.getInstance();
         String DAY = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
         String YEAR = String.valueOf(cal.get(Calendar.YEAR));
         String MONTH = String.valueOf(cal.get(Calendar.MONTH));
         String date=" "+DAY+"/"+MONTH+"/"+YEAR+" ";
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if (prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
-            this.user = " "+prefs.getString("username", null)+":";
-        }
+        //Cargamos el text view donde escribiremos las rutinas completadas. Esta informacion la coeremos del fichero creado dentro de la aplicacion
+        this.text= root.findViewById(R.id.textrutCompletadasDelDia);
+        rellenarTextView(date);  //Llamamos al metodo que rellenara el textView
 
-        TextView text= root.findViewById(R.id.textrutCompletadasDelDia);
+        //Cada vez q la fecha en el calendario cambie, se ejecutara:
+        CalendarView calendar=root.findViewById(R.id.calendario);
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Log.d("Logs", "Year: " + year + " Month: " + month + " Day: " + dayOfMonth);
+                //Cogemos la data seleccionada y llamamos a rellenar TextView para actualizar los datos
+                String date = " "+dayOfMonth + "/" + month + "/" + year+" ";
+                rellenarTextView(date);
+            }
+        });
+
+
+        return root;
+    }
+
+    public void rellenarTextView(String date){
+
         text.setText("Rutinas completadas del día: "+date);
         try {
             BufferedReader ficherointerno= new BufferedReader(new InputStreamReader(getContext().openFileInput("rutinasCompletadas.txt")));
             String linea= ficherointerno.readLine();
             Log.d("Logs", "linea: "+linea);
             while (linea!=null){
-               if(linea.contains(date) && linea.contains(this.user)) {
+                if(linea.contains(date) && linea.contains(this.user)) { //Si la linea, pertenece al dia actual,
                     text.setText(text.getText() + "\n\n" + linea);
                 }
                 linea = ficherointerno.readLine();
@@ -70,43 +96,6 @@ public class CalendarioFragment extends BaseFragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        CalendarView calendar=root.findViewById(R.id.calendario);
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Log.d("Logs", "Year: " + year + " Month: " + month + " Day: " + dayOfMonth);
-                String date = " "+dayOfMonth + "/" + month + "/" + year+" ";
-
-                TextView text= root.findViewById(R.id.textrutCompletadasDelDia);
-                text.setText("Rutinas completadas del día: "+date+"\n");
-                try {
-                    BufferedReader ficherointerno= new BufferedReader(new InputStreamReader(getContext().openFileInput("rutinasCompletadas.txt")));
-                    String linea= ficherointerno.readLine();
-                    Log.d("Logs", "linea: "+linea);
-                    while (linea!=null){
-                        if(linea.contains(date) && linea.contains(getUser())) {
-                            text.setText(text.getText() + "\n\n" + linea);
-                        }
-                        linea = ficherointerno.readLine();
-                    }
-
-                    ficherointerno.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
-        return root;
-    }
-
-    public String getUser(){
-        return this.user;
     }
 
 

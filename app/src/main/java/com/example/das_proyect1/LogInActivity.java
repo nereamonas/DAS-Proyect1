@@ -22,7 +22,7 @@ public class LogInActivity extends BaseActivity {
 
         db=new MiDB(this);
         db.añadirPrimerosElementos();
-
+        this.db.cerrarConexion();
         ImageView img= findViewById(R.id.img);
         img.setImageResource(R.mipmap.avatar);
 
@@ -34,30 +34,30 @@ public class LogInActivity extends BaseActivity {
 
         EditText editView_user = (EditText)findViewById(R.id.editView_user);
         EditText editView_pass = (EditText)findViewById(R.id.editView_pass);
-        String user=editView_user.getText().toString();
-        String pass=editView_pass.getText().toString();
+        String user=editView_user.getText().toString();  //Cogemos el nombre d usuario q ha insertado el usuario
+        String pass=editView_pass.getText().toString(); //Cogemos la pass q ha insertado el usuario
 
-        if (!user.equals("") && !pass.equals("")) {
+        if (!user.equals("") && !pass.equals("")) { //si es distinto null
             Log.d("Logs", "Usuario"+user+ " Contraseña"+pass);
-            Usuario usuario = db.comprobarUsuario(user, pass);
-
-            if (usuario != null) {
+            db=new MiDB(this);  //abrimos conexion con bbdd
+            Usuario usuario = db.comprobarUsuario(user, pass);  //Comprobamos si existe
+            this.db.cerrarConexion();//Cerramos conexion
+            if (usuario != null) {//si el usuario existe
                 Log.d("Logs", usuario.toString());
-                this.db.cerrarConexion();
-                Intent i = new Intent(this, PrincipalActivity.class);
-                i.putExtra("usuario", user);
+                Intent i = new Intent(this, PrincipalActivity.class);  //Abrimos el intent Principal para hacer el cambio
+                i.putExtra("usuario", user);  //Le pasamos el nombre del usuario
                 i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(i);
-                finish();
-            } else {
+                finish(); //Cerramos el actual para q no s pueda volver
+            } else {  //Saltamos una alerta d error
                 saltarAlerta();
             }
-        }else {
+        }else {  //Saltamos una alerta de error
             saltarAlerta();
         }
     }
 
-    public void saltarAlerta(){
+    public void saltarAlerta(){  //Crearemos un alert dialog para decirle al usuario q los datos introducidos no son correctos
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.alert_error));
         builder.setMessage(getString(R.string.alert_useropassincorrecto));
@@ -67,7 +67,7 @@ public class LogInActivity extends BaseActivity {
         dialog.show();
     }
 
-    public void clickCrearCuenta(View v){
+    public void clickCrearCuenta(View v){  //Si el usuario clica en crear una cuenta. abriremos ese intent y cerramos el actual
         Intent i = new Intent(this, SingUpActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);

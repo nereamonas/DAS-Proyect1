@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
 
+    //Esta clase es el adaptador para crear la list view de las rutinas. será un array list de rutinas
+
     private Context contexto;
     private LayoutInflater inflater;
     private ArrayList<Rutina> rutinas;
@@ -47,6 +49,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        //Insertamos en el view todos los elementos. q los cogemos del arraylist
         view=inflater.inflate(R.layout.listviewelement_rutinas,null);
         TextView titulo= (TextView) view.findViewById(R.id.titulo);
         ImageView img=(ImageView) view.findViewById(R.id.image);
