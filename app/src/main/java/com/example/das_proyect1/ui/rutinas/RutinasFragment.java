@@ -1,5 +1,7 @@
 package com.example.das_proyect1.ui.rutinas;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,14 @@ public class RutinasFragment extends BaseFragment {
             }
 
         });
+
+            int id=getArguments().getInt("id");
+            if(id==1) {
+                NotificationManager elManager = (NotificationManager)
+                        getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                elManager.cancel(id);
+            }
+
 
         return root;
     }

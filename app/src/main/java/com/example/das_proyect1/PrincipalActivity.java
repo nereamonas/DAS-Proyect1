@@ -52,6 +52,9 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
             case "azul":
                 this.setTheme(R.style.Theme_Azul_NoActionBar);
                 break;
+            default:
+                this.setTheme(R.style.Theme_Morado_NoActionBar);
+                break;
         }
         setContentView(R.layout.activity_principal);
         //getSupportActionBar().hide();
