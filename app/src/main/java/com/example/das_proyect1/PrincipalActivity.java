@@ -38,8 +38,6 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
         super.onCreate(savedInstanceState);
         String tema=super.returnTema();
 
-
-
         switch (tema) {
             case "morado":
                 this.setTheme(R.style.Theme_Morado_NoActionBar);
@@ -118,13 +116,23 @@ public class PrincipalActivity extends ControlarCambios {//ControlarCambios   Ap
                 } else if (id == R.id.nav_contactanos) {
                     Log.d("Logs", "nav_contactanos");
 
-                    String email= "nereamonasterio99@gmail.com";
+                    String to= "nereamonasterio99@gmail.com";
                     String subject = getString(R.string.email_dudaValoracionaplicacion);
                     String body = getString(R.string.email_mandanosmensaje);
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+email));
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);  //No m escribe el subject y el body
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-                    startActivity(emailIntent);
+                    //SOLO FUNCIONA EN OUTLOOK
+                    //Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+to));
+                    //emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                    //emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+                    //startActivity(emailIntent);
+
+                    //ASI FUNCIONA TAMBIEN PARA GMAIL
+                    String uriText="mailto:"+to+"?subject="+Uri.encode(subject)+"&body="+Uri.encode(body);
+                    Uri uri= Uri.parse(uriText);
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+to));
+                    emailIntent.setData(uri);
+                    startActivity(Intent.createChooser(emailIntent,"Send email"));
+
+
 
 
                 } else if (id == R.id.nav_logoff) {
