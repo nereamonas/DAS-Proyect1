@@ -49,6 +49,7 @@ public class MiDB extends SQLiteOpenHelper {
             añadirRutina(2,"Ejercicios de brazo","rutinaEjerBrazo");
             añadirRutina(3,"Estiramientos","rutinaEstiramiento");
             añadirRutina(4,"Ejercicios abdominales","rutinaEjerAbdominal");
+            añadirRutina(5,"Ejercicios de pierna","rutinaEstiramiento");
 
             añadirEjercicio(1,"DeadBug","Levantar la pierna a 90º y el brazo contrario hasta la cabeza.Ir alternando las dos piernas","deadBug","60000");
             añadirEjercicio(2,"Plancha","Manten la siguiente posición","plancha","45000");
@@ -84,6 +85,11 @@ public class MiDB extends SQLiteOpenHelper {
             añadirRutEjer(4,2);
             añadirRutEjer(4,3);
             añadirRutEjer(4,4);
+            añadirRutEjer(5,5);
+            añadirRutEjer(5,1);
+            añadirRutEjer(5,8);
+            añadirRutEjer(5,3);
+            añadirRutEjer(5,9);
         }
 
     }
@@ -91,6 +97,7 @@ public class MiDB extends SQLiteOpenHelper {
     public boolean añadirRutina(int id, String nombre, String foto){
         ContentValues cv = new ContentValues();
         //cv.put("id", id);
+        Log.d("Logs","Añadir rutina "+nombre);
         cv.put("nombre", nombre);
         cv.put("foto", foto);
         Log.d("Logs"," "+id+"  "+nombre+"  "+foto);
@@ -162,6 +169,8 @@ public class MiDB extends SQLiteOpenHelper {
         añadirUserRut(usuario,1);
         añadirUserRut(usuario,2);
         añadirUserRut(usuario,3);
+        añadirUserRut(usuario,4);
+        añadirUserRut(usuario,5);
 
         return todoCorrecto;
     }

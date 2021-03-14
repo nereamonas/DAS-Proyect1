@@ -65,19 +65,6 @@ public class RutinasFragment extends ControlarCambiosFragment {
 
         });
 
-
-/**
-        lalista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                elementosLista.remove(i);
-                adapt.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(),"Se ha eliminado la tarea",Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
-**/
-
         return root;
     }
 }
