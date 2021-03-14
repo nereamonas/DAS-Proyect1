@@ -201,14 +201,6 @@ public class RutEjerFragment extends ControlarCambiosFragment {
 
         if("0:01".equals(texto)){
             //El contador a llegado al final, hay que pasar de elemento
-            if (this.prefs.contains("notiftoast")) {
-                Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
-                Log.d("Logs", "estado notificaciones toast: " + activadas);
-                if (activadas) {
-                    Toast toast = Toast.makeText(getContext(), getString(R.string.toast_siguienteEjercicio), Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
 
             pasarAlSiguienteElemento();
         }
@@ -221,6 +213,15 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         this.posicion++;
         calcelarCounter();
         if(this.posicion<this.ejercicios.size()){
+            //Lanzar un toast
+            if (this.prefs.contains("notiftoast")) {
+                Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                Log.d("Logs", "estado notificaciones toast: " + activadas);
+                if (activadas) {
+                    Toast toast = Toast.makeText(getContext(), getString(R.string.toast_siguienteEjercicio), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
             //Recargo la pagina
             Bundle bundle = new Bundle();
             bundle.putString("usuario", this.usuario);
