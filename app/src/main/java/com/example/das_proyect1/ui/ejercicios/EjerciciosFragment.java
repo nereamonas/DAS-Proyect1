@@ -21,7 +21,6 @@ import com.example.das_proyect1.R;
 import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.recycleViewAdapterEjercicios.AdaptadorRecyclerEjercicios;
-import com.example.das_proyect1.recycleViewAdaptersRutinas.AdaptadorRecyclerRutinas;
 
 import java.util.ArrayList;
 

@@ -46,9 +46,9 @@ public class MiDB extends SQLiteOpenHelper {
         if(c==null || c.getCount()==0){
             //Añadir elementos a la base de datos
             añadirRutina(1,"Todos","todos");
-            añadirRutina(4,"Ejercicios abdominales","rutinaEjerAbdominal");
             añadirRutina(2,"Ejercicios de brazo","rutinaEjerBrazo");
             añadirRutina(3,"Estiramientos","rutinaEstiramiento");
+            añadirRutina(4,"Ejercicios abdominales","rutinaEjerAbdominal");
 
             añadirEjercicio(1,"DeadBug","Levantar la pierna a 90º y el brazo contrario hasta la cabeza.Ir alternando las dos piernas","deadBug","60000");
             añadirEjercicio(2,"Plancha","Manten la siguiente posición","plancha","45000");

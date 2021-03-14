@@ -12,16 +12,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
-import androidx.viewpager2.widget.CompositePageTransformer;
-import androidx.viewpager2.widget.MarginPageTransformer;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -34,24 +29,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.das_proyect1.MiDB;
-import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.controlarCambios.ControlarCambiosFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.rutinas.RutinasFragment;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class RutEjerFragment extends ControlarCambiosFragment {
     private TextView titulo;
@@ -92,36 +81,36 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         this.rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina
-        this.usuario=getArguments().getString("usuario");
+        this.usuario = getArguments().getString("usuario");
 
-        this.imageView=root.findViewById(R.id.image_view);
-        this.temporizador=root.findViewById(R.id.temporizador);
-        this.btn_startStop=root.findViewById(R.id.btn_stopStart);
-        this.titulo=root.findViewById(R.id.tituloEjer);
-        this.desc=root.findViewById(R.id.descEjer);
-        this.encendido=true;
-        this.btn_next=root.findViewById(R.id.btn_next);
-        this.elemPendientes=root.findViewById(R.id.elemPendientes);
+        this.imageView = root.findViewById(R.id.image_view);
+        this.temporizador = root.findViewById(R.id.temporizador);
+        this.btn_startStop = root.findViewById(R.id.btn_stopStart);
+        this.titulo = root.findViewById(R.id.tituloEjer);
+        this.desc = root.findViewById(R.id.descEjer);
+        this.encendido = true;
+        this.btn_next = root.findViewById(R.id.btn_next);
+        this.elemPendientes = root.findViewById(R.id.elemPendientes);
 
 
         //insertamos los textos del primer elemento de la base de datos
-        db=new MiDB(getContext());
-        this.ejercicios= db.getEjerciciosDeLaRutina(rutId);
+        db = new MiDB(getContext());
+        this.ejercicios = db.getEjerciciosDeLaRutina(rutId);
         if (savedInstanceState != null) {
-            Log.d("Logs","POSICItiempoON RECUPERADA: "+savedInstanceState.getLong("tiempoFaltante"));
-            this.posicion=savedInstanceState.getInt("posicion");
-            this.tiempoFaltante=savedInstanceState.getLong("tiempoFaltante");
-        }else{
-            this.posicion=getArguments().getInt("posicion");
-            this.tiempoFaltante=Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
+            Log.d("Logs", "POSICItiempoON RECUPERADA: " + savedInstanceState.getLong("tiempoFaltante"));
+            this.posicion = savedInstanceState.getInt("posicion");
+            this.tiempoFaltante = savedInstanceState.getLong("tiempoFaltante");
+        } else {
+            this.posicion = getArguments().getInt("posicion");
+            this.tiempoFaltante = Long.parseLong(this.ejercicios.get(this.posicion).getDuracion());
         }
-        Log.d("Logs"," rutid siguientefrag"+rutId);
+        Log.d("Logs", " rutid siguientefrag" + rutId);
         this.titulo.setText(this.ejercicios.get(this.posicion).getNombre());
         this.desc.setText(this.ejercicios.get(this.posicion).getDescripcion());
-        Log.d("Logs"," tiempo faltante inicial"+this.tiempoFaltante);
-        this.elemPendientes.setText((this.posicion+1)+"/"+this.ejercicios.size());
+        Log.d("Logs", " tiempo faltante inicial" + this.tiempoFaltante);
+        this.elemPendientes.setText((this.posicion + 1) + "/" + this.ejercicios.size());
         //La imagen
-        imgCorrespondiente= new ImgCorrespondiente();
+        imgCorrespondiente = new ImgCorrespondiente();
         this.imageView.setImageResource(imgCorrespondiente.devolver(this.ejercicios.get(this.posicion).getFoto()));
 
         empezarTemporizador();
@@ -155,6 +144,7 @@ public class RutEjerFragment extends ControlarCambiosFragment {
             @Override
             public void onTick(long l) {
                 tiempoFaltante=l;
+                Log.d("Logs","EEEEEEEEEEE");
                 actualizarTemporizador();
             }
 
@@ -257,8 +247,8 @@ public class RutEjerFragment extends ControlarCambiosFragment {
                 NotificationManager elManager = (NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE);
                 NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(getContext());
                 Intent intent = new Intent(getContext(), RutinasFragment.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
-
+                intent.putExtra("usuario",this.usuario);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 elBuilder.setSmallIcon(R.drawable.ic_rutinas)
                         .setContentTitle(getString(R.string.notif_titulo_finEntrenamiento))
@@ -320,5 +310,4 @@ public class RutEjerFragment extends ControlarCambiosFragment {
         //se coge en el create
         super.onActivityCreated(savedInstanceState);
     }
-
 }

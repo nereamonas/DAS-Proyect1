@@ -9,8 +9,8 @@
     <fragment
         android:id="@+id/fragment"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesFragment"
-        android:layout_width="376dp"
-        android:layout_height="584dp"
+        android:layout_width="379dp"
+        android:layout_height="571dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.485"
