@@ -188,7 +188,6 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         bundle.putString("usuario", this.usuario);
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)  //Queremos q siga el modelo singleTop. es decir q si es el fragment de arriba, coga ese y no lo vuelva a crear
-                .setPopUpTo(R.id.nav_rutinas,false)  //Aqui decimos q al ir atras nos llevara al nav_rutinas siempre
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_rutinas, bundle,options); //Navegamos
     }
@@ -197,7 +196,6 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         bundle.putString("usuario", this.usuario);
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_nav_ejercicios, bundle,options);
     }
@@ -206,25 +204,20 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         bundle.putString("usuario", this.usuario);
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_ajustesGeneralesFragment, bundle,options);
     }
     public void open_nav_rutinascompletadas(){
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_rutinasCompletadasFragment,null,options);
     }
     public void open_calendar(){
         NavOptions options = new NavOptions.Builder()
                 .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.nav_rutinas,false)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_fragment_calen,null,options);
     }
-
-
 
 }

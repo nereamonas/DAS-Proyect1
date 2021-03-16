@@ -187,6 +187,7 @@ public class RutEjerFragment extends BaseFragment {
             @Override
             public void onTick(long l) {
                 tiempoFaltante=l;
+                Log.d("Logs","Temporizador corriendo");
                 actualizarTemporizador();
             }
             @Override
@@ -303,8 +304,7 @@ public class RutEjerFragment extends BaseFragment {
                         .setLights(Color.BLUE, 200, 200)
                         .setDefaults(Notification.DEFAULT_SOUND)
                         .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-                        .addAction(android.R.drawable.ic_input_add,getString(R.string.notif_boton_iniciarOtraRutina),pendingIntent);
+                        .setAutoCancel(true);
                 if(permiso) {
                     elBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
                 }

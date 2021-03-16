@@ -67,13 +67,6 @@ public class RutinasFragment extends BaseFragment {
 
         });
 
-            int id=getArguments().getInt("id");
-            if(id==1) {
-                NotificationManager elManager = (NotificationManager)
-                        getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                elManager.cancel(id);
-            }
-
 
         return root;
     }

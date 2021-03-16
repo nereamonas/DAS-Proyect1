@@ -47,7 +47,7 @@ public class MiDB extends SQLiteOpenHelper {
 
     public void añadirPrimerosElementos(){
         //Añadiremos los primeros elementos.
-        Cursor c = db.rawQuery("select * from rutina where id=1",null);
+        Cursor c = db.rawQuery("select * from rutina",null);
         if(c==null || c.getCount()==0){
             //Añadir elementos a la base de datos
             añadirRutina(1,"Todos","todos");
