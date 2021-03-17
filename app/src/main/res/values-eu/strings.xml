@@ -92,5 +92,5 @@
     <string name="toast_usuarionoCambiadoCorrectamente">Ezin izan da erabiltzailea eguneratu</string>
     <string name="toast_emailnoCambiadoCorrectamente">Ezin izan da posta elektronikoa eguneratu</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">Ezin da izan pasahitza eguneratu</string>
-    <string name="btn_atras">Atzera</string>
+    <string name="btn_atras">Aurrekoa</string>
 </resources>

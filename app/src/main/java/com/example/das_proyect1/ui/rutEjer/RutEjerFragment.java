@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,7 +41,6 @@ import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.calendario.CalendarioFragment;
-import com.example.das_proyect1.ui.rutinas.RutinasFragment;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,9 +50,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class RutEjerFragment extends BaseFragment {
-    //Aviso - es un poco locurote de clase porq hace muchas cosas.
-    //TIENE UN ERROR - Cuando le das al boton atras, no consigo para el CountDownTimer, por lo q posiblemente de error al de unos minutos la aplicacion y se cierre
-    //He intentado con herencia y asi controlar el onBackClick, pero no puedo... en los fragment no es tan facil como en los intent porq no cuentan con ese metodo. Y hay una manera desde el intent que lo kudeatua, pero me lo hace en todos los fragmentos no solo este. Continuare investigando pero... M ha llevamo mazo tiempo intentaar arreglarlo pero nada... :(
+    //Aviso - es un poco locurote de clase porq hace muchas cosas. Pero, cogerá de la base de datos todos los ejercicios que hay para la rutina establecida. creara un temporizador con el tiempo q dura cada ejercicio(que se indica en base de datos). cuando el tiempo acabe automaticamente salará al siguiente ejercicio, aunque tambien hay un  botón de next por si queremos pasr más rapido. al pasar de ejercicio saldrá un toast si dichas notificaciones estan activadas, y al terminar con todos los ejercicios, nos redirige a la ventana rutinas, salta un toast y una notificacion si están activados y escribe en un fichero que se ha terminado la rutina
     private TextView titulo;
     private TextView desc;
     private TextView elemPendientes;
@@ -146,15 +141,7 @@ public class RutEjerFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //Si vamos atras, cancela el counter (importante)(he metido este boton ya q al darle al atras del movil no consigo cambiarlo, asi se puede ir atras correctamente sin recibir errores) y va al fragment d rutina
-                calcelarCounter();
-                Bundle bundle = new Bundle();
-                bundle.putString("usuario", getUsuario());
-                NavOptions options = new NavOptions.Builder()
-                        .setLaunchSingleTop(true)
-                        .setPopUpTo(R.id.nav_rutinas,false)
-                        .build();
-                Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle,options);
-
+                anterior();
             }
         });
         return root;
@@ -163,10 +150,40 @@ public class RutEjerFragment extends BaseFragment {
         return this.usuario;
     }
 
-    private void calcelarCounter(){
+    private void anterior(){
+        if (this.posicion!=0){
+            this.posicion--;
+            //Recargo la pagina
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", this.usuario);
+            bundle.putString("idRut", (String.valueOf(this.rutId)));
+            bundle.putInt("posicion",this.posicion);
+            NavOptions options = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.nav_rutinas,false)
+                    .build();
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_self, bundle,options);
+
+        }else{
+            cancelarCounter();
+            Bundle bundle = new Bundle();
+            bundle.putString("usuario", getUsuario());
+            NavOptions options = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.nav_rutinas,false)
+                    .build();
+            Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle,options);
+
+        }
+
+    }
+    private void cancelarCounter(){
         //Cancelamos el counter activo
-        this.countDownTimer.cancel();
-        this.countDownTimer=null;
+        if (this.countDownTimer!=null){
+            this.countDownTimer.cancel();
+            this.countDownTimer=null;
+        }
+
     }
 
     public void startStop(){
@@ -181,7 +198,7 @@ public class RutEjerFragment extends BaseFragment {
     public void empezarTemporizador(){
         //Empieza el contador
         if(this.countDownTimer!=null){
-            calcelarCounter();
+            cancelarCounter();
         }
         this.countDownTimer= new CountDownTimer(this.tiempoFaltante,1000) {
             @Override
@@ -192,7 +209,7 @@ public class RutEjerFragment extends BaseFragment {
             }
             @Override
             public void onFinish() {
-                calcelarCounter(); //Cuando le daws a back con el mvl, aunq este esto, no s cancela, da error
+                cancelarCounter(); //Cuando le daws a back con el mvl, aunq este esto, no s cancela, da error
             }
         }.start();
         btn_startStop.setText(getString(R.string.pause));
@@ -225,7 +242,7 @@ public class RutEjerFragment extends BaseFragment {
         //Actualizamos todos los elementos al siguiente de la bbdd
         //hasieratuamos el contador
         this.posicion++;
-        calcelarCounter(); //Cancelamos el counter activo. improtante
+        cancelarCounter(); //Cancelamos el counter activo. improtante
         if(this.posicion<this.ejercicios.size()){
             //Lanzar un toast
             if (this.prefs.contains("notiftoast")) { //si estan activadas las notificaciones toast, lanzamos una
@@ -346,7 +363,7 @@ public class RutEjerFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         //Cuando se rota la pantalla tendremos q guardar x informacion. la posicion en la que estamos y el tiempo q falta del contador para accabar
         super.onSaveInstanceState(outState);
-        calcelarCounter();
+        cancelarCounter();
         outState.putInt("posicion",this.posicion);
         outState.putLong("tiempoFaltante",this.tiempoFaltante);
 
@@ -391,9 +408,9 @@ public class RutEjerFragment extends BaseFragment {
 
 
     @Override
-    public void onDetach() {
-        calcelarCounter();
-        Log.d("Logs","Ha pulsado atras, cancelar counter");
+    public void onDetach() {  //Este metodo detecta cuando pulsamos la tecla atras en el mvl. Es importante cancelar el temporizador, ya que si al darle atras no se cancela, cuando este acabe peta la aplicacion
+        cancelarCounter();  //Lo cancelamos
+        Log.d("Logs","cancelar counter"); //Añadimos un log para comprobar
         super.onDetach(); }
 
 

@@ -92,5 +92,5 @@
     <string name="toast_usuarionoCambiadoCorrectamente">Unable to update username</string>
     <string name="toast_emailnoCambiadoCorrectamente">Unable to update email</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">Unable to update password</string>
-    <string name="btn_atras">Back</string>
+    <string name="btn_atras">Previous</string>
 </resources>
