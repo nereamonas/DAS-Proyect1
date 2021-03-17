@@ -388,4 +388,15 @@ public class RutEjerFragment extends BaseFragment {
         }
         return permiso;
     }
+
+
+    @Override
+    public void onDetach() {
+        calcelarCounter();
+        Log.d("Logs","Ha pulsado atras, cancelar counter");
+        super.onDetach(); }
+
+
+
+
 }
