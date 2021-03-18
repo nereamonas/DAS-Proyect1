@@ -373,7 +373,7 @@ public class MiDB extends SQLiteOpenHelper {
         añadirUserRut(usuario,idRutina);
         for (int i=0 ; i<ejercicios.size() ; i++) {
             int idEjercicio=getIdEjercicio(ejercicios.get(i));
-            Log.d("Logs","AÑADIENDO A LA BD: elem: "+idRutina+"  "+i+  "  NOMBRE: "+ejercicios.get(i)+ "   , idEjercicio"+ idEjercicio);
+            Log.d("Logs","AÑADIENDO A LA BD: idRutina: "+idRutina+  "  nombre: "+ejercicios.get(i)+ "  idEjercicio: "+ idEjercicio);
             if (idEjercicio!=0){
                 añadirRutEjer(idRutina,idEjercicio);
             }
@@ -413,7 +413,6 @@ public class MiDB extends SQLiteOpenHelper {
             int id = c.getInt(c.getColumnIndex("id"));
             String foto = c.getString(c.getColumnIndex("foto"));
             r = new Rutina(id, nombre, foto); //Cogemos todos los elementos y con ellos creamos una rutina
-            Log.d("Logs","id: "+id+"  foto "+foto);
         }
         return r;
     }

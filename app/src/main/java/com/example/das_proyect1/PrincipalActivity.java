@@ -220,4 +220,15 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_fragment_calen,null,options);
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //Si el menu desplegable está abierto, lo cerraremos al darle atras con el boton del movil
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else { //si al contrario el menu desplegable esta cerrado, llamamos al super
+            super.onBackPressed();
+        }
+    }
+
 }

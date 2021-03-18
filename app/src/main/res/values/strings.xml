@@ -106,4 +106,6 @@
     <string name="alert_cancelar">Cancelar</string>
     <string name="alert_ok">Ok</string>
     <string name="alert_eligeejerciciosaañadir">Elige los ejercicios que quieras añadir a la rutina</string>
+    <string name="toast_sehaeliminadolarutina">Se ha eliminado la rutina</string>
+    <string name="toast_rutinaCreada">Se ha creado la rutina</string>
 </resources>

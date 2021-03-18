@@ -99,7 +99,7 @@ public class RutinasFragment extends BaseFragment {
                         if (prefs.contains("notiftoast")) {
                             Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                             if (activadas) {
-                                Toast toast = Toast.makeText(getContext(),"Se ha eliminado la rutina", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(getContext(),getString(R.string.toast_sehaeliminadolarutina), Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                         }
@@ -173,6 +173,16 @@ public class RutinasFragment extends BaseFragment {
 
                                     rutinas.add(r);
                                     eladap.notifyDataSetChanged();
+
+                                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                    //Most4ramos un toast diciendo que se ha eliminado correctamente
+                                    if (prefs.contains("notiftoast")) {
+                                        Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                                        if (activadas) {
+                                            Toast toast = Toast.makeText(getContext(),getString(R.string.toast_rutinaCreada), Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                    }
                                 }
                             });
                             builder2.setNegativeButton(getString(R.string.alert_cancelar), null);

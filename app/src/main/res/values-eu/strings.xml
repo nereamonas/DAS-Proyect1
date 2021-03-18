@@ -99,4 +99,6 @@
     <string name="alert_ok">Ok</string>
     <string name="alert_cancelar">Utzi</string>
     <string name="alert_eligeejerciciosaañadir">Aukeratu errutinara gehitu nahi dituzun ariketak</string>
+    <string name="toast_sehaeliminadolarutina">Errutina ezabatu da</string>
+    <string name="toast_rutinaCreada">Errutina sortu da</string>
 </resources>
