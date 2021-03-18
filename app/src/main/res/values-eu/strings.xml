@@ -93,4 +93,10 @@
     <string name="toast_emailnoCambiadoCorrectamente">Ezin izan da posta elektronikoa eguneratu</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">Ezin da izan pasahitza eguneratu</string>
     <string name="btn_atras">Aurrekoa</string>
+    <string name="alert_eliminarRutina">Errutina ezabatu</string>
+    <string name="alert_seguroquequiereseliminarlarutina">Ziur zaude errutina ezabatu nahi duzula?</string>
+    <string name="alert_insertatitulorutina">Txertatu izenburua errutinarako</string>
+    <string name="alert_ok">Ok</string>
+    <string name="alert_cancelar">Utzi</string>
+    <string name="alert_eligeejerciciosaañadir">Aukeratu errutinara gehitu nahi dituzun ariketak</string>
 </resources>

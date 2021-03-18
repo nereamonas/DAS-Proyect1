@@ -93,4 +93,10 @@
     <string name="toast_emailnoCambiadoCorrectamente">Unable to update email</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">Unable to update password</string>
     <string name="btn_atras">Previous</string>
+    <string name="alert_eliminarRutina">Remove routine</string>
+    <string name="alert_seguroquequiereseliminarlarutina">Are you sure you want to eliminate the routine?</string>
+    <string name="alert_insertatitulorutina">Insert a title for the routine</string>
+    <string name="alert_ok">Ok</string>
+    <string name="alert_cancelar">Cancel</string>
+    <string name="alert_eligeejerciciosaañadir">Choose the exercises you want to add to the routine</string>
 </resources>

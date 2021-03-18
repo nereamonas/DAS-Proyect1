@@ -86,11 +86,17 @@
     <string name="email_dudaValoracionaplicacion">Duda / Valoración aplicación</string>
     <string name="email_mandanosmensaje">Mandanos tu mensaje</string>
     <string name="toast_siguienteEjercicio">Muy bien. Pasamos al siguiente ejercicio</string>
-    <string name="toast_usuarioCambiadoCorrectamente">Usuario actualizada correctamente</string>
-    <string name="toast_emailCambiadoCorrectamente">Correo actualizada correctamente</string>
+    <string name="toast_usuarioCambiadoCorrectamente">Usuario actualizado correctamente</string>
+    <string name="toast_emailCambiadoCorrectamente">Correo actualizado correctamente</string>
     <string name="toast_contraseñaCambiadoCorrectamente">Contraseña actualizada correctamente</string>
     <string name="toast_usuarionoCambiadoCorrectamente">No se ha podido actualizar el usuario</string>
     <string name="toast_emailnoCambiadoCorrectamente">No se ha podido actualizar el correo</string>
     <string name="toast_contraseñanoCambiadoCorrectamente">No se ha podido actualizar la contraseña</string>
     <string name="btn_atras">Anterior</string>
+    <string name="alert_eliminarRutina">Eliminar rutina</string>
+    <string name="alert_seguroquequiereseliminarlarutina">¿Estás seguro que quieres eliminar la rutina?</string>
+    <string name="alert_insertatitulorutina">Inserta un titulo para la rutina</string>
+    <string name="alert_ok">Ok</string>
+    <string name="alert_cancelar">Cancelar</string>
+    <string name="alert_eligeejerciciosaañadir">Elige los ejercicios que quieras añadir a la rutina</string>
 </resources>

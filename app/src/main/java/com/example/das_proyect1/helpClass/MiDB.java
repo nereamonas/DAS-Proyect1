@@ -50,11 +50,11 @@ public class MiDB extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("select * from rutina",null);
         if(c==null || c.getCount()==0){
             //Añadir elementos a la base de datos
-            añadirRutina(1,"Todos","todos");
-            añadirRutina(2,"Ejercicios de brazo","rutinaEjerBrazo");
-            añadirRutina(3,"Estiramientos","rutinaEstiramiento");
-            añadirRutina(4,"Ejercicios abdominales","rutinaEjerAbdominal");
-            añadirRutina(5,"Ejercicios de pierna","rutinaEstiramiento");
+            añadirRutina("Todos","todos");
+            añadirRutina("Ejercicios de brazo","rutinaEjerBrazo");
+            añadirRutina("Estiramientos","rutinaEstiramiento");
+            añadirRutina("Ejercicios abdominales","rutinaEjerAbdominal");
+            añadirRutina("Ejercicios de pierna","rutinaEstiramiento");
 
             añadirEjercicio(1,"DeadBug","Levantar la pierna a 90º y el brazo contrario hasta la cabeza.Ir alternando las dos piernas","deadBug","60000");
             añadirEjercicio(2,"Plancha","Manten la siguiente posición","plancha","45000");
@@ -99,14 +99,14 @@ public class MiDB extends SQLiteOpenHelper {
 
     }
 
-    public boolean añadirRutina(int id, String nombre, String foto){
+    public boolean añadirRutina(String nombre, String foto){
         //Añadiremos una nueva rutina a la base de datos
         ContentValues cv = new ContentValues();
         //cv.put("id", id);
         Log.d("Logs","Añadir rutina "+nombre);
         cv.put("nombre", nombre);
         cv.put("foto", foto);
-        Log.d("Logs"," "+id+"  "+nombre+"  "+foto);
+        Log.d("Logs","  "+nombre+"  "+foto);
         int resultado = (int) db.insert("rutina", null, cv);
         Log.d("Logs"," "+resultado);
         if(resultado== -1) {
@@ -337,17 +337,85 @@ public class MiDB extends SQLiteOpenHelper {
         return nombre;
     }
 
-    public boolean eliminarRutinaDelUsuario(String usuario, int idRutina){
-        boolean bien=false;
+    public void eliminarRutinaDelUsuario(String usuario, int idRutina){
+        try{
+            db.execSQL("DELETE from rutEjer where idRut="+idRutina);
+        }catch(Exception e){
+            Log.d("Logs","ERROR AL eliminar rutejer");
+        }
+        //Luego eliminamos la rutina
         try{
             db.execSQL("DELETE from userRut where idUser='"+usuario+"' and idRut="+idRutina);
-            bien=true;
         }catch(Exception e){
-            Log.d("Logs","ERROR AL ACTUALIZAR EMAIL");
+            Log.d("Logs","ERROR AL eliminar userrut");
         }
-        return bien;
+    }
 
 
+    public ArrayList<String> getNombreTodosLosEjercicios(String usuario){
+        //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
+        ArrayList<String> lista= new ArrayList<String>();
+        String select="select distinct e.id,e.nombre,e.descripcion,e.foto,e.duracion from ejercicio e inner join rutEjer r on r.idEjer=e.id inner join userRut u on u.idRut=r.idRut where u.idUser='"+usuario+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            do {
+                String nombre=c.getString(c.getColumnIndex("nombre"));
+                lista.add(nombre);
+            }while(c.moveToNext());
+        }
+        return lista;
+    }
+
+    public void añadirRutinaConEjerciciosAlUsuario(String usuario, String nombre, ArrayList<String> ejercicios){
+        añadirRutina(nombre,"todos");
+        int idRutina=getIdRutina(nombre);
+        añadirUserRut(usuario,idRutina);
+        for (int i=0 ; i<ejercicios.size() ; i++) {
+            int idEjercicio=getIdEjercicio(ejercicios.get(i));
+            Log.d("Logs","AÑADIENDO A LA BD: elem: "+idRutina+"  "+i+  "  NOMBRE: "+ejercicios.get(i)+ "   , idEjercicio"+ idEjercicio);
+            if (idEjercicio!=0){
+                añadirRutEjer(idRutina,idEjercicio);
+            }
+        }
+
+    }
+
+    public int getIdEjercicio(String nombre){
+        //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
+        int id=0;
+        String select="select id from ejercicio where nombre='"+nombre+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            id=c.getInt(c.getColumnIndex("id"));
+        }
+        return id;
+    }
+    public int getIdRutina(String nombre){
+        //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
+        int id=0;
+        String select="select id from rutina where nombre='"+nombre+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            id=c.getInt(c.getColumnIndex("id"));
+        }
+        return id;
+    }
+    public Rutina getRutinaConNombre(String nombre){
+        //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
+        Rutina r=null;
+        String select="select * from rutina where nombre='"+nombre+"'";
+        Cursor c = db.rawQuery(select,null);
+        if(c!=null && c.getCount()>0){
+            c.moveToFirst();
+            int id = c.getInt(c.getColumnIndex("id"));
+            String foto = c.getString(c.getColumnIndex("foto"));
+            r = new Rutina(id, nombre, foto); //Cogemos todos los elementos y con ellos creamos una rutina
+            Log.d("Logs","id: "+id+"  foto "+foto);
+        }
+        return r;
     }
 
 }

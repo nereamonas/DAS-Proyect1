@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,12 +24,12 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 
-import com.example.das_proyect1.LogInActivity;
 import com.example.das_proyect1.adaptadores.ListViewAdapterRutinas.ListViewAdapter;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Rutina;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -81,37 +82,28 @@ public class RutinasFragment extends BaseFragment {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Mostramos una alerta indicando si se quiere eliminar la rutina
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(view.getContext());
-                dialogo.setTitle("Eliminar rutina");
-                dialogo.setMessage("Estas seguro que quieres eliminar la rutina?");
+                dialogo.setTitle(getString(R.string.alert_eliminarRutina));
+                dialogo.setMessage(getString(R.string.alert_seguroquequiereseliminarlarutina));
                 //dialogo.setCancelable(false);
                 dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
                         //Si dice que si quiere eliminar. Actualizamos la lista y lo borramos de la base de datos
                         int idRutina= (int) eladap.getItemId(i);
                         db = new MiDB(getContext());
-                        boolean todobien=db.eliminarRutinaDelUsuario(usuario,idRutina);
+                        db.eliminarRutinaDelUsuario(usuario,idRutina);
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        if(todobien){
-                            rutinas.remove(i);
-                            eladap.notifyDataSetChanged();
-                            //Most4ramos un toast diciendo que se ha eliminado correctamente
-                            if (prefs.contains("notiftoast")) {
-                                Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
-                                if (activadas) {
-                                    Toast toast = Toast.makeText(getContext(),"Se ha eliminado la rutina", Toast.LENGTH_LONG);
-                                    toast.show();
-                                }
-                            }
 
-                        }else{
-                            if (prefs.contains("notiftoast")) {
-                                Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
-                                if (activadas) {
-                                    Toast toast = Toast.makeText(getContext(),"No se ha podido eliminar la rutina", Toast.LENGTH_LONG);
-                                    toast.show();
-                                }
+                        rutinas.remove(i);
+                        eladap.notifyDataSetChanged();
+                        //Most4ramos un toast diciendo que se ha eliminado correctamente
+                        if (prefs.contains("notiftoast")) {
+                            Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
+                            if (activadas) {
+                                Toast toast = Toast.makeText(getContext(),"Se ha eliminado la rutina", Toast.LENGTH_LONG);
+                                toast.show();
                             }
                         }
+
                         db.cerrarConexion();
                     }
                 });
@@ -126,6 +118,81 @@ public class RutinasFragment extends BaseFragment {
             }
         });
 
+
+        FloatingActionButton myFab = (FloatingActionButton) root.findViewById(R.id.floatingActionButton);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("Logs", "CLICKFLOAT");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(getString(R.string.alert_insertatitulorutina));
+
+                final EditText input = new EditText(getContext());  //Creamos un edit text. para q el usuairo pueda insertar el titulo
+                builder.setView(input);
+
+                builder.setPositiveButton(getString(R.string.alert_ok), new DialogInterface.OnClickListener() {  //Si el usuario acepta, mostramos otra alerta con los ejercicios que puede agregar
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String tituloRutina = input.getText().toString();
+
+                        if (!tituloRutina.equals("")){
+                            //Mostramos una checkbox
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+                            builder2.setTitle(getString(R.string.alert_eligeejerciciosaañadir));
+
+                            db = new MiDB(getContext());
+                            ArrayList<String> ejercicioslist = db.getNombreTodosLosEjercicios(usuario);
+                            String[] ejercicios = new String[ejercicioslist.size()];
+                            ejercicios = ejercicioslist.toArray(ejercicios);
+
+                            final ArrayList <Integer> loselegidos=new ArrayList<>();
+                            builder2.setMultiChoiceItems(ejercicios, null, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                                    if (b == true){
+                                        //Hemos seleccionado un elemento, lo añadimos a la lista
+                                        loselegidos.add(i);
+                                    }
+                                    else if (loselegidos.contains(i)){
+                                        //Hemos desseleccionado el elemento, lo eliminamos de la lista
+                                        loselegidos.remove(Integer.valueOf((i)));
+                                    }
+                                }
+                            });
+
+                            builder2.setPositiveButton(getString(R.string.alert_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ArrayList<String> nombreElegidos= new ArrayList<String>();
+                                    for (int i=0 ; i<loselegidos.size() ; i++) {
+                                        nombreElegidos.add(ejercicioslist.get(loselegidos.get(i)));
+                                    }
+                                    db.añadirRutinaConEjerciciosAlUsuario(usuario,tituloRutina,nombreElegidos);
+                                    Rutina r=db.getRutinaConNombre(tituloRutina);
+                                    db.cerrarConexion();
+
+                                    rutinas.add(r);
+                                    eladap.notifyDataSetChanged();
+                                }
+                            });
+                            builder2.setNegativeButton(getString(R.string.alert_cancelar), null);
+                            builder2.show();
+                        }
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.alert_cancelar), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+
+
+            }
+        });
 
 
         return root;
