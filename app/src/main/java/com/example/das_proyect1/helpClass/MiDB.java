@@ -337,6 +337,19 @@ public class MiDB extends SQLiteOpenHelper {
         return nombre;
     }
 
+    public boolean eliminarRutinaDelUsuario(String usuario, int idRutina){
+        boolean bien=false;
+        try{
+            db.execSQL("DELETE from userRut where idUser='"+usuario+"' and idRut="+idRutina);
+            bien=true;
+        }catch(Exception e){
+            Log.d("Logs","ERROR AL ACTUALIZAR EMAIL");
+        }
+        return bien;
+
+
+    }
+
 }
 //https://academiaandroid.com/proyecto-ejemplo-de-app-android-con-bbdd-sqlite/
 
