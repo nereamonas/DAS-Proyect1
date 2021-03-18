@@ -9,24 +9,23 @@
     <fragment
         android:id="@+id/fragment2"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesFragment"
-        android:layout_width="362dp"
-        android:layout_height="270dp"
+        android:layout_width="347dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <fragment
         android:id="@+id/fragment3"
         android:name="com.example.das_proyect1.ui.ajustes.AjustesUsuarioFragment"
-        android:layout_width="285dp"
-        android:layout_height="285dp"
+        android:layout_width="301dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.99"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/fragment2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
