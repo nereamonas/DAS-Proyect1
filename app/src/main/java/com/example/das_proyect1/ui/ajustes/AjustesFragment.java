@@ -21,6 +21,9 @@ import java.util.Locale;
 
 public class AjustesFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    //Clase donde se administran los ajustes principales de la aplicación. El cambio de idioma, el tema y la activación de notificaciones
+
     private MiDB db;
     private SharedPreferences prefs;
     private String user;
@@ -102,8 +105,4 @@ public class AjustesFragment extends PreferenceFragmentCompat
 
 
 }
-//https://www.develou.com/como-crear-actividad-preferencias-android/
-//https://www.youtube.com/watch?v=Pay4nZu9Kuc
-//https://www.youtube.com/watch?v=BxOafejwT3c
-
 //generan un fichero d preferencias enlazado a la app

@@ -11,7 +11,7 @@ public class CalendarioViewModel extends ViewModel {
 
     public CalendarioViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("Este es el fragmento de calendario");
     }
 
     public LiveData<String> getText() {

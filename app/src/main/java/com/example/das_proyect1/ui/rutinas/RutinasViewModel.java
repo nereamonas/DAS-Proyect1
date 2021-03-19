@@ -11,7 +11,7 @@ public class RutinasViewModel extends ViewModel {
 
     public RutinasViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("Este es el fragmento de rutinas");
     }
 
     public LiveData<String> getText() {

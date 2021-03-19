@@ -15,9 +15,6 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Gets the saved theme ID from SharedPrefs,
-        // or uses default_theme if no theme ID has been saved
-
         //Cogemos de sharedPreferences el tema que tiene el usuario guardado. Y dependiendo del valor, le asignamos al fragmento un tema u otro
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String tema = "";

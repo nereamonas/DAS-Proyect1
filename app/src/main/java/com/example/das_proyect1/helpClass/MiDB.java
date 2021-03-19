@@ -367,7 +367,7 @@ public class MiDB extends SQLiteOpenHelper {
         return lista;
     }
 
-    public void añadirRutinaConEjerciciosAlUsuario(String usuario, String nombre, ArrayList<String> ejercicios){
+    public Rutina añadirRutinaConEjerciciosAlUsuario(String usuario, String nombre, ArrayList<String> ejercicios){
         añadirRutina(nombre,"todos");
         int idRutina=getIdRutina(nombre);
         añadirUserRut(usuario,idRutina);
@@ -378,6 +378,7 @@ public class MiDB extends SQLiteOpenHelper {
                 añadirRutEjer(idRutina,idEjercicio);
             }
         }
+        return getRutinaConId(idRutina);
 
     }
 
@@ -403,14 +404,14 @@ public class MiDB extends SQLiteOpenHelper {
         }
         return id;
     }
-    public Rutina getRutinaConNombre(String nombre){
+    public Rutina getRutinaConId(int id){
         //Devolvemos todos los ejercicios que pertenecen a un usuario en un array list de ejercicios
         Rutina r=null;
-        String select="select * from rutina where nombre='"+nombre+"'";
+        String select="select * from rutina where id="+id;
         Cursor c = db.rawQuery(select,null);
         if(c!=null && c.getCount()>0){
             c.moveToFirst();
-            int id = c.getInt(c.getColumnIndex("id"));
+            String nombre = c.getString(c.getColumnIndex("nombre"));
             String foto = c.getString(c.getColumnIndex("foto"));
             r = new Rutina(id, nombre, foto); //Cogemos todos los elementos y con ellos creamos una rutina
         }

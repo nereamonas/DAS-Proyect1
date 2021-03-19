@@ -29,6 +29,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 
 public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCompatActivity
+
+    //Esta es la clase principal que se encarga de gestionar los fragmentos que pertenecen a ella.
+    //Nos indicará a que fragment hay que navegar o que hacer al hacer click sobre un elemento del menu
     private String usuario;
     private AppBarConfiguration mAppBarConfiguration;
     private MiDB db;

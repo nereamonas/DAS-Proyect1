@@ -1,6 +1,7 @@
 package com.example.das_proyect1.helpClass;
 
 public class Rutina {
+    //Clase de ayuda donde se guarda la información de una rutina
     int id;
     String nombre;
     String foto;

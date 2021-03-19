@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.das_proyect1.R;
 
 public class ViewHolderNewEjercicios extends RecyclerView.ViewHolder {
+    //Guardaremos los elementos que tiene cada elemento del recycler view. en este caso un titulo y una imagen
     public TextView eltexto;
     public ImageView laimagen;
     public ViewHolderNewEjercicios(@NonNull View itemView){

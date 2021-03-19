@@ -34,7 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class RutinasFragment extends BaseFragment {
-    //Creara una list view de rutinas, q al pulsar en una te lleva al fragment RutEjerFragment, parandole la rutina seleccionada
+    //Creara una list view de rutinas, q al pulsar en una te lleva al fragment RutEjerFragment, parandole la rutina seleccionada. Tambien se puede eliminar una rutina haciendo una pulsación larga sobre ella. Y tambien se puede crear una nueva rutina mediante el botón + de abajo a la derecha. Donde nos saltará un dialogo para añadir el nombre que le queremos dar a la rutina y posteriormente otro dialogo para seleccionar los ejercicios que queramos añadir
     private MiDB db;
     private RutinasViewModel rutinasViewModel;
 
@@ -77,25 +77,29 @@ public class RutinasFragment extends BaseFragment {
 
         });
 
+        //Cuando hagamos pulsación larga sobre un elemento entrará aqui. Se dará la opción a borrar la rutina seleccionada
         lalista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Mostramos una alerta indicando si se quiere eliminar la rutina
+                //Mostramos una alerta indicando si se quiere eliminar la rutina, antes de eliminarla, necesitaremos una confirmación del usuario
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(view.getContext());
                 dialogo.setTitle(getString(R.string.alert_eliminarRutina));
                 dialogo.setMessage(getString(R.string.alert_seguroquequiereseliminarlarutina));
-                //dialogo.setCancelable(false);
-                dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+
+                dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {  //Botón si. es decir, queremos eliminar la rutina
                     public void onClick(DialogInterface dialogo1, int id) {
                         //Si dice que si quiere eliminar. Actualizamos la lista y lo borramos de la base de datos
+                        //Cogemos el id del elemento seleccionado por el usuario
                         int idRutina= (int) eladap.getItemId(i);
-                        db = new MiDB(getContext());
-                        db.eliminarRutinaDelUsuario(usuario,idRutina);
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        db = new MiDB(getContext()); //Creamos conexion con base de datos
+                        db.eliminarRutinaDelUsuario(usuario,idRutina); //Llamamos al metodo para eliminar la rutina, pasandole el usuario y el id de la rutina
+                        db.cerrarConexion();  //Cerramos conexion con base de datos
+                        rutinas.remove(i);  //Eliminamos de la lista de rutinas la rutina
+                        eladap.notifyDataSetChanged();  //Y actualizamos el adaptador para que se muestre la lista actualizada, es decir, eliminando la rutina.
 
-                        rutinas.remove(i);
-                        eladap.notifyDataSetChanged();
-                        //Most4ramos un toast diciendo que se ha eliminado correctamente
+                        //Llamamos a las preferencias para ver si tiene las notificaciones toast activadas
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        //En el caso de que las tenga activadas, Mostramos un toast diciendo que se ha eliminado correctamente
                         if (prefs.contains("notiftoast")) {
                             Boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                             if (activadas) {
@@ -104,12 +108,12 @@ public class RutinasFragment extends BaseFragment {
                             }
                         }
 
-                        db.cerrarConexion();
                     }
                 });
+                //En el caso de que el usuario diga que no quiere borrarlo, pues no hará nada. se cerrará el dialogo
                 dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        Log.d("Logs", "no cerrar sesion");
+                        Log.d("Logs", "no se eliminara la rutina");
                     }
                 });
                 dialogo.show();
@@ -119,33 +123,36 @@ public class RutinasFragment extends BaseFragment {
         });
 
 
+        //Hemos añadido un boton flotante en la esquina inferior derecha con el icono +. Donde se da la opción de añadir una nueva rutina. Primero nos saltará un dialogo para ingresar un nombre y posteriormente otro para seleccionar los ejercicios a añadir.
         FloatingActionButton myFab = (FloatingActionButton) root.findViewById(R.id.floatingActionButton);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d("Logs", "CLICKFLOAT");
 
+                //Creamos una alerta
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(getString(R.string.alert_insertatitulorutina));
-
+                //Añadimos en la alerta un edit text
                 final EditText input = new EditText(getContext());  //Creamos un edit text. para q el usuairo pueda insertar el titulo
                 builder.setView(input);
-
+                //Si el usuario da al ok
                 builder.setPositiveButton(getString(R.string.alert_ok), new DialogInterface.OnClickListener() {  //Si el usuario acepta, mostramos otra alerta con los ejercicios que puede agregar
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String tituloRutina = input.getText().toString();
 
-                        if (!tituloRutina.equals("")){
+                        if (!tituloRutina.equals("")){  //Comprobamos que haya ingresado un titulo, ya que si el titulo es nulo, no se creará la rutina
                             //Mostramos una checkbox
                             AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
                             builder2.setTitle(getString(R.string.alert_eligeejerciciosaañadir));
 
-                            db = new MiDB(getContext());
-                            ArrayList<String> ejercicioslist = db.getNombreTodosLosEjercicios(usuario);
+                            db = new MiDB(getContext());  //Creamos conexion con base de datos
+                            ArrayList<String> ejercicioslist = db.getNombreTodosLosEjercicios(usuario);  //Devolvemos un arraylist coon los ejercicios que tiene ese usuario
+                            db.cerrarConexion();   //Cerramos conexion con base de datos
                             String[] ejercicios = new String[ejercicioslist.size()];
-                            ejercicios = ejercicioslist.toArray(ejercicios);
+                            ejercicios = ejercicioslist.toArray(ejercicios);  //Convertimos el arraylist en String[]
 
-                            final ArrayList <Integer> loselegidos=new ArrayList<>();
+                            final ArrayList <Integer> loselegidos=new ArrayList<>(); //Aqui guardaremos los identificadores de los elementos que selecciona el usuario
                             builder2.setMultiChoiceItems(ejercicios, null, new DialogInterface.OnMultiChoiceClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i, boolean b) {
@@ -160,20 +167,22 @@ public class RutinasFragment extends BaseFragment {
                                 }
                             });
 
+                            //Cuando el usuario de al ok, se procederá a añadir los ejercicios a la rutina
                             builder2.setPositiveButton(getString(R.string.alert_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ArrayList<String> nombreElegidos= new ArrayList<String>();
-                                    for (int i=0 ; i<loselegidos.size() ; i++) {
+                                    ArrayList<String> nombreElegidos= new ArrayList<String>();  //Crearemos un array list con los nombres de las rutinas seleccionadas, que le pasaremos al metodo que haga los insert en la bbdd
+                                    for (int i=0 ; i<loselegidos.size() ; i++) {  //Recorremos la lista de elegidos para coger su nombre por el id
                                         nombreElegidos.add(ejercicioslist.get(loselegidos.get(i)));
                                     }
-                                    db.añadirRutinaConEjerciciosAlUsuario(usuario,tituloRutina,nombreElegidos);
-                                    Rutina r=db.getRutinaConNombre(tituloRutina);
-                                    db.cerrarConexion();
+                                    db = new MiDB(getContext());  //Creamos conexion con base de datos
+                                    Rutina r = db.añadirRutinaConEjerciciosAlUsuario(usuario,tituloRutina,nombreElegidos);  //Llamamos al metodo que añadira los elementos a la bbdd
+                                    db.cerrarConexion();   //Cerramos conexion con base de datos
 
-                                    rutinas.add(r);
-                                    eladap.notifyDataSetChanged();
+                                    rutinas.add(r);  //Actualizaremos la lista de rutinas
+                                    eladap.notifyDataSetChanged();  //Actualizamos el adaptador para que muestre los cambios en pantalla
 
+                                    //Cogeremos las preferencias, para ver si tiene las notificaciones toast activadas para mostrar el mensaje
                                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                     //Most4ramos un toast diciendo que se ha eliminado correctamente
                                     if (prefs.contains("notiftoast")) {
@@ -185,11 +194,14 @@ public class RutinasFragment extends BaseFragment {
                                     }
                                 }
                             });
+                            //Si hace click en cancelar, se cancelará la operación y no se añadiran ejercicios a la nueva rutina
                             builder2.setNegativeButton(getString(R.string.alert_cancelar), null);
                             builder2.show();
                         }
                     }
                 });
+
+                //Si se cancela, no se creará la rutina y se cancelará el dialogo
                 builder.setNegativeButton(getString(R.string.alert_cancelar), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -198,8 +210,6 @@ public class RutinasFragment extends BaseFragment {
                 });
 
                 builder.show();
-
-
 
             }
         });

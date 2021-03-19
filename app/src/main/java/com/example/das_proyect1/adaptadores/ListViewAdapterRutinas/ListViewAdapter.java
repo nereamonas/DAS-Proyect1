@@ -57,7 +57,7 @@ public class ListViewAdapter extends BaseAdapter {
         titulo.setText(this.rutinas.get(position).getNombre());
         ImgCorrespondiente i = new ImgCorrespondiente();
         img.setImageResource(i.devolver(this.rutinas.get(position).getFoto()));
-        duracion.setText("algo pondre");
+        duracion.setText("Entra para empezar la rutina");
         return view;
     }
 }

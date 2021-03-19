@@ -1,6 +1,7 @@
 package com.example.das_proyect1.helpClass;
 
 public class Ejercicio {
+    //Clase de ayuda donde se guarda la información de un ejercicio
     int id;
     String nombre;
     String descripcion;

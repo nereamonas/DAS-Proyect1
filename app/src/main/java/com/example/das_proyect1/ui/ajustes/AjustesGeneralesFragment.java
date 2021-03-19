@@ -13,7 +13,7 @@ import com.example.das_proyect1.base.BaseFragment;
 
 public class AjustesGeneralesFragment extends BaseFragment {
     private MutableLiveData<String> mText;
-
+    //Esta clase une el ajustesFragment y ajustesUsuario fragment. Si está en vertical solo muestra ajustes fragment y si esta en horizontal muestra los dos
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -14,6 +14,9 @@ import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.helpClass.Usuario;
 
 public class LogInActivity extends BaseActivity {
+
+    //La actividad que se encarga de gestionar el inicio de sesión, si los datos introducidos por el usuaario son correctos en base de datos, redirige a la ventana principal. En caso contrario muestra un mensaje de error
+
     private MiDB db;
     @Override
     public void onCreate(Bundle savedInstanceState) {

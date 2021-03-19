@@ -19,8 +19,6 @@ public class BaseActivity extends AppCompatActivity {
     //Lo que conseguimos es, que al apagar la app y volver a arrancarla, se mantengan todas las configuraciones que ha indicado el usuario en las prefereencias. y que estas preferencias se apliquen a todas las actividades cuando se crean
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            // Gets the saved theme ID from SharedPrefs,
-            // or uses default_theme if no theme ID has been saved
             //Cogemos de sharedPreferences el tema que tiene el usuario guardado. Y dependiendo del valor, le asignamos a la actividad un tema u otro
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String tema = "";

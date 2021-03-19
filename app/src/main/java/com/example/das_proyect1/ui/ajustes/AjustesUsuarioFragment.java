@@ -50,9 +50,9 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                     username = this.prefs.getString("username", null);  //Cogemos el usuaario nuevo
 
                     Log.d("Logs", "nombre nuevo: "+username+" viejo"+this.user);
-                    if (!this.user.equals(username)) { //Miramos si tiene las notificaciones toast activadas
+                    if (!this.user.equals(username)) { //Si el usuario insertado es distinto al actual, es decir, lo ha editado, procedemos a modificarlo
                         boolean todobien = this.db.editarNombreDeUsuario(this.user, username);
-                        if (todobien) {
+                        if (todobien) {//si se ha editado correctamente. mostramos un toast en el caso de q esten activdaas de como se ha modificado
                             this.user = username;
                             if(this.prefs.contains("notiftoast")) { //Comprobamos si las notificaciones toast estan activadas, para mandarle una notificacion
                                 boolean activadas = prefs.getBoolean("notiftoast", true);
@@ -90,7 +90,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                     email = this.prefs.getString("email", null);
                     Log.d("Logs", "email nuevo: "+email);
                     boolean todobien=this.db.editarEmailDeUsuario(this.user,email);
-                    if (todobien){
+                    if (todobien){//si se ha editado correctamente. mostramos un toast en el caso de q esten activdaas de como se ha modificado
                         if (this.prefs.contains("notiftoast")) {
                             boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                             Log.d("Logs", "estado notificaciones toast: " + activadas);
@@ -100,7 +100,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                             }
                         }
                         reload();
-                    }else{ //Volvemos el valor al estado anterior
+                    }else{ //no se ha actualizado, por lo que Volvemos el valor al estado anterior
                         SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
                         editor.putString("email", db.getCorreoConUsuario(this.user));
                         editor.apply();
@@ -123,7 +123,7 @@ public class AjustesUsuarioFragment  extends PreferenceFragmentCompat
                     pass = this.prefs.getString("pass", null);
                     Log.d("Logs", "pass nuevo: "+pass);
                     boolean todobien=this.db.editarPassDeUsuario(this.user,pass);
-                    if (todobien){
+                    if (todobien){  //si se ha editado correctamente. mostramos un toast en el caso de q esten activdaas de como se ha modificado
                         if (this.prefs.contains("notiftoast")) {
                             boolean activadas = prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
                             Log.d("Logs", "estado notificaciones toast: " + activadas);

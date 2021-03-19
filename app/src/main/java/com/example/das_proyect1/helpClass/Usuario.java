@@ -1,6 +1,7 @@
 package com.example.das_proyect1.helpClass;
 
 public class Usuario {
+    //Clase de ayuda donde se guarda la información de un usuario
     String user;
     String email;
     String pass;

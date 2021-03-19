@@ -13,6 +13,9 @@ import com.example.das_proyect1.base.BaseActivity;
 import com.example.das_proyect1.helpClass.MiDB;
 
 public class SingUpActivity extends BaseActivity {
+
+    // La actividad que se encarga de gestionar la creacion de un usuario. Si los datos introducidos por el usuario son correctos y se puede crear una cuenta, redirige a la ventana principal. En caso contrario muestra un mensaje de error
+
     private MiDB db;
     @Override
     public void onCreate(Bundle savedInstanceState) {

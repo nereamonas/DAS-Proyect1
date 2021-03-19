@@ -11,7 +11,7 @@ public class RutEjerViewModel extends ViewModel {
 
     public RutEjerViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("Este es el fragmento de rutina-ejercicio");
     }
 
     public LiveData<String> getText() {
