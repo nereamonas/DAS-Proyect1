@@ -114,6 +114,22 @@
         android:id="@+id/action_global_fragment_calen"
         app:destination="@id/nav_calendar"
         app:launchSingleTop="true"/>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.das_proyect1.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" />
+    <action
+        android:id="@+id/action_global_mapsFragment"
+        app:destination="@id/mapsFragment" />
+    <fragment
+        android:id="@+id/camaraFragment"
+        android:name="com.example.das_proyect1.ui.camara.CamaraFragment"
+        android:label="fragment_camara"
+        tools:layout="@layout/fragment_camara" />
+    <action
+        android:id="@+id/action_global_camaraFragment"
+        app:destination="@id/camaraFragment" />
 
 
 </navigation>

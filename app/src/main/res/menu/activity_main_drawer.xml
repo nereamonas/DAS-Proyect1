@@ -23,6 +23,16 @@
             android:title="@string/menu_rutinasCompletada" />
 
         <item
+            android:id="@+id/mapsFragment"
+            android:icon="@drawable/ic_list"
+            android:title="GOOGLE MAPS" />
+
+        <item
+            android:id="@+id/camaraFragment"
+            android:icon="@drawable/ic_list"
+            android:title="CAMARA" />
+
+        <item
             android:id="@+id/nav_ajustes"
             android:icon="@drawable/setting"
             android:title="@string/menu_ajustes" />

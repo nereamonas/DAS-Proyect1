@@ -79,7 +79,7 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff,R.id.nav_calendar)
+                R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.mapsFragment, R.id.camaraFragment, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff,R.id.nav_calendar)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -118,6 +118,12 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                 }else if (id==R.id.nav_rutinasCompletadas){
                     Log.d("Logs", "nav_rutinasCompletadas");
                     open_nav_rutinascompletadas();
+                } else if (id == R.id.mapsFragment) {
+                    Log.d("Logs", "maps_fragment");
+                    open_maps();
+                } else if (id == R.id.camaraFragment) {
+                    Log.d("Logs", "camera_fragment");
+                    open_camara();
                 } else if (id == R.id.nav_ajustes) {
                     Log.d("Logs", "nav_ajustes");
                     open_nav_ajustes();
@@ -221,6 +227,19 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                 .setLaunchSingleTop(true)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_fragment_calen,null,options);
+    }
+
+    public void open_maps(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_mapsFragment,null,options);
+    }
+    public void open_camara(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_camaraFragment,null,options);
     }
 
     @Override

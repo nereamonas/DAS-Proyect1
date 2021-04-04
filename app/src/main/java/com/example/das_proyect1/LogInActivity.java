@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.das_proyect1.base.BaseActivity;
+import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.helpClass.Usuario;
 
@@ -43,6 +44,18 @@ public class LogInActivity extends BaseActivity {
         if (!user.equals("") && !pass.equals("")) { //si es distinto null
             Log.d("Logs", "Usuario"+user+ " Contraseña"+pass);
             db=new MiDB(this);  //abrimos conexion con bbdd
+
+
+
+
+            //ExternalDB ex=new ExternalDB();
+            //Usuario usuario=ex.comprobarUsuario(user,pass);
+
+
+
+
+
+
             Usuario usuario = db.comprobarUsuario(user, pass);  //Comprobamos si existe
             this.db.cerrarConexion();//Cerramos conexion
             if (usuario != null) {//si el usuario existe

@@ -1,6 +1,7 @@
 package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.work.WorkerParameters;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.das_proyect1.base.BaseActivity;
+import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.helpClass.MiDB;
 
 public class SingUpActivity extends BaseActivity {
@@ -44,6 +46,18 @@ public class SingUpActivity extends BaseActivity {
             if(passAgain.equals(pass)) {  //Ski las contraseñas son iguales
                 //Iniciamos el controlador de la base de datos
                 db=new MiDB(this);
+
+
+
+                //ExternalDB ex=new ExternalDB();
+                //boolean resultado=ex.crearUsuario(user,mail,pass);
+
+
+
+
+
+
+
                 boolean resultado = db.crearUsuario(user,mail,pass);  //Creamos el usuario
                 this.db.cerrarConexion();   //Cerramos conexion con bbdd
                 if (resultado) {  //Si se ha creado bien el usuario
