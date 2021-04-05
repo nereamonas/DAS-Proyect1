@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
+import com.example.das_proyect1.base.BaseViewModel;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -26,20 +27,13 @@ public class RutinasCompletadasFragment extends BaseFragment {
     //Sera una lista un poco fea, que muestra todas las rutinas que ha completado el usuario. Nombre de la rutina + fecha + hora.
     //Coge la informacion del fichero que se genera dentro d la app.
     //Funciona igual q el calendario, pero cogiendo todas las fechas.
-    private RutinasCompletadasViewModel rutinasCompletadasViewModel;
+    private BaseViewModel rutinasCompletadasViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         rutinasCompletadasViewModel =
-                new ViewModelProvider(this).get(RutinasCompletadasViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rutinas_completadas, container, false);
-        //final TextView textView = root.findViewById(R.id.text_gallery);
-        rutinasCompletadasViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 

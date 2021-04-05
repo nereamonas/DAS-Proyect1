@@ -1,4 +1,4 @@
-package com.example.das_proyect1;
+package com.example.das_proyect1.ui.maps;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.model.DirectionsLeg;

@@ -25,6 +25,7 @@ import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.adaptadores.ListViewAdapterRutinas.ListViewAdapter;
+import com.example.das_proyect1.base.BaseViewModel;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
@@ -36,21 +37,15 @@ import java.util.ArrayList;
 public class RutinasFragment extends BaseFragment {
     //Creara una list view de rutinas, q al pulsar en una te lleva al fragment RutEjerFragment, parandole la rutina seleccionada. Tambien se puede eliminar una rutina haciendo una pulsación larga sobre ella. Y tambien se puede crear una nueva rutina mediante el botón + de abajo a la derecha. Donde nos saltará un dialogo para añadir el nombre que le queremos dar a la rutina y posteriormente otro dialogo para seleccionar los ejercicios que queramos añadir
     private MiDB db;
-    private RutinasViewModel rutinasViewModel;
+    private BaseViewModel rutinasViewModel;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         rutinasViewModel =
-                new ViewModelProvider(this).get(RutinasViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rutinas, container, false);
-        //final TextView textView = root.findViewById(R.id.text_gallery);
-        rutinasViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
 
         db=new MiDB(getContext());
         String usuario = getArguments().getString("usuario");

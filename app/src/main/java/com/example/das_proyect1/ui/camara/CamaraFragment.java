@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
+import com.example.das_proyect1.base.BaseViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -44,7 +45,6 @@ import java.util.Date;
 
 public class CamaraFragment  extends BaseFragment {
     private StorageReference mStorageRef;
-    private MutableLiveData<String> mText;
 
     private int CAMERA_REQUEST_CODE=4;
     private int GALLERY_REQUEST_CODE=2;
@@ -52,20 +52,15 @@ public class CamaraFragment  extends BaseFragment {
     private ImageView imagenActual;
     Button btnGaleria,btnCamara;
     String currentPhotoPath;
-    private CamaraViewModel camaraViewModel;
+    private BaseViewModel camaraViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         camaraViewModel =
-                new ViewModelProvider(this).get(CamaraViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_camara, container, false);
         //final TextView textView = root.findViewById(R.id.text_gallery);
-        camaraViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
 
         mStorageRef = FirebaseStorage.getInstance().getReference();  //Abrimos la referencia del firebase para poder subir las fotos
 

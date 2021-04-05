@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.das_proyect1.base.BaseViewModel;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
@@ -24,20 +25,15 @@ import java.util.ArrayList;
 public class EjerciciosFragment extends BaseFragment {
     //Aqui se mostraran todos los ejercicios q hay añadidos en la abse de datos para ese usuario en un recycle view
     private MiDB db;
-    private EjerciciosViewModel ejerciciosViewModel;
+    private BaseViewModel ejerciciosViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         ejerciciosViewModel =
-                new ViewModelProvider(this).get(EjerciciosViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_ejercicios, container, false);
         //final TextView textView = root.findViewById(R.id.text_home);
-        ejerciciosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
 
         String usuario = getArguments().getString("usuario");  //cogemos el id de la rutina
 

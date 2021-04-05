@@ -20,12 +20,13 @@ import android.widget.Toast;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
+import com.example.das_proyect1.base.BaseViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlarmaFragment  extends BaseFragment {
-    private AlarmaViewModel alarmaViewModel;
+    private BaseViewModel alarmaViewModel;
 
     private EditText horas;
     private EditText minutos;
@@ -46,15 +47,9 @@ public class AlarmaFragment  extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         alarmaViewModel =
-                new ViewModelProvider(this).get(AlarmaViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_alarma, container, false);
-        //final TextView textView = root.findViewById(R.id.text_gallery);
-        alarmaViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
 
 
         horas= root.findViewById(R.id.editTextHoras);

@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.das_proyect1.base.BaseViewModel;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
@@ -73,20 +74,14 @@ public class RutEjerFragment extends BaseFragment {
 
     private SharedPreferences prefs;
 
-    private RutEjerViewModel rutEjerViewModel;
+    private BaseViewModel rutEjerViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        rutEjerViewModel = new ViewModelProvider(this).get(RutEjerViewModel.class);
+        rutEjerViewModel = new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rutejerviewpager, container, false);
         super.onCreate(savedInstanceState);
 
-        rutEjerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
         //Inicializamos todas las variables necesarias
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.rutId = Integer.parseInt(getArguments().getString("idRut"));  //cogemos el id de la rutina

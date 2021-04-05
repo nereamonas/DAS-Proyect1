@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,9 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
-import androidx.preference.PreferenceManager;
 
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -29,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,18 +32,15 @@ import android.widget.Toast;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.adaptadores.ListViewAdapterContactos.ListViewAdapterContactos;
-import com.example.das_proyect1.adaptadores.ListViewAdapterRutinas.ListViewAdapter;
+import com.example.das_proyect1.base.BaseViewModel;
 import com.example.das_proyect1.helpClass.Contacto;
-import com.example.das_proyect1.helpClass.MiDB;
-import com.example.das_proyect1.helpClass.Rutina;
-import com.example.das_proyect1.ui.alarma.AlarmaViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class RecomendarFragment extends Fragment {
 
-    private RecomendarViewModel recomendarViewModel;
+    private BaseViewModel recomendarViewModel;
     private ListViewAdapterContactos eladap;
 
     private ListView listViewContactos;
@@ -56,15 +48,10 @@ public class RecomendarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         recomendarViewModel =
-                new ViewModelProvider(this).get(RecomendarViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_recomendar, container, false);
         //final TextView textView = root.findViewById(R.id.text_gallery);
-        recomendarViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
 
         listViewContactos=(ListView)root.findViewById(R.id.listContactos);
 

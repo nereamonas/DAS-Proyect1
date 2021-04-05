@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
+import com.example.das_proyect1.base.BaseViewModel;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -27,22 +28,16 @@ import java.util.Calendar;
 public class CalendarioFragment extends BaseFragment {
     //Es un calendario, que cuando tu clicas en un día te muestra las rutinas q has completado en ese dia por ese usuario
 
-    private CalendarioViewModel calendarioViewModel;
+    private BaseViewModel calendarioViewModel;
     private TextView text;
     String user=" ";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         calendarioViewModel =
-                new ViewModelProvider(this).get(CalendarioViewModel.class);
+                new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendario, container, false);
-        //final TextView textView = root.findViewById(R.id.text_gallery);
-        calendarioViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
         //Cogemos el usuario con el q se ha iniciado sesion
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (prefs.contains("username")) {//Comprobamos si existe  Deberia de pasar el username por parametro.
