@@ -130,6 +130,22 @@
     <action
         android:id="@+id/action_global_camaraFragment"
         app:destination="@id/camaraFragment" />
+    <fragment
+        android:id="@+id/alarmaFragment"
+        android:name="com.example.das_proyect1.ui.alarma.AlarmaFragment"
+        android:label="fragment_alarma"
+        tools:layout="@layout/fragment_alarma" />
+    <action
+        android:id="@+id/action_global_alarmaFragment"
+        app:destination="@id/alarmaFragment" />
+    <fragment
+        android:id="@+id/recomendarFragment"
+        android:name="com.example.das_proyect1.ui.recomendar.RecomendarFragment"
+        android:label="fragment_recomendar"
+        tools:layout="@layout/fragment_recomendar" />
+    <action
+        android:id="@+id/action_global_recomendarFragment"
+        app:destination="@id/recomendarFragment" />
 
 
 </navigation>

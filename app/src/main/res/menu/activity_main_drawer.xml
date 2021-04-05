@@ -33,6 +33,16 @@
             android:title="CAMARA" />
 
         <item
+            android:id="@+id/alarmaFragment"
+            android:icon="@drawable/ic_list"
+            android:title="ALARMA" />
+
+        <item
+            android:id="@+id/recomendarFragment"
+            android:icon="@drawable/ic_list"
+            android:title="RECOMENDAR" />
+
+        <item
             android:id="@+id/nav_ajustes"
             android:icon="@drawable/setting"
             android:title="@string/menu_ajustes" />

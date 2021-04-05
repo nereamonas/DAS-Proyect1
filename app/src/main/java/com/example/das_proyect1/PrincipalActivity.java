@@ -79,7 +79,7 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.mapsFragment, R.id.camaraFragment, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff,R.id.nav_calendar)
+                R.id.nav_rutinas, R.id.nav_ejercicios, R.id.nav_rutinasCompletadas, R.id.mapsFragment, R.id.camaraFragment, R.id.alarmaFragment, R.id.recomendarFragment, R.id.ajustesGeneralesFragment, R.id.nav_contactanos, R.id.nav_logoff,R.id.nav_calendar)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -124,6 +124,12 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                 } else if (id == R.id.camaraFragment) {
                     Log.d("Logs", "camera_fragment");
                     open_camara();
+                } else if (id == R.id.alarmaFragment) {
+                    Log.d("Logs", "alarma_fragment");
+                    open_alarma();
+                } else if (id == R.id.recomendarFragment) {
+                    Log.d("Logs", "recomendar_fragment");
+                    open_recomendar();
                 } else if (id == R.id.nav_ajustes) {
                     Log.d("Logs", "nav_ajustes");
                     open_nav_ajustes();
@@ -240,6 +246,18 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
                 .setLaunchSingleTop(true)
                 .build();
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_camaraFragment,null,options);
+    }
+    public void open_alarma(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_alarmaFragment,null,options);
+    }
+    public void open_recomendar(){
+        NavOptions options = new NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .build();
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.action_global_recomendarFragment,null,options);
     }
 
     @Override
