@@ -1,7 +1,9 @@
 package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.work.WorkerParameters;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,38 +47,41 @@ public class SingUpActivity extends BaseActivity {
 
             if(passAgain.equals(pass)) {  //Ski las contraseñas son iguales
                 //Iniciamos el controlador de la base de datos
-                db=new MiDB(this);
 
 
+                Data datos = new Data.Builder()
+                        .putString("tarea","crearUsuario")
+                        .putString("user",user)
+                        .putString("mail",mail)
+                        .putString("pass",pass)
+                        .build();
+                OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+                WorkManager.getInstance(this).enqueue(otwr);
+                WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                        .observe(this, status -> {
+                            if (status != null && status.getState().isFinished()) {
+                                //Comprobamos si ha ido bien o mal el proceso
+                                boolean resultado=status.getOutputData().getBoolean("resultado",false);
+                                if (resultado) {  //Si se ha creado bien el usuario
+                                    Log.d("Logs", "Usuario creado");
+                                    //Cerramos el intent actual y abrimos el principal
+                                    Intent i = new Intent(this, PrincipalActivity.class);
+                                    i.putExtra("usuario", user);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startActivity(i);
+                                    finish();  //Lo cerramos para q no s pueda volver atras
+                                } else { //El usuario no se ha creado bnien por lo q mostramos una alerta al usuario nformando de ello
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                    builder.setTitle(getString(R.string.alert_error));
+                                    builder.setMessage(getString(R.string.alert_nosehapodidocrealelusuario));
+                                    builder.setPositiveButton(getString(R.string.alert_aceptar), null);
 
-                //ExternalDB ex=new ExternalDB();
-                //boolean resultado=ex.crearUsuario(user,mail,pass);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                }
+                            }
+                        });
 
-
-
-
-
-
-
-                boolean resultado = db.crearUsuario(user,mail,pass);  //Creamos el usuario
-                this.db.cerrarConexion();   //Cerramos conexion con bbdd
-                if (resultado) {  //Si se ha creado bien el usuario
-                    Log.d("Logs", "Usuario creado");
-                    //Cerramos el intent actual y abrimos el principal
-                    Intent i = new Intent(this, PrincipalActivity.class);
-                    i.putExtra("usuario", user);
-                    i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(i);
-                    finish();  //Lo cerramos para q no s pueda volver atras
-                } else { //El usuario no se ha creado bnien por lo q mostramos una alerta al usuario nformando de ello
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(getString(R.string.alert_error));
-                    builder.setMessage(getString(R.string.alert_nosehapodidocrealelusuario));
-                    builder.setPositiveButton(getString(R.string.alert_aceptar), null);
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
             }else{//Las contraseñas no son iguales por lo q mostraremos una alerta para informar al usuario de ello
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.alert_error));

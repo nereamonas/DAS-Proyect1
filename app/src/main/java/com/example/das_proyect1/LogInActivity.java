@@ -1,6 +1,9 @@
 package com.example.das_proyect1;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,23 +54,38 @@ public class LogInActivity extends BaseActivity {
             //ExternalDB ex=new ExternalDB();
             //Usuario usuario=ex.comprobarUsuario(user,pass);
 
+            Data datos = new Data.Builder()
+                    .putString("tarea","comprobarUsuario")
+                    .putString("user",user)
+                    .putString("pass",pass)
+                    .build();
+            OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+            WorkManager.getInstance(this).enqueue(otwr);
+            WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                    .observe(this, status -> {
+                        if (status != null && status.getState().isFinished()) {
+                            //Comprobamos si ha ido bien o mal el proceso
+                            //Map<String, Object> resultado=status.getOutputData().getKeyValueMap();
+                            //Object usuario=resultado.get("usuario");
+                            //if (usuario != null) {//si el usuario existe
+                            boolean resultado=status.getOutputData().getBoolean("resultado",false);
+                            if (resultado) {  //
+                                Intent i = new Intent(this, PrincipalActivity.class);  //Abrimos el intent Principal para hacer el cambio
+                                i.putExtra("usuario", status.getOutputData().getString("user"));  //Le pasamos el nombre del usuario
+                                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(i);
+                                finish(); //Cerramos el actual para q no s pueda volver
+                            } else {  //Saltamos una alerta d error
+                                saltarAlerta();
+                            }
+                        }
+                    });
 
 
 
 
 
-            Usuario usuario = db.comprobarUsuario(user, pass);  //Comprobamos si existe
-            this.db.cerrarConexion();//Cerramos conexion
-            if (usuario != null) {//si el usuario existe
-                Log.d("Logs", usuario.toString());
-                Intent i = new Intent(this, PrincipalActivity.class);  //Abrimos el intent Principal para hacer el cambio
-                i.putExtra("usuario", user);  //Le pasamos el nombre del usuario
-                i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(i);
-                finish(); //Cerramos el actual para q no s pueda volver
-            } else {  //Saltamos una alerta d error
-                saltarAlerta();
-            }
+
         }else {  //Saltamos una alerta de error
             saltarAlerta();
         }
