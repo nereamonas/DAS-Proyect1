@@ -108,7 +108,7 @@ public class CamaraFragment  extends BaseFragment {
             public void onClick(View v) {
                 nombreFoto=root.findViewById(R.id.editTextNombreFoto);
                 if(TextUtils.isEmpty(nombreFoto.getText().toString())) { //Si el nombre es nulo, decir q no se va a subir
-                    Toast.makeText(getActivity(), "Tienes que insertar un nombre", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunnombre), Toast.LENGTH_SHORT).show();
 
                 }else{
                     if (contentUri!=null) {
@@ -122,7 +122,7 @@ public class CamaraFragment  extends BaseFragment {
                         //Subimos la foto al firebase
                         uploadImageToFirebase(imageFileName, contentUri);
                     }else{
-                        Toast.makeText(getActivity(), "Tienes que insertar una foto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunafoto), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -258,12 +258,12 @@ public class CamaraFragment  extends BaseFragment {
                     }
                 });
 
-                Toast.makeText(getActivity(), "Se ha subido la imagen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Sehasubidolaimagen), Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "No se ha podido subir la imagen", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehapodidosubirlaimagen), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -293,7 +293,7 @@ public class CamaraFragment  extends BaseFragment {
                 //EL PERMISO NO ESTÁ CONCEDIDO TODAVÍA O EL USUARIO HA INDICADO
                 //QUE NO QUIERE QUE SE LE VUELVA A SOLICITAR
                 Log.d("Logs","NO SE HA CONCEDIDO");
-                Toast.makeText(getActivity(), "No se han concedido los permisos para abrir la camara", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehanconcedidolospermisosparaabrirlacamara), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);  //ACTIVITY_RECOGNITION
@@ -325,7 +325,7 @@ public class CamaraFragment  extends BaseFragment {
                 //EL PERMISO NO ESTÁ CONCEDIDO TODAVÍA O EL USUARIO HA INDICADO
                 //QUE NO QUIERE QUE SE LE VUELVA A SOLICITAR
                 Log.d("Logs","NO SE HA CONCEDIDO");
-                Toast.makeText(getActivity(), "No se ha concedido el permiso de escritura", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehaconcedidoelpermisodeescritura), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);  //ACTIVITY_RECOGNITION

@@ -82,8 +82,8 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                 public void onInfoWindowClick(Marker marker) {
                     Log.d("Logs", "CLICK A LA MARCCA");
                     AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
-                    dialogo.setTitle(("Calcular distancia?"));
-                    dialogo.setMessage("Quieres calcular el camino: " );
+                    dialogo.setTitle(getString(R.string.maps_calculardistancia));
+                    dialogo.setMessage(getString(R.string.maps_quierescalcularelcaminohastaestepunto));
                     //dialogo.setCancelable(false);
                     dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
@@ -175,8 +175,8 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
     public void alertaCrearMarca(LatLng latLng) {
         AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
-        dialogo.setTitle(("Poner marca"));
-        dialogo.setMessage("Quieres poner una marca en las cordenadas: " + latLng.latitude + " " + latLng.longitude);
+        dialogo.setTitle(getString(R.string.maps_ponerMarca));
+        dialogo.setMessage(getString(R.string.maps_quieresPonerUnaMarcaEnLasCordenadas)+ latLng.latitude + " " + latLng.longitude);
         //dialogo.setCancelable(false);
         dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
@@ -316,7 +316,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     }
 
     public void crearPuntoIni(LatLng posicion) {
-        map.addMarker(new MarkerOptions().position(posicion).title("Punto inicial"));
+        map.addMarker(new MarkerOptions().position(posicion).title(getString(R.string.maps_puntoInicial)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
         latitude=posicion.latitude;
         longitude=posicion.longitude;
@@ -324,7 +324,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     }
 
     public void crearPunto(LatLng posicion) {
-        map.addMarker(new MarkerOptions().position(posicion).title("Toca para calcular el trayecto"));
+        map.addMarker(new MarkerOptions().position(posicion).title(getString(R.string.maps_tocaparacalculareltrayecto)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
         latitude=posicion.latitude;
         longitude=posicion.longitude;
@@ -434,7 +434,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
                 LatLng endLoc= new LatLng(polylineData.getLeg().endLocation.lat, polylineData.getLeg().endLocation.lng);
 
-                Marker marker=map.addMarker(new MarkerOptions().position(endLoc).title("Trayecto "+cont).snippet("Duración: "+polylineData.getLeg().duration+", Kilometros: "+polylineData.getLeg().distance));
+                Marker marker=map.addMarker(new MarkerOptions().position(endLoc).title(getString(R.string.maps_trayecto)+" "+cont).snippet(getString(R.string.maps_duracion)+": "+polylineData.getLeg().duration+", "+getString(R.string.maps_kilometros)+": "+polylineData.getLeg().distance));
 
                 marker.showInfoWindow();
             }

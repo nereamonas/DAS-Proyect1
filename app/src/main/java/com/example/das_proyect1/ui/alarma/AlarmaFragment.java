@@ -113,10 +113,10 @@ public class AlarmaFragment  extends BaseFragment {
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivity(intent);
             } else {
-                Toast.makeText(getActivity(), "No puede soportar esta accion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.alarma_toast_Nopuedesoportarestaaccion), Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(getActivity(), "Tienes que establecer una hora", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.alarma_toast_Tienesqueestablecerunahora), Toast.LENGTH_SHORT).show();
         }
     }
 

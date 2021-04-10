@@ -64,21 +64,20 @@ public class RecomendarFragment extends Fragment {
                 String nombreElegido=String.valueOf(eladap.getItemName(position));
 
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(view.getContext());
-                dialogo.setTitle("Enviar mensaje");
-                dialogo.setMessage("Quieres enviar un mensaje de recomendación al usuario: "+nombreElegido+" - "+telefonoElegido);
+                dialogo.setTitle(getString(R.string.recomendar_Enviarmensaje));
+                dialogo.setMessage(getString(R.string.recomendar_Quieresenviarunmensajederecomendaciónalusuario)+" "+nombreElegido+" - "+telefonoElegido);
 
                 dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {  //Botón si. es decir, queremos eliminar la rutina
                     public void onClick(DialogInterface dialogo1, int id) {
                         Intent intent= new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse("smsto:"+telefonoElegido));
-                        intent.putExtra("sms_body","Hola. Te recomiendo que te descarges la aplicación DAS_PROYECT1, es genial!");
+                        intent.putExtra("sms_body",getString(R.string.recomendar_bodymensaje));
                         startActivity(intent);
                     }
                 });
                 //En el caso de que el usuario diga que no quiere borrarlo, pues no hará nada. se cerrará el dialogo
                 dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        Log.d("Logs", "no se eliminara la rutina");
                     }
                 });
                 dialogo.show();
@@ -96,11 +95,12 @@ public class RecomendarFragment extends Fragment {
         listViewContactos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String nombreElegido=String.valueOf(eladap.getItemName(i));
                 String telefonoElegido=String.valueOf(eladap.getItemTelef(i));
                 //Mostramos una alerta indicando si se quiere eliminar la rutina, antes de eliminarla, necesitaremos una confirmación del usuario
                 AlertDialog.Builder dialogo = new AlertDialog.Builder(view.getContext());
-                dialogo.setTitle("Editar contacto");
-                dialogo.setMessage("Quieres editar el contacto?");
+                dialogo.setTitle(getString(R.string.recomendar_Editarcontacto));
+                dialogo.setMessage(getString(R.string.recomendar_Quiereseditarelcontacto)+" "+nombreElegido+" - "+telefonoElegido);
 
                 dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {  //Botón si. es decir, queremos eliminar la rutina
                     public void onClick(DialogInterface dialogo1, int id) {
@@ -119,7 +119,6 @@ public class RecomendarFragment extends Fragment {
                 //En el caso de que el usuario diga que no quiere borrarlo, pues no hará nada. se cerrará el dialogo
                 dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        Log.d("Logs", "no se eliminara el contacto");
                     }
                 });
                 dialogo.show();
@@ -137,16 +136,16 @@ public class RecomendarFragment extends Fragment {
 
                 //Creamos una alerta
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Añade los datos del nuevo contacto");
+                builder.setTitle(getString(R.string.recomendar_Añadelosdatosdelnuevocontacto));
                 LinearLayout layout = new LinearLayout(getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 //Añadimos en la alerta un edit text
                 final EditText inputNombre = new EditText(getContext());  //Creamos un edit text. para q el usuairo pueda insertar el titulo
-                inputNombre.setHint("Nombre");
+                inputNombre.setHint(getString(R.string.recomendar_Nombre));
                 layout.addView(inputNombre);
 
                 final EditText inputTelefono = new EditText(getContext());  //Creamos un edit text. para q el usuairo pueda insertar el titulo
-                inputTelefono.setHint("Telefono");
+                inputTelefono.setHint(getString(R.string.recomendar_Telefono));
                 layout.addView(inputTelefono);
 
                 builder.setView(layout);
@@ -232,7 +231,7 @@ public class RecomendarFragment extends Fragment {
                 //EL PERMISO NO ESTÁ CONCEDIDO TODAVÍA O EL USUARIO HA INDICADO
                 //QUE NO QUIERE QUE SE LE VUELVA A SOLICITAR
                 Log.d("Logs","NO SE HA CONCEDIDO");
-                Toast.makeText(getActivity(), "No se ha concedido el permiso de escritura", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.recomendar_toast_Nosehaconcedidoelpermisodeleercontactos), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, 1);  //ACTIVITY_RECOGNITION

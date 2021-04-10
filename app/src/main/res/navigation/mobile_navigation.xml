@@ -117,7 +117,7 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.das_proyect1.ui.maps.MapsFragment"
-        android:label="fragment_maps"
+        android:label="@string/menu_googleMaps"
         tools:layout="@layout/fragment_maps" />
     <action
         android:id="@+id/action_global_mapsFragment"
@@ -125,7 +125,7 @@
     <fragment
         android:id="@+id/camaraFragment"
         android:name="com.example.das_proyect1.ui.camara.CamaraFragment"
-        android:label="fragment_camara"
+        android:label="@string/menu_camara"
         tools:layout="@layout/fragment_camara" >
         <action
             android:id="@+id/action_camaraFragment_to_imagenesFirebaseFragment"
@@ -137,7 +137,7 @@
     <fragment
         android:id="@+id/alarmaFragment"
         android:name="com.example.das_proyect1.ui.alarma.AlarmaFragment"
-        android:label="fragment_alarma"
+        android:label="@string/menu_crearAlarma"
         tools:layout="@layout/fragment_alarma" />
     <action
         android:id="@+id/action_global_alarmaFragment"
@@ -145,7 +145,7 @@
     <fragment
         android:id="@+id/recomendarFragment"
         android:name="com.example.das_proyect1.ui.recomendar.RecomendarFragment"
-        android:label="fragment_recomendar"
+        android:label="@string/menu_recomiendaLaApp"
         tools:layout="@layout/fragment_recomendar" />
     <action
         android:id="@+id/action_global_recomendarFragment"
@@ -153,7 +153,7 @@
     <fragment
         android:id="@+id/imagenesFirebaseFragment"
         android:name="com.example.das_proyect1.ui.camara.ImagenesFirebaseFragment"
-        android:label="fragment_imagenes_firebase"
+        android:label="@string/menu_imagenesFirebase"
         tools:layout="@layout/fragment_imagenes_firebase" />
 
 

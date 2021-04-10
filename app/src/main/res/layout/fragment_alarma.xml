@@ -12,7 +12,7 @@
         android:id="@+id/buttonCrearAlarma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Crear alarma"
+        android:text="@string/alarma_crearAlarma"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -24,7 +24,7 @@
         android:id="@+id/buttonElegirHora"
         android:layout_width="133dp"
         android:layout_height="40dp"
-        android:text="Elegir hora"
+        android:text="@string/alarma_elegir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.751"
@@ -36,7 +36,7 @@
         android:id="@+id/textViewHoraElegida"
         android:layout_width="348dp"
         android:layout_height="32dp"
-        android:text="Elige una hora para establecer la alarma:"
+        android:text="@string/alarma_Eligeunahoraparaestablecerlaalarma"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -99,7 +99,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Escribe un mensaje"
+        android:text="@string/alarma_escribeunmensaje"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.892"
@@ -132,13 +132,13 @@
                     android:id="@+id/radioButtonLunes"
                     android:layout_width="138dp"
                     android:layout_height="match_parent"
-                    android:text="Lunes" />
+                    android:text="@string/alarma_lunes" />
 
                 <RadioButton
                     android:id="@+id/radioButtonViernes"
                     android:layout_width="184dp"
                     android:layout_height="26dp"
-                    android:text="Viernes" />
+                    android:text="@string/alarma_viernes" />
 
             </LinearLayout>
 
@@ -151,13 +151,13 @@
                     android:id="@+id/radioButtonMartes"
                     android:layout_width="138dp"
                     android:layout_height="25dp"
-                    android:text="Martes" />
+                    android:text="@string/alarma_martes" />
 
                 <RadioButton
                     android:id="@+id/radioButtonSabado"
                     android:layout_width="184dp"
                     android:layout_height="26dp"
-                    android:text="Sabado" />
+                    android:text="@string/alarma_sabado" />
 
             </LinearLayout>
 
@@ -170,13 +170,13 @@
                     android:id="@+id/radioButtonMiercoles"
                     android:layout_width="138dp"
                     android:layout_height="25dp"
-                    android:text="Miercoles" />
+                    android:text="@string/alarma_miercoles" />
 
                 <RadioButton
                     android:id="@+id/radioButtonDomingo"
                     android:layout_width="184dp"
                     android:layout_height="26dp"
-                    android:text="Domingo" />
+                    android:text="@string/alarma_domingo" />
 
             </LinearLayout>
 
@@ -189,7 +189,7 @@
                     android:id="@+id/radioButtonJueves"
                     android:layout_width="138dp"
                     android:layout_height="25dp"
-                    android:text="Jueves" />
+                    android:text="@string/alarma_jueves" />
 
             </LinearLayout>
 
@@ -200,7 +200,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selecciona los dias que quieras activarla"
+        android:text="@string/alarma_seleccionalosdiasquequieresactivarla"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
