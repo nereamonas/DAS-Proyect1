@@ -14,24 +14,32 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.base.BaseViewModel;
+import com.example.das_proyect1.helpClass.ImagenFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -43,14 +51,19 @@ import java.util.Date;
 
 public class CamaraFragment  extends BaseFragment {
     private StorageReference mStorageRef;
+    DatabaseReference mDatabaseRef;
 
     private int CAMERA_REQUEST_CODE=4;
     private int GALLERY_REQUEST_CODE=2;
 
     private ImageView imagenActual;
-    Button btnGaleria,btnCamara;
+    Button btnGaleria,btnCamara,buttonSubirAFirebase;
     String currentPhotoPath;
+    Uri contentUri;
+    TextView verTodosLosArchivosFirebase;
+    EditText nombreFoto;
     private BaseViewModel camaraViewModel;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +74,8 @@ public class CamaraFragment  extends BaseFragment {
 
 
         mStorageRef = FirebaseStorage.getInstance().getReference();  //Abrimos la referencia del firebase para poder subir las fotos
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("imagenes");  //Abrimos la referencia del firebase
+
 
         btnCamara=root.findViewById(R.id.buttonCamara);
         btnCamara.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
@@ -81,12 +96,52 @@ public class CamaraFragment  extends BaseFragment {
 
         imagenActual = root.findViewById(R.id.displayImageView);
 
+
+        buttonSubirAFirebase=root.findViewById(R.id.buttonSubirAFirebase);
+        buttonSubirAFirebase.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
+            @Override
+            public void onClick(View v) {
+                nombreFoto=root.findViewById(R.id.editTextNombreFoto);
+                if(TextUtils.isEmpty(nombreFoto.getText().toString())) { //Si el nombre es nulo, decir q no se va a subir
+                    Toast.makeText(getActivity(), "Tienes que insertar un nombre", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    if (contentUri!=null) {
+                        String ext = "jpg";
+                        if (getFileExt(contentUri) != null) {
+                            ext = getFileExt(contentUri);
+                        }
+                        String imageFileName = nombreFoto.getText() + "." + ext;
+                        Log.d("Logs", "Se subira la imagen con el nombre: " + imageFileName);
+
+                        //Subimos la foto al firebase
+                        uploadImageToFirebase(imageFileName, contentUri);
+                    }else{
+                        Toast.makeText(getActivity(), "Tienes que insertar una foto", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        TextView verTodosLosArchivosFirebase=root.findViewById(R.id.verTodosLosArchivosFirebase);
+        verTodosLosArchivosFirebase.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en la galeria se abrira la galeria
+            @Override
+            public void onClick(View v) {
+                NavOptions options = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .build();
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_camaraFragment_to_imagenesFirebaseFragment,null,options);
+
+            }
+        });
+
         return root;
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         if(requestCode == CAMERA_REQUEST_CODE){  //Si la respuesta viene de la camara y es correcta
             if(resultCode == Activity.RESULT_OK){
 
@@ -95,16 +150,16 @@ public class CamaraFragment  extends BaseFragment {
 
                 //Guardaremos la foto en la galeria del movil
                 File f = new File(currentPhotoPath);
-                //selectedImage.setImageURI(Uri.fromFile(f));
+                imagenActual.setImageURI(Uri.fromFile(f));
                 Log.d("Logs", "URL de la imagen sacada:  " + Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.fromFile(f);
+                contentUri=Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 getActivity().sendBroadcast(mediaScanIntent);
 
                 //Subiremos la foto al firebase
-                uploadImageToFirebase(f.getName(),contentUri,"Camara");
+                //uploadImageToFirebase(f.getName(),contentUri,"Camara");
 
             }
 
@@ -113,14 +168,17 @@ public class CamaraFragment  extends BaseFragment {
         if(requestCode == GALLERY_REQUEST_CODE){ //Si la respuesta viene de la galeria y es correcta.
             if(resultCode == Activity.RESULT_OK){
                 //Cargamos la imagen poniendole un nombre
-                Uri contentUri = data.getData();
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = "JPEG_" + timeStamp +"."+getFileExt(contentUri);
-                Log.d("Logs", "Url de la imagen de la galeria:  " +  imageFileName);
-                //selectedImage.setImageURI(contentUri);
+                this.contentUri=data.getData();
+
+                Log.d("Logs","URL de la imagen de la galeria: "+contentUri);
+                //Uri contentUri = data.getData();
+                //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                //String imageFileName = "JPEG_" + timeStamp +"."+getFileExt(contentUri);
+                //Log.d("Logs", "Url de la imagen de la galeria:  " +  imageFileName);
+                imagenActual.setImageURI(contentUri);
 
                 //Subimos la foto al firebase
-                uploadImageToFirebase(imageFileName,contentUri,"Galeria");
+                //uploadImageToFirebase(imageFileName,contentUri,"Galeria");
             }
         }
     }
@@ -176,8 +234,9 @@ public class CamaraFragment  extends BaseFragment {
     }
 
 
-    private void uploadImageToFirebase(String name, Uri contentUri, String lugar) {
-        final StorageReference image = mStorageRef.child(lugar+"/" + name); //La carpeta donde queremos almacenar la foto
+    private void uploadImageToFirebase(String name, Uri contentUri) {
+
+        final StorageReference image = mStorageRef.child("imagenes/" + name); //La carpeta donde queremos almacenar la foto
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -185,7 +244,12 @@ public class CamaraFragment  extends BaseFragment {
                     @Override
                     public void onSuccess(Uri uri) {
                         Log.d("Logs", "Imagen subida. URI: " + uri.toString());
-                        Glide.with(getActivity().getApplicationContext()).load(uri).into(imagenActual);  //Cargamos la imagen en el imagen view
+                        //Glide.with(getActivity().getApplicationContext()).load(uri).into(imagenActual);  //Cargamos la imagen en el imagen view
+                       //Lo subimos tambn a la base de datos para poder visualizarlas luego
+                        ImagenFirebase img= new ImagenFirebase(nombreFoto.getText().toString(),uri.toString());
+                        String id= mDatabaseRef.push().getKey();
+                        mDatabaseRef.child(id).setValue(nombreFoto.getText().toString()+"###"+uri.toString());
+
                     }
                 });
 

@@ -126,7 +126,11 @@
         android:id="@+id/camaraFragment"
         android:name="com.example.das_proyect1.ui.camara.CamaraFragment"
         android:label="fragment_camara"
-        tools:layout="@layout/fragment_camara" />
+        tools:layout="@layout/fragment_camara" >
+        <action
+            android:id="@+id/action_camaraFragment_to_imagenesFirebaseFragment"
+            app:destination="@id/imagenesFirebaseFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_camaraFragment"
         app:destination="@id/camaraFragment" />
@@ -146,6 +150,11 @@
     <action
         android:id="@+id/action_global_recomendarFragment"
         app:destination="@id/recomendarFragment" />
+    <fragment
+        android:id="@+id/imagenesFirebaseFragment"
+        android:name="com.example.das_proyect1.ui.camara.ImagenesFirebaseFragment"
+        android:label="fragment_imagenes_firebase"
+        tools:layout="@layout/fragment_imagenes_firebase" />
 
 
 </navigation>
