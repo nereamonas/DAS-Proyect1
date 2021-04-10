@@ -24,22 +24,22 @@
 
         <item
             android:id="@+id/mapsFragment"
-            android:icon="@drawable/ic_list"
+            android:icon="@drawable/ic_maps"
             android:title="@string/menu_googleMaps" />
 
         <item
             android:id="@+id/camaraFragment"
-            android:icon="@drawable/ic_list"
+            android:icon="@drawable/ic_camara"
             android:title="@string/menu_camara" />
 
         <item
             android:id="@+id/alarmaFragment"
-            android:icon="@drawable/ic_list"
+            android:icon="@drawable/ic_alarma"
             android:title="@string/menu_crearAlarma" />
 
         <item
             android:id="@+id/recomendarFragment"
-            android:icon="@drawable/ic_list"
+            android:icon="@drawable/ic_recomend"
             android:title="@string/menu_recomiendaLaApp" />
 
         <item
