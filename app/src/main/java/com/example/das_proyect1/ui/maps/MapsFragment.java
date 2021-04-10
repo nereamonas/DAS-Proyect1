@@ -258,7 +258,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                                 Log.d("Logs", "BN");
 
                                 LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
-                                crearPunto(posicion);
+                                crearPuntoIni(posicion);
                             } else {
 
                                 Log.d("Logs", "BN PERO MAL");
@@ -310,8 +310,16 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
     }
 
+    public void crearPuntoIni(LatLng posicion) {
+        map.addMarker(new MarkerOptions().position(posicion).title("Punto inicial"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
+        latitude=posicion.latitude;
+        longitude=posicion.longitude;
+
+    }
+
     public void crearPunto(LatLng posicion) {
-        map.addMarker(new MarkerOptions().position(posicion).title("Marcador en la cordenada actual"));
+        map.addMarker(new MarkerOptions().position(posicion).title("Toca para calcular el trayecto"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
         latitude=posicion.latitude;
         longitude=posicion.longitude;
