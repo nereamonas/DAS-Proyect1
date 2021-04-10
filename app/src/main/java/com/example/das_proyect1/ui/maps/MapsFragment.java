@@ -59,6 +59,9 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     private LatLng posUsuario;
     private ArrayList<PolylineData> mPolylineData= new ArrayList<>();
     private Marker selectMarker=null;
+    private LocationCallback actualizador=null;
+    private LocationRequest peticion =null;
+    private FusedLocationProviderClient proveedordelocalizacion =null;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -139,12 +142,12 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
 
-    private SupportMapFragment f;
+    private SupportMapFragment mapFragment;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
+        mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         Bundle mapBundle = null;
         if (savedInstanceState != null) {
@@ -167,7 +170,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             mapBundle = new Bundle();
             outState.putBundle("MapViewBundleKey", mapBundle);
         }
-        f.onSaveInstanceState(mapBundle);
+        mapFragment.onSaveInstanceState(mapBundle);
     }
 
     public void alertaCrearMarca(LatLng latLng) {
@@ -246,7 +249,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             permiso = true;
         }
         if (permiso) {
-            FusedLocationProviderClient proveedordelocalizacion =
+            proveedordelocalizacion =
                     LocationServices.getFusedLocationProviderClient(getContext());
 
             proveedordelocalizacion.getLastLocation()
@@ -277,12 +280,13 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
             //cambios de posicion)
 
-            LocationRequest peticion = LocationRequest.create();
+            peticion = LocationRequest.create();
             peticion.setInterval(1000);
             peticion.setFastestInterval(5000);
+
             peticion.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-            LocationCallback actualizador = new LocationCallback() {
+            actualizador = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     super.onLocationResult(locationResult);
@@ -301,6 +305,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                     }
                 }
             };
+
             proveedordelocalizacion.requestLocationUpdates(peticion, actualizador, null);
         } else {
 
@@ -444,13 +449,19 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
     @Override
     public void onDetach() {  //Este metodo detecta cuando pulsamos la tecla atras en el mvl. Es importante cancelar el temporizador, ya que si al darle atras no se cancela, cuando este acabe peta la aplicacion
+        Log.d("Logs","DETACH"); //Añadimos un log para comprobar
         map=null;
         mGeoApiContext=null;
         posUsuario=null;
         mPolylineData=null;
         selectMarker=null;
+        proveedordelocalizacion.removeLocationUpdates(actualizador);
+        actualizador=null;
+        peticion=null;
         super.onDetach();
     }
+
+
 
     //https://gist.github.com/mitchtabian/33d78c511fdb82694296ecf3ab3a05ce#file-addpolylinestomap-java
 

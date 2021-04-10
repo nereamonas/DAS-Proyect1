@@ -95,7 +95,12 @@ public class CamaraFragment  extends BaseFragment {
         });
 
         imagenActual = root.findViewById(R.id.displayImageView);
-
+        if (savedInstanceState != null) { //Si viene de la rotacion de pantalla q tiene cosas guardadas. el tiempo y la posicion lo ogera de ahi
+            String uri = savedInstanceState.getString("uri");
+            Log.d("Logs","save url: "+uri);
+            contentUri= Uri.parse(uri);
+            imagenActual.setImageURI(contentUri);
+        }
 
         buttonSubirAFirebase=root.findViewById(R.id.buttonSubirAFirebase);
         buttonSubirAFirebase.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
@@ -262,6 +267,15 @@ public class CamaraFragment  extends BaseFragment {
             }
         });
 
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Cuando se rota la pantalla tendremos q guardar x informacion. la posicion en la que estamos y el tiempo q falta del contador para accabar
+        super.onSaveInstanceState(outState);
+        Log.d("Logs","GUARDAR "+String.valueOf(contentUri));
+        outState.putString("uri", String.valueOf(contentUri));
     }
 
     public void permisoCamara(){  //Pedimos permiso para abrir la camara, cuando este concedido abrimos la camara

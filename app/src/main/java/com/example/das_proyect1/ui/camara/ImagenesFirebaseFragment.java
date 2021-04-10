@@ -43,9 +43,7 @@ public class ImagenesFirebaseFragment extends BaseFragment {
 
         DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference("imagenes");  //Abrimos la referencia del firebase
         RecyclerView lalista= root.findViewById(R.id.recycleViewImagenesFirebase);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        lalista.setLayoutManager(manager);
-        lalista.setHasFixedSize(true);
+
         mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -57,6 +55,20 @@ public class ImagenesFirebaseFragment extends BaseFragment {
                 }
                 AdaptadorRecyclerImagenesFirebase eladaptador = new AdaptadorRecyclerImagenesFirebase(getContext(),imagenes);
                 lalista.setAdapter(eladaptador);
+
+
+                GridLayoutManager elLayoutRejillaIgual;
+                //Cogemos la orientacion de la pantalla. ya q si está en vertical, saldran solamente dos columnas, y si está en horizontal saldran 3 columnas
+                int rotacion=getActivity().getWindowManager().getDefaultDisplay().getRotation();
+                if (rotacion== Surface.ROTATION_0 || rotacion==Surface.ROTATION_180){
+                    //La pantalla está en vertical
+                    elLayoutRejillaIgual= new GridLayoutManager(getContext(),1, GridLayoutManager.VERTICAL,false);
+                }else{
+                    //La pantalla esta en horizontal
+                    elLayoutRejillaIgual= new GridLayoutManager(getContext(),2, GridLayoutManager.VERTICAL,false);
+                }
+
+                lalista.setLayoutManager(elLayoutRejillaIgual);
             }
 
             @Override
