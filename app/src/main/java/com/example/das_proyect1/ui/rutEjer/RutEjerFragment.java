@@ -15,15 +15,16 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -36,12 +37,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.das_proyect1.base.BaseViewModel;
+import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.calendario.CalendarioFragment;
+
+
+import org.json.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -99,8 +104,34 @@ public class RutEjerFragment extends BaseFragment {
 
         //insertamos los textos del primer elemento de la base de datos
         db = new MiDB(getContext());
-        this.ejercicios = db.getEjerciciosDeLaRutina(rutId); //Cogemos los ejercicios de esa rutina y los guardamos en la lista
+        //this.ejercicios = db.getEjerciciosDeLaRutina(rutId); //Cogemos los ejercicios de esa rutina y los guardamos en la lista
+
+
+
+        Data datos = new Data.Builder()
+                .putString("tarea","getEjerciciosDeLaRutina")
+                .putString("rutina", String.valueOf(rutId))
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+        WorkManager.getInstance(getActivity()).enqueue(otwr);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getActivity(), status -> {
+                    if (status != null && status.getState().isFinished()) {
+                        String ejer=status.getOutputData().getString("ejercicios");
+                        Log.d("Logs","Resultado obtenido rutejer: "+ejer);
+                        convertJsonArrayRutinas(ejer);
+                        continuar(savedInstanceState);
+                    }
+                });
+
+
+        return root;
+    }
+
+    public void continuar(Bundle savedInstanceState){
+
         this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
+
         if (savedInstanceState != null) { //Si viene de la rotacion de pantalla q tiene cosas guardadas. el tiempo y la posicion lo ogera de ahi
             this.posicion = savedInstanceState.getInt("posicion");
             this.tiempoFaltante = savedInstanceState.getLong("tiempoFaltante");
@@ -139,8 +170,8 @@ public class RutEjerFragment extends BaseFragment {
                 anterior();
             }
         });
-        return root;
     }
+
     private String getUsuario(){
         return this.usuario;
     }
@@ -409,6 +440,38 @@ public class RutEjerFragment extends BaseFragment {
         super.onDetach(); }
 
 
+    public void convertJsonArrayRutinas(String ejer){
+
+        JSONObject obj = null;
+        try {
+            obj = new JSONObject(ejer);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray arr = null; // notice that `"posts": [...]`
+        try {
+            arr = obj.getJSONArray("ejercicios");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Ejercicio> lista = new ArrayList<Ejercicio>();
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject json=arr.getJSONObject(i);
+                String id= (String) json.getString("id");
+                String nombre= (String)json.getString("nombre");
+                String descripcion= (String) json.getString("descripcion");
+                String foto= (String) json.getString("foto");
+                String duracion= (String) json.getString("duracion");
+                Ejercicio e = new Ejercicio(Integer.parseInt(id),nombre, descripcion,foto,duracion); //Cogemos todos los elementos y con ellos creamos una rutina
+                lista.add(e); //Añadimos a la lista la rutina
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        this.ejercicios=lista;
+    }
 
 
 }

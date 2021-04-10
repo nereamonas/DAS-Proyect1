@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import com.example.das_proyect1.base.BaseActivity;
-import com.example.das_proyect1.helpClass.MiDB;
+import com.example.das_proyect1.helpClass.ExternalDB;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +27,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCompatActivity
 
@@ -34,7 +37,7 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
     //Nos indicará a que fragment hay que navegar o que hacer al hacer click sobre un elemento del menu
     private String usuario;
     private AppBarConfiguration mAppBarConfiguration;
-    private MiDB db;
+    private String email;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,10 +94,30 @@ public class PrincipalActivity extends BaseActivity {//ControlarCambios   AppCom
         TextView nombre = (TextView) vi.findViewById(R.id.nombre);
         TextView correo = (TextView) vi.findViewById(R.id.correo);
 
-        db = new MiDB(this);  //En el menu arriba a la derecha, queremos ponerle el nombre del usuario y el correo
-        nombre.setText(this.usuario);
-        correo.setText(db.getCorreoConUsuario(this.usuario));
-        this.db.cerrarConexion();
+
+
+
+        Data datos = new Data.Builder()
+                .putString("tarea","getCorreoConUsuario")
+                .putString("usuario", String.valueOf(this.usuario))
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+        WorkManager.getInstance(this).enqueue(otwr);
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(this, status -> {
+                    if (status != null && status.getState().isFinished()) {
+                        this.email=status.getOutputData().getString("email");
+                        Log.d("Logs","RESULTADOTOTAL "+email);
+
+
+                        nombre.setText(this.usuario);
+                        correo.setText(this.email);
+                    }
+                });
+
+
+
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);  //Editaremos las preferencias, para ponerle el usuario con el que ha iniciado sesion. Es importante actualizarlo cuando se inicia sesion, porq sino en preferencias se guarda el anterior q estaba
         //if (!prefs.contains("username")) {//si no existe, insertamos el usuario. siempre. por si hay cambio de usuario
             SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd

@@ -2,7 +2,6 @@ package com.example.das_proyect1.ui.calendario;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,6 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -60,7 +57,6 @@ public class CalendarioFragment extends BaseFragment {
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Log.d("Logs", "Year: " + year + " Month: " + month + " Day: " + dayOfMonth);
                 //Cogemos la data seleccionada y llamamos a rellenar TextView para actualizar los datos
                 String date = " "+dayOfMonth + "/" + month + "/" + year+" ";
                 rellenarTextView(date);
@@ -77,7 +73,6 @@ public class CalendarioFragment extends BaseFragment {
         try {
             BufferedReader ficherointerno= new BufferedReader(new InputStreamReader(getContext().openFileInput("rutinasCompletadas.txt")));
             String linea= ficherointerno.readLine();
-            Log.d("Logs", "linea: "+linea);
             while (linea!=null){
                 if(linea.contains(date) && linea.contains(this.user)) { //Si la linea, pertenece al dia actual,
                     text.setText(text.getText() + "\n\n" + linea);

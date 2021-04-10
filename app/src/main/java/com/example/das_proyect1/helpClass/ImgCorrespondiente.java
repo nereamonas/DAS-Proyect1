@@ -1,7 +1,5 @@
 package com.example.das_proyect1.helpClass;
 
-import android.util.Log;
-
 import com.example.das_proyect1.R;
 
 public class ImgCorrespondiente {

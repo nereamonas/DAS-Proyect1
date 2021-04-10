@@ -1,9 +1,7 @@
 package com.example.das_proyect1.ui.ajustes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
@@ -12,25 +10,26 @@ import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
-import com.example.das_proyect1.helpClass.MiDB;
+import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
 
-import java.util.Locale;
 
 public class AjustesFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     //Clase donde se administran los ajustes principales de la aplicación. El cambio de idioma, el tema y la activación de notificaciones
 
-    private MiDB db;
     private SharedPreferences prefs;
     private String user;
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.fragment_ajustes, rootKey);
-        this.db=new MiDB(getContext());
+
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (this.prefs.contains("username")) {//Comprobamos si existe
             this.user = this.prefs.getString("username", null);
@@ -38,12 +37,42 @@ public class AjustesFragment extends PreferenceFragmentCompat
         //this.user=getArguments().getString("usuario");
         SharedPreferences.Editor editor= prefs.edit();  //Creamos un editor para asignarle los valores d la bbdd
         editor.putString("username", this.user);
-        editor.putString("email", db.getCorreoConUsuario(this.user));
-        editor.putString("pass", db.getPassConUsuario(this.user));
+
+
+
+        Data datos = new Data.Builder()
+                .putString("tarea","getCorreoConUsuario")
+                .putString("usuario",this.user)
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+        WorkManager.getInstance(getActivity()).enqueue(otwr);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getActivity(), status -> {
+                    if (status != null && status.getState().isFinished()) {
+                        String email=status.getOutputData().getString("email");
+                        editor.putString("email", email);
+                        editor.apply();
+                    }
+                });
+
+        Data datos2 = new Data.Builder()
+                .putString("tarea","getPassConUsuario")
+                .putString("usuario",this.user)
+                .build();
+        OneTimeWorkRequest otwr2 = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos2).build();
+        WorkManager.getInstance(getActivity()).enqueue(otwr2);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(otwr2.getId())
+                .observe(getActivity(), status2 -> {
+                    if (status2 != null && status2.getState().isFinished()) {
+                        String pass=status2.getOutputData().getString("pass");
+                        editor.putString("pass", pass);
+                        editor.apply();
+                    }
+                });
+
         editor.apply();
         boolean resultado=editor.commit();
         Log.d("Logs", "RESULTADO EDITAR DATOS "+resultado);
-        this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
         //Vamos a configurar q depende la rotacion de pantalla funcione de una forma o otra. si esta en vertical y se clica en info usuario devera pasar a otro fragment
         Preference infouser=(Preference) findPreference("infouser");

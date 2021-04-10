@@ -14,22 +14,16 @@ import android.widget.ImageView;
 
 import com.example.das_proyect1.base.BaseActivity;
 import com.example.das_proyect1.helpClass.ExternalDB;
-import com.example.das_proyect1.helpClass.MiDB;
-import com.example.das_proyect1.helpClass.Usuario;
 
 public class LogInActivity extends BaseActivity {
 
     //La actividad que se encarga de gestionar el inicio de sesión, si los datos introducidos por el usuaario son correctos en base de datos, redirige a la ventana principal. En caso contrario muestra un mensaje de error
 
-    private MiDB db;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db=new MiDB(this);
-        db.añadirPrimerosElementos();
-        this.db.cerrarConexion();
         ImageView img= findViewById(R.id.img);
         img.setImageResource(R.mipmap.avatar);
 
@@ -46,13 +40,6 @@ public class LogInActivity extends BaseActivity {
 
         if (!user.equals("") && !pass.equals("")) { //si es distinto null
             Log.d("Logs", "Usuario"+user+ " Contraseña"+pass);
-            db=new MiDB(this);  //abrimos conexion con bbdd
-
-
-
-
-            //ExternalDB ex=new ExternalDB();
-            //Usuario usuario=ex.comprobarUsuario(user,pass);
 
             Data datos = new Data.Builder()
                     .putString("tarea","comprobarUsuario")
@@ -80,10 +67,6 @@ public class LogInActivity extends BaseActivity {
                             }
                         }
                     });
-
-
-
-
 
 
         }else {  //Saltamos una alerta de error
