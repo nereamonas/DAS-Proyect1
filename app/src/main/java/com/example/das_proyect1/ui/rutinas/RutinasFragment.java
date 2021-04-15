@@ -59,9 +59,11 @@ public class RutinasFragment extends BaseFragment {
                 new ViewModelProvider(this).get(BaseViewModel.class);
         View root = inflater.inflate(R.layout.fragment_rutinas, container, false);
 
+        //try {
+            usuario = getArguments().getString("usuario");
+        //}catch(Exception e){
 
-        usuario = getArguments().getString("usuario");
-
+        //}
 
 
         Data datos = new Data.Builder()

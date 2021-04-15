@@ -149,4 +149,7 @@
     <string name="recomendar_Nombre">Nombre</string>
     <string name="recomendar_Telefono">Teléfono</string>
     <string name="recomendar_toast_Nosehaconcedidoelpermisodeleercontactos">No se ha concedido el permiso de leer contactos</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>
