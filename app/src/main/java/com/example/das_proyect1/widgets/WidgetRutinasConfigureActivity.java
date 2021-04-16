@@ -57,7 +57,7 @@ public class WidgetRutinasConfigureActivity extends Activity {
     // Write the prefix to the SharedPreferences object for this widget
     static void saveDayPref(Context context, int appWidgetId, int text) {//Guardamos los dias q queremos mostrar las rutinas en preferencias
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY, String.valueOf(text));
+        prefs.putString(PREF_PREFIX_KEY+appWidgetId, String.valueOf(text));
         prefs.apply();
     }
 
@@ -126,7 +126,7 @@ public class WidgetRutinasConfigureActivity extends Activity {
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE); //Guardamos en preferencias el valor elegido
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(KEY_BUTTON_TEXT, String.valueOf(dias));
+        editor.putString(PREF_PREFIX_KEY+appWidgetId, String.valueOf(dias));
         editor.apply();
 
         Intent resultValue = new Intent();

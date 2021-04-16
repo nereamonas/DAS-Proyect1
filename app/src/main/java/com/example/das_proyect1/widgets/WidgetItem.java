@@ -40,9 +40,9 @@ public class WidgetItem extends RemoteViewsService {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
 
             SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-            int i=Integer.parseInt(prefs.getString("keyButtonText","1"));
-            Log.d("Logs",""+i);
-            this.num = 2;//Integer.parseInt(i);//Integer.parseInt(String.valueOf(prefs.getInt("keyButtonText" + appWidgetId,1)));
+            int i=Integer.parseInt(prefs.getString("appwidget_"+appWidgetId,"1"));
+            Log.d("Logs","Dias: "+i);
+            this.num = i;//Integer.parseInt(i);//Integer.parseInt(String.valueOf(prefs.getInt("keyButtonText" + appWidgetId,1)));
 
         }
         @Override
