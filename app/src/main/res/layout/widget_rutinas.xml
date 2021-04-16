@@ -37,10 +37,10 @@
             android:id="@+id/example_widget_empty_view"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/light_blue_50"
             android:gravity="center"
-            android:text="Empty"
-            android:textColor="@android:color/white"
+            android:text="Todavía no tienes rutinas"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
     </FrameLayout>

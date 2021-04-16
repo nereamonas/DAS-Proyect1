@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +45,7 @@ import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
 import com.example.das_proyect1.ui.calendario.CalendarioFragment;
+import com.example.das_proyect1.widgets.WidgetRutinas;
 
 
 import org.json.*;
@@ -316,6 +318,13 @@ public class RutEjerFragment extends BaseFragment {
                     .build();
             Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_to_nav_rutinas, bundle,options);
 
+
+            Intent intent = new Intent(getContext(), WidgetRutinas.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            int[] ids = {R.layout.widget_rutinas};
+
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            getContext().sendBroadcast(intent);
 
         }
     }

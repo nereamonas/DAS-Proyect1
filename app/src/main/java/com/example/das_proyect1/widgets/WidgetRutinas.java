@@ -1,18 +1,18 @@
 package com.example.das_proyect1.widgets;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.das_proyect1.LogInActivity;
-import com.example.das_proyect1.PrincipalActivity;
 import com.example.das_proyect1.R;
+
+import java.util.Calendar;
 
 /**
  * Implementation of App Widget functionality.
@@ -26,13 +26,8 @@ public class WidgetRutinas extends AppWidgetProvider {
                                 int appWidgetId) {
 
 
-
-
         Intent intent = new Intent(context, LogInActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        String buttonText = prefs.getString("keyButtonText" + appWidgetId, "Press me");
 
         Intent serviceIntent = new Intent(context, WidgetItem.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -46,7 +41,7 @@ public class WidgetRutinas extends AppWidgetProvider {
         views.setEmptyView(R.id.example_widget_stack_view, R.id.example_widget_empty_view);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
-
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.example_widget_stack_view);
 
     }
 
@@ -55,7 +50,6 @@ public class WidgetRutinas extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
-            Log.d("Logs", "update widgets");
         }
     }
 
@@ -70,6 +64,14 @@ public class WidgetRutinas extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
+        AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 00); //hora en formato 24h
+        calendar.set(Calendar.MINUTE, 00); //minuto
+        calendar.set(Calendar.SECOND, 00); //segundo
+        PendingIntent pi = PendingIntent.getBroadcast(context, 7475, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pi);
     }
 
     @Override
