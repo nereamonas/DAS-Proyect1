@@ -31,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.base.BaseViewModel;
@@ -50,17 +49,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CamaraFragment  extends BaseFragment {
+
+    //Fragmento que controla la camara. Podemos sacar una foto, o seleccionar una foto desde la galeria. Se cargará en la pantalla y poniendole un nombre podremos subirla a firebase. En el caso de que la foto se saque con la camara esta tambn se guardara en la galeria del mvl
+
+
     private StorageReference mStorageRef;
     DatabaseReference mDatabaseRef;
 
-    private int CAMERA_REQUEST_CODE=4;
-    private int GALLERY_REQUEST_CODE=2;
+    private int CAMERA_CODIGO=4;
+    private int GALLERY_COGIDO=2;
 
     private ImageView imagenActual;
     Button btnGaleria,btnCamara,buttonSubirAFirebase;
     String currentPhotoPath;
     Uri contentUri;
-    TextView verTodosLosArchivosFirebase;
     EditText nombreFoto;
     private BaseViewModel camaraViewModel;
 
@@ -81,48 +83,47 @@ public class CamaraFragment  extends BaseFragment {
         btnCamara.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
             @Override
             public void onClick(View v) {
-                permisoGuardar();
-                permisoCamara();
+                permisoGuardar(); //sOLICITAMOS LOS PERMINSOS para guardar fotos y para abrir la camara
             }
         });
+
         btnGaleria=root.findViewById(R.id.buttonGaleria);
         btnGaleria.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en la galeria se abrira la galeria
             @Override
             public void onClick(View v) {
-                Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, GALLERY_REQUEST_CODE); //Le pasamos un codigo para identificar la respuesta
+                Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);  //Creamos un intent de la galeria. para abrir la galeria
+                startActivityForResult(gallery, GALLERY_COGIDO); //Le pasamos un codigo para identificar la respuesta
             }
         });
 
-        imagenActual = root.findViewById(R.id.displayImageView);
+        imagenActual = root.findViewById(R.id.displayImageView); //Referencia a la imagen
         if (savedInstanceState != null) { //Si viene de la rotacion de pantalla q tiene cosas guardadas. el tiempo y la posicion lo ogera de ahi
-            String uri = savedInstanceState.getString("uri");
+            String uri = savedInstanceState.getString("uri"); //cogemos la url de la imagen guardada antes d la rot
             Log.d("Logs","save url: "+uri);
             contentUri= Uri.parse(uri);
-            imagenActual.setImageURI(contentUri);
+            imagenActual.setImageURI(contentUri); //Y la colocamos
         }
 
         buttonSubirAFirebase=root.findViewById(R.id.buttonSubirAFirebase);
         buttonSubirAFirebase.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
             @Override
             public void onClick(View v) {
-                nombreFoto=root.findViewById(R.id.editTextNombreFoto);
+                nombreFoto=root.findViewById(R.id.editTextNombreFoto);  //Referencia al nombre
                 if(TextUtils.isEmpty(nombreFoto.getText().toString())) { //Si el nombre es nulo, decir q no se va a subir
-                    Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunnombre), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunnombre), Toast.LENGTH_SHORT).show(); //Es obligatorio insertar un nombre
 
                 }else{
-                    if (contentUri!=null) {
-                        String ext = "jpg";
-                        if (getFileExt(contentUri) != null) {
+                    if (contentUri!=null) { //Si contentUri es distinto de null significa que tenemos una imagen seleccionada
+                        String ext = "jpg";  //Ponemos por defecto jpg
+                        if (getFileExt(contentUri) != null) { //Pero si trae extension cogemos su extension
                             ext = getFileExt(contentUri);
                         }
-                        String imageFileName = nombreFoto.getText() + "." + ext;
+                        String imageFileName = nombreFoto.getText() + "." + ext; //Creamos el nombre de la imagen con el nombre q ha elegido el usuario + la extension
                         Log.d("Logs", "Se subira la imagen con el nombre: " + imageFileName);
-
                         //Subimos la foto al firebase
-                        uploadImageToFirebase(imageFileName, contentUri);
+                        subirImagenAFirebase(imageFileName, contentUri); //Subimos la foto a firebase
                     }else{
-                        Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunafoto), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.camara_toast_Tienesqueinsertarunafoto), Toast.LENGTH_SHORT).show(); //Mensaje de q es obligatorio seleccionar una foto
                     }
                 }
             }
@@ -134,9 +135,8 @@ public class CamaraFragment  extends BaseFragment {
             public void onClick(View v) {
                 NavOptions options = new NavOptions.Builder()
                         .setLaunchSingleTop(true)
-                        .build();
+                        .build();  //Navegaremos a la ventana de ImagenesFirebase
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_camaraFragment_to_imagenesFirebaseFragment,null,options);
-
             }
         });
 
@@ -145,50 +145,38 @@ public class CamaraFragment  extends BaseFragment {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {  //Kudeatuamos las respuestas
 
-        if(requestCode == CAMERA_REQUEST_CODE){  //Si la respuesta viene de la camara y es correcta
-            if(resultCode == Activity.RESULT_OK){
+        if(requestCode == CAMERA_CODIGO){  //Si la respuesta viene de la camara y es correcta
+            if(resultCode == Activity.RESULT_OK){ //Si to do ha ido bien
 
                 //Bitmap image=(Bitmap) data.getExtras().get("data");  //Ponemos la imaagen directamente en la pantalla
                 //selectedImage.setImageBitmap(image);
 
-                //Guardaremos la foto en la galeria del movil
+                //Cogemos la imagen sacada
                 File f = new File(currentPhotoPath);
-                imagenActual.setImageURI(Uri.fromFile(f));
+                imagenActual.setImageURI(Uri.fromFile(f)); //Ponemos la imagen en pantalla
                 Log.d("Logs", "URL de la imagen sacada:  " + Uri.fromFile(f));
 
+                //Guardaremos la foto en la galeria del movil
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 contentUri=Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 getActivity().sendBroadcast(mediaScanIntent);
-
-                //Subiremos la foto al firebase
-                //uploadImageToFirebase(f.getName(),contentUri,"Camara");
-
             }
-
         }
 
-        if(requestCode == GALLERY_REQUEST_CODE){ //Si la respuesta viene de la galeria y es correcta.
-            if(resultCode == Activity.RESULT_OK){
-                //Cargamos la imagen poniendole un nombre
+        if(requestCode == GALLERY_COGIDO){ //Si la respuesta viene de la galeria y es correcta.
+            if(resultCode == Activity.RESULT_OK){ //Si to do ha ido bien
+                //Cargamos la imagen
                 this.contentUri=data.getData();
-
                 Log.d("Logs","URL de la imagen de la galeria: "+contentUri);
-                //Uri contentUri = data.getData();
-                //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                //String imageFileName = "JPEG_" + timeStamp +"."+getFileExt(contentUri);
-                //Log.d("Logs", "Url de la imagen de la galeria:  " +  imageFileName);
-                imagenActual.setImageURI(contentUri);
-
-                //Subimos la foto al firebase
-                //uploadImageToFirebase(imageFileName,contentUri,"Galeria");
+                imagenActual.setImageURI(contentUri);  //La mostramos en pantalla
             }
         }
     }
 
-    private String getFileExt(Uri contentUri) {
+    private String getFileExt(Uri contentUri) {  //Cogemos la extension de la uri y la devolvemos
         ContentResolver c = getActivity().getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(c.getType(contentUri));
@@ -207,15 +195,12 @@ public class CamaraFragment  extends BaseFragment {
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
-        // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
     private void abrirCamara() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
 
         //Copiado de la pag oficial
         // Ensure that there's a camera activity to handle the intent
@@ -233,13 +218,13 @@ public class CamaraFragment  extends BaseFragment {
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+                startActivityForResult(takePictureIntent, CAMERA_CODIGO);
             }
         }
     }
 
 
-    private void uploadImageToFirebase(String name, Uri contentUri) {
+    private void subirImagenAFirebase(String name, Uri contentUri) {  //Subimos la imagen a firebase
 
         final StorageReference image = mStorageRef.child("imagenes/" + name); //La carpeta donde queremos almacenar la foto
         image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -254,10 +239,8 @@ public class CamaraFragment  extends BaseFragment {
                         ImagenFirebase img= new ImagenFirebase(nombreFoto.getText().toString(),uri.toString());
                         String id= mDatabaseRef.push().getKey();
                         mDatabaseRef.child(id).setValue(nombreFoto.getText().toString()+"###"+uri.toString());
-
                     }
                 });
-
                 Toast.makeText(getActivity(), getString(R.string.camara_toast_Sehasubidolaimagen), Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -332,10 +315,12 @@ public class CamaraFragment  extends BaseFragment {
 
             Log.d("Logs","PEDIR PERMISO");
             //ya estará aceptado asiq:
+            permisoCamara();
         }
         else {
             Log.d("Logs","YA LO TIENE");
             //EL PERMISO ESTÁ CONCEDIDO, EJECUTAR LA FUNCIONALIDAD
+            permisoCamara();
         }
     }
 

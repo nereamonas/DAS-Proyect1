@@ -25,7 +25,7 @@ public class WidgetRutinas extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-
+        //Actualizar
         Intent intent = new Intent(context, LogInActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
@@ -36,19 +36,18 @@ public class WidgetRutinas extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_rutinas);
         views.setOnClickPendingIntent(R.id.example_widget_text, pendingIntent);
-        //views.setCharSequence(R.id.example_widget_button, "setText", buttonText);
         views.setRemoteAdapter(R.id.example_widget_stack_view, serviceIntent);
         views.setEmptyView(R.id.example_widget_stack_view, R.id.example_widget_empty_view);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.example_widget_stack_view);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.example_widget_stack_view); //Importante para q tambien se actualice la lista de las rutinas
 
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) { //Actualizamos todos los widgets q tengamos
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
@@ -64,6 +63,7 @@ public class WidgetRutinas extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
+        //Alarma a las 00:00
         AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         Calendar calendar = Calendar.getInstance();

@@ -53,6 +53,10 @@ import java.util.List;
 
 
 public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineClickListener{
+
+    //Clase google maps. Se ha inplementado un mapa donde desde tu ubicación actual puedes calcular la distancia a cualquier ubicacion que elijas en el mapa
+
+    //Inicializamos todas las variables que usaremos
     private MutableLiveData<String> mText;
     private GoogleMap map;
     private GeoApiContext mGeoApiContext=null;
@@ -62,6 +66,8 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     private LocationCallback actualizador=null;
     private LocationRequest peticion =null;
     private FusedLocationProviderClient proveedordelocalizacion =null;
+    private SupportMapFragment mapFragment;
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -80,34 +86,33 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
-                    Log.d("Logs", "CLICK A LA MARCCA");
-                    AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
+                    //Cuando clicamos encima de la marca, preguntaremos a ver si quiere calcular la distancia a ese punto
+
+                    AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext()); //Abrimos un dialogo para preguntar si quiere calcular la distancia
                     dialogo.setTitle(getString(R.string.maps_calculardistancia));
                     dialogo.setMessage(getString(R.string.maps_quierescalcularelcaminohastaestepunto));
                     //dialogo.setCancelable(false);
-                    dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+                    dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {  //En el caso de SI
                         public void onClick(DialogInterface dialogo1, int id) {
-                            selectMarker=marker;
-                            calculateDirections(marker);
+                            selectMarker=marker; //el marcador actual lo guardamos
+                            calculateDirections(marker); //Calcularemos las direcciones
                         }
                     });
-                    dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {  //En el caso de no, no haremos nada
                         public void onClick(DialogInterface dialogo1, int id) {
-                            Log.d("Logs", "no cerrar sesion");
+
                         }
                     });
-                    dialogo.show();
+                    dialogo.show(); //Mostramos el dialogo
                 }
 
             });
-            Double[] cordenadaActual = getCordenadas();
-            posUsuario= new LatLng(cordenadaActual[0],cordenadaActual[1]);
+            Double[] cordenadaActual = getCordenadas();  //cogemos las cordenadas actuales del usuario
+            posUsuario= new LatLng(cordenadaActual[0],cordenadaActual[1]); //Guardamos las cordenaddas como la posicion del usuario
 
 
             Log.d("Logs", "lo q recibe: " + cordenadaActual[0] + "  " + cordenadaActual[1]);
-            LatLng sydney = new LatLng(cordenadaActual[0], cordenadaActual[1]);
-            //map.addMarker(new MarkerOptions().position(sydney).title("Marcador en la cordenada actual"));
-            //map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
@@ -115,21 +120,15 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             map.setMyLocationEnabled(true);
 
 
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {  //Cuando toques cualquier punto del mapa, queremos preguntar si quiere crear un marcador en ese punto
                 @Override
                 public void onMapClick(LatLng latLng) {
-
                     Log.d("Logs", "Has clicado el punto: " + latLng.latitude + "  " + latLng.longitude);
-                    //Igual mejor de crear una alerta de seguro que quieres poner aqui un punto?
-                    //Creamos un nuevo punto
-                    alertaCrearMarca(latLng);
 
+                    alertaCrearMarca(latLng); //Llamamos al metodo que creara una alerta preguntando si quiere crear un punto en esas cordenadas
                 }
             });
-
-
         }
-
     };
 
 
@@ -142,7 +141,6 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
 
-    private SupportMapFragment mapFragment;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -158,73 +156,43 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             mapFragment.getMapAsync(callback);
         }
         if(mGeoApiContext==null){
-            mGeoApiContext= new GeoApiContext.Builder().apiKey("AIzaSyAuBU3ofxCqO-Rw6IlZib7MNx9_3QastJc").build();
+            mGeoApiContext= new GeoApiContext.Builder().apiKey(String.valueOf(R.string.google_maps_key)).build();  //Le pasamos nuestro apikey de maps
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Bundle mapBundle = outState.getBundle("MapViewBundleKey");
-        if (mapBundle == null) {
+        Bundle mapBundle = outState.getBundle("MapViewBundleKey"); //Cogemos el almacenado
+        if (mapBundle == null) { //Si es null creamos uno nuevo
             mapBundle = new Bundle();
             outState.putBundle("MapViewBundleKey", mapBundle);
         }
         mapFragment.onSaveInstanceState(mapBundle);
     }
 
-    public void alertaCrearMarca(LatLng latLng) {
+    public void alertaCrearMarca(LatLng latLng) {  //Creamos una alerta para preguntar si quiere crear un marcador en el punto seleccionado
         AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
         dialogo.setTitle(getString(R.string.maps_ponerMarca));
         dialogo.setMessage(getString(R.string.maps_quieresPonerUnaMarcaEnLasCordenadas)+ latLng.latitude + " " + latLng.longitude);
         //dialogo.setCancelable(false);
-        dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+        dialogo.setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {  //En el caso de decir que si quiere crear un marcador
             public void onClick(DialogInterface dialogo1, int id) {
-                crearPunto(latLng);
+                crearPunto(latLng); //Llamamos al metodo crearPunto que se encargará de crear el punto en las cordenadas seleccionadas por el usuario
             }
         });
-        dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+        dialogo.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {  //En el caso de que no quiera crear marcador no se hará nada
             public void onClick(DialogInterface dialogo1, int id) {
-                Log.d("Logs", "no cerrar sesion");
             }
         });
         dialogo.show();
     }
 
-    public boolean solicitarPermiso() {
-        boolean permiso = false;
-
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            Log.d("Logs", "NO ESTA CONCEDIDO");
-            //EL PERMISO NO ESTÁ CONCEDIDO, PEDIRLO
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // MOSTRAR AL USUARIO UNA EXPLICACIÓN DE POR QUÉ ES NECESARIO EL PERMISO
-                Log.d("Logs", "DECIR XQ ES NECESARIO");
-            } else {
-                //EL PERMISO NO ESTÁ CONCEDIDO TODAVÍA O EL USUARIO HA INDICADO
-                //QUE NO QUIERE QUE SE LE VUELVA A SOLICITAR
-                Log.d("Logs", "NO SE HA CONCEDIDO");
-            }
-            //PEDIR EL PERMISO
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ACTIVITY_RECOGNITION
-
-            Log.d("Logs", "PEDIR PERMISO");
-            permiso = true;
-        } else {
-            Log.d("Logs", "YA LO TIENE");
-            //EL PERMISO ESTÁ CONCEDIDO, EJECUTAR LA FUNCIONALIDAD
-            permiso = true;
-        }
-        return permiso;
-
-    }
-
-    public Double[] getCordenadas() {
+    public Double[] getCordenadas() {  //Metodo que returnea las cordenadas
         Double[] cordenadas = new Double[2];
-        cordenadas[0] = Double.valueOf(43.0504629);
-        cordenadas[1] = Double.valueOf(-3.0070026);
-        //Permiso
+        cordenadas[0] = Double.valueOf(43.0504629);  //Ponemos unas por defecto
+        cordenadas[1] = Double.valueOf(-3.0070026);  //Ponemos una x defecto
+        //Pedimos permiso de access_fine_location
         boolean permiso = false;
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -248,6 +216,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             //EL PERMISO ESTÁ CONCEDIDO, EJECUTAR LA FUNCIONALIDAD
             permiso = true;
         }
+        //Si tiene el permiso procedemos:
         if (permiso) {
             proveedordelocalizacion =
                     LocationServices.getFusedLocationProviderClient(getContext());
@@ -257,23 +226,19 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-
                                 Log.d("Logs", "BN");
-
                                 LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
                                 crearPuntoIni(posicion);
                             } else {
-
                                 Log.d("Logs", "BN PERO MAL");
-                                //text.setText("Latitud: (desconocida)"+"  Longitud: (desconocida)");
                             }
                         }
                     })
                     .addOnFailureListener(getActivity(), new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
                             Log.d("Logs", "FATAL");
+                            getCordenadas();
                         }
                     });
 
@@ -296,12 +261,8 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                         cordenadas[1] = locationResult.getLastLocation().getLongitude();
                         Log.d("Logs", "" + cordenadas[0] + "  " + cordenadas[1]);
                         actualizarPunto(cordenadas);
-                        //text.setText("Latitud: " +
-                        //       locationResult.getLastLocation().getLatitude()+"  Longitud: " +
-                        //       locationResult.getLastLocation().getLongitude());
                     } else {
                         Log.d("Logs", "DOS - BN PERO MAL");
-                        //text.setText("Latitud: (desconocida)  Longitud: (desconocida)");
                     }
                 }
             };
@@ -315,50 +276,40 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
     }
 
-    public void crearPuntoIni(LatLng posicion) {
-        map.addMarker(new MarkerOptions().position(posicion).title(getString(R.string.maps_puntoInicial)));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
-        latitude=posicion.latitude;
-        longitude=posicion.longitude;
-
+    public void crearPuntoIni(LatLng posicion) {  //Creamos el punto inicial desde donde se van a calcular todas las distancias a los marcadores puestos posteriormente
+        map.addMarker(new MarkerOptions().position(posicion).title(getString(R.string.maps_puntoInicial)));  //Añadimos marcador con el nombre punto inicial al clicar sobre el
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15)); //Movemos la camara, para que se centre en el punto
     }
 
-    public void crearPunto(LatLng posicion) {
+    public void crearPunto(LatLng posicion) { //Creamos un punto. igual q el punto inicial, pero tendra otro titulo diferente
         map.addMarker(new MarkerOptions().position(posicion).title(getString(R.string.maps_tocaparacalculareltrayecto)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(posicion, 15));
-        latitude=posicion.latitude;
-        longitude=posicion.longitude;
-
     }
-    private double latitude;
-    private double longitude;
+
     public void actualizarPunto(Double[] cordenadas) {
         CameraUpdate actualizar = CameraUpdateFactory.newLatLngZoom(new LatLng(cordenadas[0], cordenadas[1]), 15);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        this.latitude=cordenadas[0];
-        this.longitude=cordenadas[1];
         map.setMyLocationEnabled(true);
-        //map.moveCamera(actualizar);  //o animateCamara()
     }
 
-    private void calculateDirections(Marker marker){
+    private void calculateDirections(Marker marker){ //Calcular la direcciones entre el punto del usuario hasta el marcador seleccionado
         Log.d("Logs", "calculateDirections: calculating directions.");
 
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
                 marker.getPosition().latitude,
                 marker.getPosition().longitude
-        );
-        DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
+        );  //LagLng destino
+        DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext); //Creamos las direcciones
 
-        directions.alternatives(true);
+        directions.alternatives(true); //Queremos tambien rutas alternaticas
         directions.origin(
                 new com.google.maps.model.LatLng(
                         posUsuario.latitude,
                         posUsuario.longitude
-                )
-        );
+                ));  //Marcamos cual es el origen
+
         Log.d("Logs", "calculateDirections: destination: " + destination.toString());
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
@@ -367,18 +318,17 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                 Log.d("Logs", "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d("Logs", "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d("Logs", "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result);
+                addPolylinesToMap(result); //Añadimos el polyline
             }
 
             @Override
-            public void onFailure(Throwable e) {
+            public void onFailure(Throwable e) { //si falla mostramos log
                 Log.e("Logs", "calculateDirections: Failed to get directions: " + e.getMessage() );
-
             }
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void addPolylinesToMap(final DirectionsResult result){ //Añadimos la linea al mapa
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -388,29 +338,25 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                     mPolylineData= new ArrayList<>();
                 }
                 int cont=1;
-                for(DirectionsRoute route: result.routes){
+                for(DirectionsRoute route: result.routes){  //Recorremos todas las rutas posibles que tengamos
                     Log.d("Logs", "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
 
-                    // This loops through all the LatLng coordinates of ONE polyline.
                     for(com.google.maps.model.LatLng latLng: decodedPath){
-
-//                        Log.d(TAG, "run: latlng: " + latLng.toString());
-
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
                         ));
                     }
-                    Polyline polyline = map.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    polyline.setClickable(true);
+                    Polyline polyline = map.addPolyline(new PolylineOptions().addAll(newDecodedPath)); //Añadimos al mapa la linea
+                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.grey)); //Sera de color gris
+                    polyline.setClickable(true); //Es clicable, para hacer que cuando se clicke se ponga de color azul
                     mPolylineData.add(new PolylineData(polyline,route.legs[0]));
                     onPolylineClick(polyline);
                     selectMarker.setVisible(false);
-                    if(cont==1){
+                    if(cont==1){  //En la primera que nos ofrezca la cogeremos por defecto y lo ponemos de color azul para q resalte mas
                         polyline.setColor(ContextCompat.getColor(getActivity(), R.color.blue));
                         polyline.setZIndex(1);
                     }
@@ -423,23 +369,23 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
 
 
     @Override
-    public void onPolylineClick(Polyline polyline) {
+    public void onPolylineClick(Polyline polyline) {  //Cuando clickemos una de las lineas, cambiaremos los estados. Por un lado pondremos la linea seleccionada en azul y el resto en gris, y en el titulo del marcador, pondremos la distancia que tienes por esa nueva ruta seleccionada y el tiempo que llevará
         Log.d("Logs", "click polyline");
         int cont=1;
-        for(PolylineData polylineData: mPolylineData){
+        for(PolylineData polylineData: mPolylineData){ //Recorremos todas las lineas q tenemos
             Log.d("Logs", "onPolylineClick: toString: " + polylineData.toString());
-            if(polyline.getId().equals(polylineData.getPolyline().getId())){
-                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.blue));
+            if(polyline.getId().equals(polylineData.getPolyline().getId())){ //Si es la linea seleccionada
+                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.blue)); //La pintamos en azul
                 polylineData.getPolyline().setZIndex(1);
 
                 LatLng endLoc= new LatLng(polylineData.getLeg().endLocation.lat, polylineData.getLeg().endLocation.lng);
 
-                Marker marker=map.addMarker(new MarkerOptions().position(endLoc).title(getString(R.string.maps_trayecto)+" "+cont).snippet(getString(R.string.maps_duracion)+": "+polylineData.getLeg().duration+", "+getString(R.string.maps_kilometros)+": "+polylineData.getLeg().distance));
+                Marker marker=map.addMarker(new MarkerOptions().position(endLoc).title(getString(R.string.maps_trayecto)+" "+cont).snippet(getString(R.string.maps_duracion)+": "+polylineData.getLeg().duration+", "+getString(R.string.maps_kilometros)+": "+polylineData.getLeg().distance));//Cambiamos el titulo del marcador
 
-                marker.showInfoWindow();
+                marker.showInfoWindow(); //Lo visualizamos
             }
-            else{
-                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.grey));
+            else{ //Si no es la linea seleccionada
+                polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.grey)); //Lo ponemos de color gris
                 polylineData.getPolyline().setZIndex(0);
             }
             cont++;
@@ -450,18 +396,22 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     @Override
     public void onDetach() {  //Este metodo detecta cuando pulsamos la tecla atras en el mvl. Es importante cancelar el temporizador, ya que si al darle atras no se cancela, cuando este acabe peta la aplicacion
         Log.d("Logs","DETACH"); //Añadimos un log para comprobar
+        cancelarTodo();
+        super.onDetach();
+    }
+
+    public void cancelarTodo(){
         map=null;
         mGeoApiContext=null;
         posUsuario=null;
         mPolylineData=null;
         selectMarker=null;
         proveedordelocalizacion.removeLocationUpdates(actualizador);
-        actualizador=null;
+        proveedordelocalizacion=null;
+        this.actualizador=null;
         peticion=null;
-        super.onDetach();
     }
-
-
+//ME FALTA AÑADIR EL CANCELAR CUANDO TOCA PARA ABRIR EL MENU... Q NO SE COMO JEJE
 
     //https://gist.github.com/mitchtabian/33d78c511fdb82694296ecf3ab3a05ce#file-addpolylinestomap-java
 

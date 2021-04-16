@@ -86,14 +86,15 @@
 
     <EditText
         android:id="@+id/editTextMensajeAlarma"
-        android:layout_width="171dp"
-        android:layout_height="40dp"
+        android:layout_width="205dp"
+        android:layout_height="63dp"
+        android:text="@string/alarma_TocaEmpezarAHacerEjercicio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.327" />
+        app:layout_constraintVertical_bias="0.319" />
 
     <TextView
         android:id="@+id/textView3"

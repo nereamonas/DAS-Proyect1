@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class WidgetItem extends RemoteViewsService {
+
+    //El item, osea las ventanitas q se pueden ir pasando y muestran cada una una rutina completada
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new ExampleWidgetItemFactory(getApplicationContext(), intent);
@@ -45,12 +48,12 @@ public class WidgetItem extends RemoteViewsService {
         @Override
         public void onCreate() {
             //connect to data source
-            rellenarLista();
+            rellenarLista(); //Al crear rellenamos la lista
             SystemClock.sleep(3000);
         }
         @Override
         public void onDataSetChanged() {
-            rellenarLista();
+            rellenarLista();//Cuando se produja algun cambio actualizamos la lista
         }
 
 
@@ -92,7 +95,7 @@ public class WidgetItem extends RemoteViewsService {
         }
 
         public void rellenarLista(){
-
+            //Cogemos la fecha actual
             Calendar cal = Calendar.getInstance();
             String DAY = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
             String YEAR = String.valueOf(cal.get(Calendar.YEAR));
@@ -104,28 +107,28 @@ public class WidgetItem extends RemoteViewsService {
 
             BufferedReader ficherointerno;
 
-            lista= new ArrayList<String[]>();
+            lista= new ArrayList<String[]>(); //Creamos una lista
             {
                 try {
-                    ficherointerno = new BufferedReader(new InputStreamReader(openFileInput("rutinasCompletadas.txt")));
+                    ficherointerno = new BufferedReader(new InputStreamReader(openFileInput("rutinasCompletadas.txt"))); //Abrimos el fichero donde esta la info
                     String linea= ficherointerno.readLine();
-                    if (num==2){
+                    if (num==2){ //Si hemos decidido mostrar las rut de los ultimos dos dias:
                         String DAY2 = String.valueOf(cal.get(Calendar.DAY_OF_MONTH-1));
                         date2=" "+DAY2+"/"+MONTH+"/"+YEAR+" ";
-                    }if(num==3){
+                    }if(num==3){//Si hemos decidido mostrar las rut de los ultimos tres dias:
                         String DAY3 = String.valueOf(cal.get(Calendar.DAY_OF_MONTH-2));
                         date3=" "+DAY3+"/"+MONTH+"/"+YEAR+" ";
                     }
-                    while (linea!=null){
-                        if(linea.contains(date)||linea.contains(date2)||linea.contains(date3)) { //Si la linea, pertenece al dia actual,
-                            String usuario=linea.split(":")[0].split("- ")[1];
+                    while (linea!=null){ //Por cada linea del fichero
+                        if(linea.contains(date)||linea.contains(date2)||linea.contains(date3)) { //Si la linea, pertenece al dia actual, o el anterior o el anterior
+                            String usuario=linea.split(":")[0].split("- ")[1]; //Cogemos el nombre de usuario q la ha completado
                             String a=linea.split("la rutina ")[1];
                             String[] e=a.split(" el día ");
-                            String tituloRut=e[0];
+                            String tituloRut=e[0]; //Cogemos el titulo de la rutina
                             String[] h=e[1].split(" a las ");
-                            String fechaHora=h[0]+" "+h[1];
-                            String[] dato= {usuario,tituloRut,fechaHora};
-                            lista.add(dato);
+                            String fechaHora=h[0]+" "+h[1]; //Cogemos la fecha en la q se ha completado
+                            String[] dato= {usuario,tituloRut,fechaHora}; //Creamos un string con los datos
+                            lista.add(dato); //Añadimos los datos a la lista
                         }
                         linea = ficherointerno.readLine();
                     }
@@ -136,7 +139,6 @@ public class WidgetItem extends RemoteViewsService {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 }

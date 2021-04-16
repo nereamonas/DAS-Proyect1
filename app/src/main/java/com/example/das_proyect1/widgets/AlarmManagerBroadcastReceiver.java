@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 import com.example.das_proyect1.R;
 
 public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
+    //Para actualizar cada 24h
     @Override
     public void onReceive(Context context, Intent intent) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_rutinas);

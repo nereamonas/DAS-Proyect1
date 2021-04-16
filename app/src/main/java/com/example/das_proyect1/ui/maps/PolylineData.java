@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.model.DirectionsLeg;
 
 public class PolylineData {
+    //Clase de ayuda de polyline, q se guardara cada linea y la distancia,tiempo...
 
     private Polyline polyline;
     private DirectionsLeg leg;

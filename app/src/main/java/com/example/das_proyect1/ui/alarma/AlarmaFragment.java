@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlarmaFragment  extends BaseFragment {
+
+    //Clase para programar una alarma de recordatorios
+
     private BaseViewModel alarmaViewModel;
 
     private EditText horas;
@@ -64,14 +67,14 @@ public class AlarmaFragment  extends BaseFragment {
         rsabado=root.findViewById(R.id.radioButtonSabado);
         rdomingo=root.findViewById(R.id.radioButtonDomingo);
 
-        btnElegirHora.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en la galeria se abrira la galeria
+        btnElegirHora.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en elegir hora se abrira un dialogo que mostrara un reloj para elegir la hora
             @Override
             public void onClick(View v) {
                 dialogoElegirHora();
             }
         });
 
-        btnEstablecerAlarma.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en la galeria se abrira la galeria
+        btnEstablecerAlarma.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en establecer alarma, estableceremos la alarma con los datos indicados
             @Override
             public void onClick(View v) {
                 establecerAlarma();
@@ -83,44 +86,43 @@ public class AlarmaFragment  extends BaseFragment {
         return root;
     }
 
-    public void dialogoElegirHora(){
+    public void dialogoElegirHora(){ //Mostramos un dialogo de reloj
         calendario=Calendar.getInstance();
         horaActual=calendario.get(Calendar.HOUR_OF_DAY);
         minActual=calendario.get(Calendar.MINUTE);
 
         timePickerDialog= new TimePickerDialog(getActivity(),(view, hourOfDay, minute) -> {
-            horas.setText(String.format("%02d", hourOfDay));
-            minutos.setText(String.format("%02d", minute));
+            horas.setText(String.format("%02d", hourOfDay)); //En el editText donde se pone la hora lo actualizamos con los datos elegidos en el dialogo
+            minutos.setText(String.format("%02d", minute)); //Lo mismo con los minutos
         },horaActual,minActual,false);
         timePickerDialog.show();
-
 
     }
 
 
 
     public void establecerAlarma(){
-        if (!horas.getText().toString().isEmpty()&&!minutos.getText().toString().isEmpty()) {
-            Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-            intent.putExtra(AlarmClock.EXTRA_HOUR, Integer.parseInt(horas.getText().toString()));
-            intent.putExtra(AlarmClock.EXTRA_MINUTES, Integer.parseInt(minutos.getText().toString()));
-            intent.putExtra(AlarmClock.EXTRA_MESSAGE, mensaje.getText().toString());
+        if (!horas.getText().toString().isEmpty()&&!minutos.getText().toString().isEmpty()) { //Si se ha elegido una hora, podemos crear la alarma
+            Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM); //Intent de alarma
+            intent.putExtra(AlarmClock.EXTRA_HOUR, Integer.parseInt(horas.getText().toString())); //Ponemos la h
+            intent.putExtra(AlarmClock.EXTRA_MINUTES, Integer.parseInt(minutos.getText().toString())); //Ponemos los minutos
+            intent.putExtra(AlarmClock.EXTRA_MESSAGE, mensaje.getText().toString()); //Ponemos el mensaje del usuario.
             getDiasSeleccionados();
-            intent.putExtra(AlarmClock.EXTRA_DAYS,diasSeleccionados);
+            intent.putExtra(AlarmClock.EXTRA_DAYS,diasSeleccionados); //Añadimos los dias seleccionados q queremos q suene
             intent.putExtra(AlarmClock.EXTRA_VIBRATE,false);
             intent.putExtra(AlarmClock.EXTRA_SKIP_UI,true);  //Para no dirigir al usuario a la ventana de alarma. sino q lo pone directamente. ns q es mjr
 
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivity(intent);
+                startActivity(intent); //Empezamos la intent
             } else {
                 Toast.makeText(getActivity(), getString(R.string.alarma_toast_Nopuedesoportarestaaccion), Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(getActivity(), getString(R.string.alarma_toast_Tienesqueestablecerunahora), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.alarma_toast_Tienesqueestablecerunahora), Toast.LENGTH_SHORT).show(); //Es obligatorio establecer la h
         }
     }
 
-    public void getDiasSeleccionados(){
+    public void getDiasSeleccionados(){ //Miramos los dias seleccionados con el radio button y los añadimos a la lista en el caso de estar seleccionados
 
         if (rlunes.isChecked()==true){
             diasSeleccionados.add(Calendar.MONDAY);
