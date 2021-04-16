@@ -64,7 +64,7 @@ public class ExternalDB extends Worker{
                 }
                 inputStream.close();
 
-                if (result.contains("Ha ocurrido al")){
+                if (result.contains("Ha ocurrido")){
                     return false;
                 }
                 return true;
@@ -906,7 +906,7 @@ public class ExternalDB extends Worker{
             //Map<String,Object> map=new HashMap();
             //Object object=(Object) u;
             //map.put("usuario",object);
-            if (user!=null) {
+            if (u!=null) {
                 try {
                     resultados = new Data.Builder()
                             .putBoolean("resultado",true)
