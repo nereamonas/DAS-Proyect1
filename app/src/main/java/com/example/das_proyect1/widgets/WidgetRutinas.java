@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.das_proyect1.LogInActivity;
@@ -20,11 +21,15 @@ import java.util.Calendar;
  */
 public class WidgetRutinas extends AppWidgetProvider {
 
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
     private static final String PREFS_NAME = "com.example.das_proyect1.widgets.WidgetRutinas";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
+        Log.d("Logs","UPDATE");
         //Actualizar
         Intent intent = new Intent(context, LogInActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -63,19 +68,41 @@ public class WidgetRutinas extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
-        //Alarma a las 00:00
-        AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        Log.d("Logs","Creamos alarma");
+        //uso de RTC_WAKEUP.
+        //Activa el dispositivo para activar la alarma aproximadamente a las 00:00 p.m. y que se repita una vez al día a la misma hora:
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 00); //hora en formato 24h
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 00);//hora en formato 24h
         calendar.set(Calendar.MINUTE, 00); //minuto
-        calendar.set(Calendar.SECOND, 00); //segundo
-        PendingIntent pi = PendingIntent.getBroadcast(context, 7475, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24*60*60*1000, pi);
+
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, 7475, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+        Log.d("Logs","Disable widgets");
+        if (alarmManager!= null) { //Si existe un alarmManager
+            alarmManager.cancel(pendingIntent); //Lo cancelamos
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals("com.example.das_proyect1.ACTUALIZAR_WIDGET")) {
+            int widgetId = intent.getIntExtra( AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+        }
+        super.onReceive(context, intent);
     }
 }
