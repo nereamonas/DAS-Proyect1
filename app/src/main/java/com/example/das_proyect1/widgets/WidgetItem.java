@@ -41,7 +41,6 @@ public class WidgetItem extends RemoteViewsService {
 
             SharedPreferences prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
             int i=Integer.parseInt(prefs.getString("appwidget_"+appWidgetId,"1"));
-            Log.d("Logs","Dias: "+i);
             this.num = i;//Integer.parseInt(i);//Integer.parseInt(String.valueOf(prefs.getInt("keyButtonText" + appWidgetId,1)));
 
         }
@@ -112,11 +111,11 @@ public class WidgetItem extends RemoteViewsService {
                 try {
                     ficherointerno = new BufferedReader(new InputStreamReader(openFileInput("rutinasCompletadas.txt"))); //Abrimos el fichero donde esta la info
                     String linea= ficherointerno.readLine();
-                    if (num==2){ //Si hemos decidido mostrar las rut de los ultimos dos dias:
-                        String DAY2 = String.valueOf(cal.get(Calendar.DAY_OF_MONTH-1));
+                    if (num>=2){ //Si hemos decidido mostrar las rut de los ultimos dos dias:
+                        String DAY2 = String.valueOf((Integer.parseInt(DAY)-1));
                         date2=" "+DAY2+"/"+MONTH+"/"+YEAR+" ";
                     }if(num==3){//Si hemos decidido mostrar las rut de los ultimos tres dias:
-                        String DAY3 = String.valueOf(cal.get(Calendar.DAY_OF_MONTH-2));
+                        String DAY3 = String.valueOf((Integer.parseInt(DAY)-2));
                         date3=" "+DAY3+"/"+MONTH+"/"+YEAR+" ";
                     }
                     while (linea!=null){ //Por cada linea del fichero
