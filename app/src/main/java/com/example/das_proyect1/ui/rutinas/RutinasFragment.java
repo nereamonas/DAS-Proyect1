@@ -64,7 +64,8 @@ public class RutinasFragment extends BaseFragment {
         //}catch(Exception e){
 
         //}
-
+//como va para atras pues:
+        getContext().stopService(new Intent(getContext(), MusicService.class));
 
         Data datos = new Data.Builder()
                 .putString("tarea","getRutinasDelUsuario")

@@ -881,6 +881,50 @@ public class ExternalDB extends Worker{
         return false;
     }
 
+    public String getNombreRutina(String id){
+
+        String direccion= "http://ec2-54-167-31-169.compute-1.amazonaws.com/nmonasterio003/WEB/consultas.php";
+        try {
+            URL destino = new URL(direccion);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) destino.openConnection();
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
+
+            JSONObject parametrosJSON= new JSONObject();
+            try {
+                parametrosJSON.put("tarea", "getNombreRutina");
+                parametrosJSON.put("id", id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type","application/json");
+
+            PrintWriter out= new PrintWriter(urlConnection.getOutputStream());
+            out.print(parametrosJSON.toString());
+            out.close();
+
+            int statusCode= urlConnection.getResponseCode();
+            if(statusCode== 200){
+                BufferedInputStream inputStream= new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                String line="";
+                String result="";
+                while((line = bufferedReader.readLine()) != null){
+                    result+= line;
+                }
+                inputStream.close();
+
+                return result;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     @SuppressLint("RestrictedApi")
     @NonNull
     @Override
@@ -1040,6 +1084,21 @@ public class ExternalDB extends Worker{
                     .putBoolean("resultado",resultado)
                     .build();
             return Result.success(resultados);
+        }else if ("getNombreRutina".equals(tarea)) {
+            String id = getInputData().getString("id");
+            String nombre= getNombreRutina(id);
+            if(nombre!="") {
+                resultados = new Data.Builder()
+                        .putBoolean("resultado", true)
+                        .putString("nombre", nombre)
+                        .build();
+                return Result.success(resultados);
+            }else{
+                resultados = new Data.Builder()
+                        .putBoolean("resultado", false)
+                        .build();
+                return Result.success(resultados);
+            }
         }
 
         return null;

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.example.das_proyect1.base.BaseActivity;
 import com.example.das_proyect1.helpClass.ExternalDB;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LogInActivity extends BaseActivity {
 
@@ -26,7 +27,7 @@ public class LogInActivity extends BaseActivity {
 
         ImageView img= findViewById(R.id.img);
         img.setImageResource(R.mipmap.avatar);
-
+        Log.d("Logs",""+FirebaseInstanceId.getInstance().getToken());
     }
 
 

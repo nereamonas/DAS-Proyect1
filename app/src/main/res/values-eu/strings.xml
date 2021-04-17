@@ -154,4 +154,5 @@
     <string name="add_widget">Add widget</string>
     <string name="alarma_TocaEmpezarAHacerEjercicio">Ariketa fisikoa egiten hasteko garaia da</string>
     <string name="alarma_Crearnotificacion">Sortu jakinarazpena</string>
+    <string name="alarma_notifcacionProgramada">Jakinarazpena programatu da</string>
 </resources>

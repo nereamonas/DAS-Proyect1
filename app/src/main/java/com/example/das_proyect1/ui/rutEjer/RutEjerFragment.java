@@ -39,7 +39,6 @@ import android.widget.Toast;
 
 import com.example.das_proyect1.base.BaseViewModel;
 import com.example.das_proyect1.helpClass.ExternalDB;
-import com.example.das_proyect1.helpClass.MiDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
@@ -68,7 +67,6 @@ public class RutEjerFragment extends BaseFragment {
     private Button btn_atras;
     private TextView temporizador;
     private Button btn_startStop;
-    private MiDB db;
 
     private String usuario;
     private int rutId;
@@ -79,6 +77,7 @@ public class RutEjerFragment extends BaseFragment {
     private ImgCorrespondiente imgCorrespondiente;
     private long tiempoFaltante;
     private boolean encendido;
+    private String nombreRutina;
 
     private SharedPreferences prefs;
 
@@ -105,8 +104,9 @@ public class RutEjerFragment extends BaseFragment {
         this.elemPendientes = root.findViewById(R.id.elemPendientes);
 
 
+        cogerNombreRutina();
         //insertamos los textos del primer elemento de la base de datos
-        db = new MiDB(getContext());
+
         //this.ejercicios = db.getEjerciciosDeLaRutina(rutId); //Cogemos los ejercicios de esa rutina y los guardamos en la lista
 
 
@@ -132,8 +132,6 @@ public class RutEjerFragment extends BaseFragment {
     }
 
     public void continuar(Bundle savedInstanceState){
-
-        this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
 
         if (savedInstanceState != null) { //Si viene de la rotacion de pantalla q tiene cosas guardadas. el tiempo y la posicion lo ogera de ahi
             this.posicion = savedInstanceState.getInt("posicion");
@@ -371,6 +369,33 @@ public class RutEjerFragment extends BaseFragment {
         }
     }
 
+    public void cogerNombreRutina(){
+        //Cuardara en un fichero el usuario, la rutina y la fecha y hora en la q se ha compeltado
+        Data datos = new Data.Builder()
+                .putString("tarea","getNombreRutina")
+                .putString("id", String.valueOf(this.rutId))
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+        WorkManager.getInstance(getActivity()).enqueue(otwr);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getActivity(), status -> {
+                    if (status != null && status.getState().isFinished()) {
+                        boolean resultado=status.getOutputData().getBoolean("resultado",false);
+                        if(resultado){
+
+                            String nombre=status.getOutputData().getString("nombre");
+                            this.nombreRutina=nombre;
+                        } else {  //Saltamos una alerta d error
+                            Log.d("Logs","ALGO SALIO MAL");
+                        }
+                    }
+                });
+
+
+
+    }
+
+
     public void escribirEnFichero(){
         //Cuardara en un fichero el usuario, la rutina y la fecha y hora en la q se ha compeltado
         try {
@@ -382,10 +407,62 @@ public class RutEjerFragment extends BaseFragment {
             String YEAR = String.valueOf(cal.get(Calendar.YEAR));
             String MONTH = String.valueOf(cal.get(Calendar.MONTH));
             Log.d("Logs","El dia "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes());
-            db = new MiDB(getContext());
-            fichero.write("- "+this.usuario+": Has completado la rutina "+db.getNombreRutina(this.rutId)+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
+            fichero.write("- "+this.usuario+": Has completado la rutina "+this.nombreRutina+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
             fichero.close();
-            this.db.cerrarConexion(); //Cerramos la conexion porq no lo vamos a usar mas
+            Log.d("Logs", "Ha insertado los datos en el fichero ");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("Logs", "file not found ");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("Logs", "io excepcion ");
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.d("Logs", "error al insertar datos ");
+
+        }
+    }
+
+/*
+    public void escribirEnFichero(){
+        //Cuardara en un fichero el usuario, la rutina y la fecha y hora en la q se ha compeltado
+        Data datos = new Data.Builder()
+                .putString("tarea","getNombreRutina")
+                .putString("id", String.valueOf(this.rutId))
+                .build();
+        OneTimeWorkRequest otwr = new OneTimeWorkRequest.Builder(ExternalDB.class).setInputData(datos).build();
+        WorkManager.getInstance(getActivity()).enqueue(otwr);
+        WorkManager.getInstance(getActivity()).getWorkInfoByIdLiveData(otwr.getId())
+                .observe(getActivity(), status -> {
+                    if (status != null && status.getState().isFinished()) {
+                        boolean resultado=status.getOutputData().getBoolean("resultado",false);
+                        if(resultado){
+
+                            String nombre=status.getOutputData().getString("nombre");
+                            insert(nombre);
+                        } else {  //Saltamos una alerta d error
+                              Log.d("Logs","ALGO SALIO MAL");
+                        }
+                        }
+                    });
+
+
+
+    }
+
+    public void insert(String nombre){
+        //Cuardara en un fichero el usuario, la rutina y la fecha y hora en la q se ha compeltado
+        try {
+            OutputStreamWriter fichero = new OutputStreamWriter(getContext().openFileOutput("rutinasCompletadas.txt",Context.MODE_APPEND));
+
+            java.util.Date fecha = new Date();
+            Calendar cal = Calendar.getInstance();
+            String DAY = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+            String YEAR = String.valueOf(cal.get(Calendar.YEAR));
+            String MONTH = String.valueOf(cal.get(Calendar.MONTH));
+            Log.d("Logs","El dia "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes());
+            fichero.write("- "+this.usuario+": Has completado la rutina "+nombre+" el día "+DAY+"/"+MONTH+"/"+YEAR+" a las "+fecha.getHours()+":"+fecha.getMinutes()+"\n\n");
+            fichero.close();
             Log.d("Logs", "Ha insertado los datos en el fichero ");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -397,8 +474,9 @@ public class RutEjerFragment extends BaseFragment {
             Log.d("Logs", "error al insertar datos ");
 
         }
-    }
 
+    }
+*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -452,6 +530,10 @@ public class RutEjerFragment extends BaseFragment {
     public void onDetach() {  //Este metodo detecta cuando pulsamos la tecla atras en el mvl. Es importante cancelar el temporizador, ya que si al darle atras no se cancela, cuando este acabe peta la aplicacion
         cancelarCounter();  //Lo cancelamos
         Log.d("Logs","cancelar counter"); //Añadimos un log para comprobar
+        //como va para atras pues:
+        //getContext().stopService(new Intent(getContext(), MusicService.class));
+
+
         super.onDetach(); }
 
 

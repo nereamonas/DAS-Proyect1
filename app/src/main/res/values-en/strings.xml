@@ -154,4 +154,5 @@
     <string name="add_widget">Add widget</string>
     <string name="alarma_TocaEmpezarAHacerEjercicio">It\'s time to start exercising</string>
     <string name="alarma_Crearnotificacion">Create notification</string>
+    <string name="alarma_notifcacionProgramada">Scheduled notification</string>
 </resources>
