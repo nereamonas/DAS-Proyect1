@@ -1,4 +1,4 @@
-package com.example.das_proyect1.widgets;
+package com.example.das_proyect1.serviceBroadcast;
 
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -9,8 +9,9 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.widgets.WidgetRutinas;
 
-public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
+public class AlarmWidgetManagerBroadcastReceiver extends BroadcastReceiver {
     //Para actualizar cada 24h
     @Override
     public void onReceive(Context context, Intent intent) {

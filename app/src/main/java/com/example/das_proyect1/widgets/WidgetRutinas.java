@@ -12,6 +12,7 @@ import android.widget.RemoteViews;
 
 import com.example.das_proyect1.LogInActivity;
 import com.example.das_proyect1.R;
+import com.example.das_proyect1.serviceBroadcast.AlarmWidgetManagerBroadcastReceiver;
 
 import java.util.Calendar;
 
@@ -77,7 +78,7 @@ public class WidgetRutinas extends AppWidgetProvider {
         calendar.set(Calendar.MINUTE, 00); //minuto
 
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        Intent intent = new Intent(context, AlarmWidgetManagerBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, 7475, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),

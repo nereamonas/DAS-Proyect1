@@ -1,4 +1,4 @@
-package com.example.das_proyect1.service;
+package com.example.das_proyect1.serviceBroadcast;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

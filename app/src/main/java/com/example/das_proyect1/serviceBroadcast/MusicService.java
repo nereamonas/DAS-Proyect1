@@ -1,10 +1,9 @@
-package com.example.das_proyect1.music;
+package com.example.das_proyect1.serviceBroadcast;
 
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.Nullable;

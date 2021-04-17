@@ -29,7 +29,7 @@ import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Rutina;
-import com.example.das_proyect1.music.MusicService;
+import com.example.das_proyect1.serviceBroadcast.MusicService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.*;

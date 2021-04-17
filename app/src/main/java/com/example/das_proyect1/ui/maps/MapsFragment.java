@@ -57,7 +57,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     //Clase google maps. Se ha inplementado un mapa donde desde tu ubicación actual puedes calcular la distancia a cualquier ubicacion que elijas en el mapa
 
     //Inicializamos todas las variables que usaremos
-    private MutableLiveData<String> mText;
+   // private MutableLiveData<String> mText;
     private GoogleMap map;
     private GeoApiContext mGeoApiContext=null;
     private LatLng posUsuario;
@@ -137,7 +137,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mText = new MutableLiveData<>();
+        //mText = new MutableLiveData<>();
         return inflater.inflate(R.layout.fragment_maps, container, false);
     }
 

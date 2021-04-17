@@ -1,6 +1,9 @@
 package com.example.das_proyect1.ui.alarma;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.AlarmClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,8 @@ import android.widget.Toast;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.base.BaseViewModel;
+import com.example.das_proyect1.serviceBroadcast.AlarmNotificationManagerBroadcastReceiver;
+import com.example.das_proyect1.serviceBroadcast.AlarmWidgetManagerBroadcastReceiver;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +40,7 @@ public class AlarmaFragment  extends BaseFragment {
     private EditText mensaje;
     private Button btnElegirHora;
     private Button btnEstablecerAlarma;
+    private Button btnCrearnotif;
 
     private Calendar calendario;
     private int horaActual;
@@ -58,6 +65,7 @@ public class AlarmaFragment  extends BaseFragment {
         mensaje=root.findViewById(R.id.editTextMensajeAlarma);
         btnElegirHora= root.findViewById(R.id.buttonElegirHora);
         btnEstablecerAlarma= root.findViewById(R.id.buttonCrearAlarma);
+        btnCrearnotif= root.findViewById(R.id.buttonCrearnotif);
 
         rlunes=root.findViewById(R.id.radioButtonLunes);
         rmartes=root.findViewById(R.id.radioButtonMartes);
@@ -81,6 +89,12 @@ public class AlarmaFragment  extends BaseFragment {
             }
         });
 
+        btnCrearnotif.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en establecer alarma, estableceremos la alarma con los datos indicados
+            @Override
+            public void onClick(View v) {
+                crearNotif();
+            }
+        });
 
 
         return root;
@@ -98,7 +112,6 @@ public class AlarmaFragment  extends BaseFragment {
         timePickerDialog.show();
 
     }
-
 
 
     public void establecerAlarma(){
@@ -120,6 +133,20 @@ public class AlarmaFragment  extends BaseFragment {
         }else{
             Toast.makeText(getActivity(), getString(R.string.alarma_toast_Tienesqueestablecerunahora), Toast.LENGTH_SHORT).show(); //Es obligatorio establecer la h
         }
+
+    }
+
+    public void crearNotif(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horas.getText().toString()));//hora en formato 24h
+        calendar.set(Calendar.MINUTE, Integer.parseInt(minutos.getText().toString())); //minuto
+
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), AlarmNotificationManagerBroadcastReceiver.class);
+        intent.putExtra("titulo",mensaje.getText().toString());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public void getDiasSeleccionados(){ //Miramos los dias seleccionados con el radio button y los añadimos a la lista en el caso de estar seleccionados

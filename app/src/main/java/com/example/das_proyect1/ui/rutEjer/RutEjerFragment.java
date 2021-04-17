@@ -44,7 +44,7 @@ import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
-import com.example.das_proyect1.music.MusicService;
+import com.example.das_proyect1.serviceBroadcast.MusicService;
 import com.example.das_proyect1.ui.calendario.CalendarioFragment;
 import com.example.das_proyect1.widgets.WidgetRutinas;
 
@@ -342,6 +342,7 @@ public class RutEjerFragment extends BaseFragment {
             if (activadas) {
                 Intent intent = new Intent(getContext(), CalendarioFragment.class);//RutinasFragment
                 intent.putExtra("usuario", this.usuario);
+
                 intent.putExtra("id", 1);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
