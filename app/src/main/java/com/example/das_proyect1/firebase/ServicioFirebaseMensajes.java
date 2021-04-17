@@ -34,8 +34,6 @@ public class ServicioFirebaseMensajes extends FirebaseMessagingService {
 
     }
 
-
-
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getData().size() > 0) {

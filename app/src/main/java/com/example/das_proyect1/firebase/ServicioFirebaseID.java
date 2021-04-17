@@ -23,5 +23,3 @@ public class ServicioFirebaseID extends FirebaseInstanceIdService {
         // Enviar token al servidor
     }
 }
-
-//https://github.com/alvareztech/EjemploFCM/blob/master/app/src/main/java/tech/alvarez/noticias/MiFirebaseInstanceIdService.java
