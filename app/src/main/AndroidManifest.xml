@@ -76,6 +76,7 @@
         <service
             android:name=".service.LocationService"
             android:stopWithTask="true"></service>
+        <service android:name=".music.MusicService"/>
         <service
             android:name=".firebase.ServicioFirebaseMensajes"
             android:enabled="true"

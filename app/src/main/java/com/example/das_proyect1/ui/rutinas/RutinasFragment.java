@@ -1,6 +1,7 @@
 package com.example.das_proyect1.ui.rutinas;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,14 +29,13 @@ import com.example.das_proyect1.helpClass.ExternalDB;
 import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Rutina;
+import com.example.das_proyect1.music.MusicService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.*;
 import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class RutinasFragment extends BaseFragment {
     //Creara una list view de rutinas, q al pulsar en una te lleva al fragment RutEjerFragment, parandole la rutina seleccionada. Tambien se puede eliminar una rutina haciendo una pulsación larga sobre ella. Y tambien se puede crear una nueva rutina mediante el botón + de abajo a la derecha. Donde nos saltará un dialogo para añadir el nombre que le queremos dar a la rutina y posteriormente otro dialogo para seleccionar los ejercicios que queramos añadir
@@ -97,6 +97,9 @@ public class RutinasFragment extends BaseFragment {
         lalista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Empezamos una rutina asique reproducimos la musica. Reggaeton para hacer ejercicio no viene mal
+                getContext().startService(new Intent(getContext(), MusicService.class));  //Arrancamos el servicio de musica
+
                 Bundle bundle = new Bundle(); //Con el bundle podemos pasar datos
                 bundle.putString("idRut", (String.valueOf(eladap.getItemId(position))));
                 bundle.putString("usuario", usuario);

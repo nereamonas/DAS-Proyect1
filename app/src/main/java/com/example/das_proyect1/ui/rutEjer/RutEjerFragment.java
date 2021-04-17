@@ -44,6 +44,7 @@ import com.example.das_proyect1.R;
 import com.example.das_proyect1.base.BaseFragment;
 import com.example.das_proyect1.helpClass.Ejercicio;
 import com.example.das_proyect1.helpClass.ImgCorrespondiente;
+import com.example.das_proyect1.music.MusicService;
 import com.example.das_proyect1.ui.calendario.CalendarioFragment;
 import com.example.das_proyect1.widgets.WidgetRutinas;
 
@@ -293,6 +294,10 @@ public class RutEjerFragment extends BaseFragment {
             Navigation.findNavController(getView()).navigate(R.id.action_rutEjerViewPagerFragment_self, bundle,options);
 
         }else{
+            //Has terminado, asique paramos la musica de animo
+            getContext().stopService(new Intent(getContext(), MusicService.class));
+
+
             //Has terminado la rutina. lanzar un toast
             if (this.prefs.contains("notiftoast")) {
                 Boolean activadas = this.prefs.getBoolean("notiftoast", true);  //Comprobamos si las notificaciones estan activadas
