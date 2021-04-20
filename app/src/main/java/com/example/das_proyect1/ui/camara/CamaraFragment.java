@@ -83,7 +83,18 @@ public class CamaraFragment  extends BaseFragment {
         btnCamara.setOnClickListener(new View.OnClickListener() {  //Cuando clickemos en el boton camara. pediremos permisos para abrir la camara y guardar las fotos
             @Override
             public void onClick(View v) {
-                permisoGuardar(); //sOLICITAMOS LOS PERMINSOS para guardar fotos y para abrir la camara
+                if (!(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                    abrirCamara();
+                }else {
+                    if (!(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                        permisoCamara();
+                    }else{
+                        if (!(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                            permisoGuardar();
+                        }
+                    }
+                }
+
             }
         });
 
@@ -279,22 +290,17 @@ public class CamaraFragment  extends BaseFragment {
                 Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehanconcedidolospermisosparaabrirlacamara), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);  //ACTIVITY_RECOGNITION
-
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);  //ACTIVITY_RECOGNITION
             Log.d("Logs","PEDIR PERMISO");
-            abrirCamara();
-            //ya estará aceptado asiq:
         }
         else {
             Log.d("Logs","YA LO TIENE");
-            //EL PERMISO ESTÁ CONCEDIDO, EJECUTAR LA FUNCIONALIDAD
-            abrirCamara();
         }
     }
 
 
     public void permisoGuardar(){  //Permiso de escritura
-        Log.d("Logs","PERMISO CAMARA");
+        Log.d("Logs","PERMISO GUARDAR");
         boolean permiso=false;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED) {
@@ -311,17 +317,30 @@ public class CamaraFragment  extends BaseFragment {
                 Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehaconcedidoelpermisodeescritura), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);  //ACTIVITY_RECOGNITION
-
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);  //ACTIVITY_RECOGNITION
             Log.d("Logs","PEDIR PERMISO");
-            //ya estará aceptado asiq:
-            permisoCamara();
         }
         else {
             Log.d("Logs","YA LO TIENE");
-            //EL PERMISO ESTÁ CONCEDIDO, EJECUTAR LA FUNCIONALIDAD
-            permisoCamara();
         }
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        if(requestCode==1){
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisoGuardar();
+                }
+                return;
+        }
+        if(requestCode==2){
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    abrirCamara();
+                }
+        }
+    }
 }
