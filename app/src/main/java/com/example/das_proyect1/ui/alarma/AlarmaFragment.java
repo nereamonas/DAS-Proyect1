@@ -147,7 +147,7 @@ public class AlarmaFragment  extends BaseFragment {
         intent.putExtra("titulo",mensaje.getText().toString());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Toast.makeText(getActivity(), getString(R.string.alarma_toast_Nopuedesoportarestaaccion), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.alarma_notifcacionProgramada), Toast.LENGTH_SHORT).show();
     }
 
     public void getDiasSeleccionados(){ //Miramos los dias seleccionados con el radio button y los añadimos a la lista en el caso de estar seleccionados

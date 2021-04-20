@@ -156,7 +156,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
             mapFragment.getMapAsync(callback);
         }
         if(mGeoApiContext==null){
-            mGeoApiContext= new GeoApiContext.Builder().apiKey(String.valueOf(R.string.google_maps_key)).build();  //Le pasamos nuestro apikey de maps
+            mGeoApiContext= new GeoApiContext.Builder().apiKey("AIzaSyACvDLNNsrOwo4oqDuBRUoW2eedc6DL5R8").build();  //Le pasamos nuestro apikey de maps
         }
     }
 
