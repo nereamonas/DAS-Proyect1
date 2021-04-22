@@ -12,7 +12,7 @@ public class ServicioFirebaseID extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         super.onTokenRefresh();
 
-        String token = FirebaseInstanceId.getInstance().getToken();
+        String token = FirebaseInstanceId.getInstance().getToken(); //Cogemos el token del usu
 
         Log.d("Logs", "Token: " + token);
 

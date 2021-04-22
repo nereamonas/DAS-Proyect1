@@ -84,11 +84,11 @@ public class CamaraFragment  extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)) {
-                    abrirCamara();
+                    abrirCamara(); //Si estan los dos permisos concedidos, abrimos la camara directamente
                 }if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                    permisoCamara();
+                    permisoCamara(); //Si el permiso de la camara no está concedido. lo pedimos
                 }if ((ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-                    permisoGuardar();
+                    permisoGuardar(); //Si el permiso de guardar no está concedido, lo pedimos
                 }
             }
         });
@@ -205,8 +205,8 @@ public class CamaraFragment  extends BaseFragment {
         return image;
     }
 
-    private void abrirCamara() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void abrirCamara() {  //Abriremos la camara del mvl
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //Creamos el intent
 
         //Copiado de la pag oficial
         // Ensure that there's a camera activity to handle the intent
@@ -219,12 +219,12 @@ public class CamaraFragment  extends BaseFragment {
 
             }
             // Continue only if the File was successfully created
-            if (photoFile != null) {
+            if (photoFile != null) { //Si se ha podido crear un file, abrimos la camara con startActivity
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERA_CODIGO);
+                startActivityForResult(takePictureIntent, CAMERA_CODIGO);  //Recogeremos el codigo de la camara en la respuesta
             }
         }
     }
@@ -243,16 +243,16 @@ public class CamaraFragment  extends BaseFragment {
                         //Glide.with(getActivity().getApplicationContext()).load(uri).into(imagenActual);  //Cargamos la imagen en el imagen view
                        //Lo subimos tambn a la base de datos para poder visualizarlas luego
                         ImagenFirebase img= new ImagenFirebase(nombreFoto.getText().toString(),uri.toString());
-                        String id= mDatabaseRef.push().getKey();
-                        mDatabaseRef.child(id).setValue(nombreFoto.getText().toString()+"###"+uri.toString());
+                        String id= mDatabaseRef.push().getKey();  //He creado una base de datos en tiempo real, para guardar el nombre con la referencia de la foto y asi poder recoger todas las imagenes q hay subidas
+                        mDatabaseRef.child(id).setValue(nombreFoto.getText().toString()+"###"+uri.toString()); //Añadimos un child a la bbdd con los valores a guardar. nombre y url
                     }
                 });
-                Toast.makeText(getActivity(), getString(R.string.camara_toast_Sehasubidolaimagen), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Sehasubidolaimagen), Toast.LENGTH_SHORT).show(); //Mostramos q se ha subido la imagen
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehapodidosubirlaimagen), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehapodidosubirlaimagen), Toast.LENGTH_SHORT).show(); //Mostramos toast q no s ha podido subir la imagen
             }
         });
 
@@ -264,7 +264,7 @@ public class CamaraFragment  extends BaseFragment {
         //Cuando se rota la pantalla tendremos q guardar x informacion. la posicion en la que estamos y el tiempo q falta del contador para accabar
         super.onSaveInstanceState(outState);
         Log.d("Logs","GUARDAR "+String.valueOf(contentUri));
-        outState.putString("uri", String.valueOf(contentUri));
+        outState.putString("uri", String.valueOf(contentUri)); //Guardamos la uri d la foto
     }
 
     public void permisoCamara(){  //Pedimos permiso para abrir la camara, cuando este concedido abrimos la camara
@@ -285,7 +285,7 @@ public class CamaraFragment  extends BaseFragment {
                 Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehanconcedidolospermisosparaabrirlacamara), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);  //ACTIVITY_RECOGNITION
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);    //request code 1, para saber cuando se ha reaccionado
             Log.d("Logs","PEDIR PERMISO");
         }
         else {
@@ -294,7 +294,7 @@ public class CamaraFragment  extends BaseFragment {
     }
 
 
-    public void permisoGuardar(){  //Permiso de escritura
+    public void permisoGuardar(){  //Permiso de lectura
         Log.d("Logs","PERMISO GUARDAR");
         boolean permiso=false;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)!=
@@ -312,7 +312,7 @@ public class CamaraFragment  extends BaseFragment {
                 Toast.makeText(getActivity(), getString(R.string.camara_toast_Nosehaconcedidoelpermisodeescritura), Toast.LENGTH_SHORT).show();
             }
             //PEDIR EL PERMISO
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);  //ACTIVITY_RECOGNITION
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);  //request code 2, para saber cuando se ha reaccionado
             Log.d("Logs","PEDIR PERMISO");
         }
         else {
@@ -324,17 +324,17 @@ public class CamaraFragment  extends BaseFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        if(requestCode==1){
+        if(requestCode==1){ //viene de permisoCamara
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {  //Si se ha concedido el permiso, pedimos el d guardar
                     permisoGuardar();
                 }
                 return;
         }
-        if(requestCode==2){
+        if(requestCode==2){ //viene de permisoGuardar
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    abrirCamara();
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) { //Si se ha concedido el permiso
+                    abrirCamara(); //Abrimos la camara
                 }
         }
     }

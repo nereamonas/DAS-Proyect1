@@ -43,7 +43,7 @@ public class AlarmNotificationManagerBroadcastReceiver extends BroadcastReceiver
                 }
                 elBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notif))
                         .setSmallIcon(R.drawable.ic_notif)
-                        .setContentTitle(intent.getStringExtra("titulo"))  //intent.getStringExtra("titulo")
+                        .setContentTitle(intent.getStringExtra("titulo"))  //cogemos el mensaje que hemos escrito antes, para q sea personalizado
                         //.setContentText(context.getString(R.string.notif_cuerpo_hassuperadoelentrena))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setLights(Color.BLUE, 200, 200)

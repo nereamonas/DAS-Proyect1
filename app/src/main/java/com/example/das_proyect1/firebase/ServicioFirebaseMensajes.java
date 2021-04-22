@@ -39,12 +39,12 @@ public class ServicioFirebaseMensajes extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d("Logs","Tamaño data recibido: "+remoteMessage.getData().size());
         }
-        if (remoteMessage.getNotification() != null) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            if (prefs.contains("notif")) { //Comprobamos si existe
+        if (remoteMessage.getNotification() != null) { //cogemos la notif del mensaje. si es distinto de null
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this); //Cogemos las preferencias
+            if (prefs.contains("notif")) { //Comprobamos si existe notif
                 Boolean activadas = prefs.getBoolean("notif", true);  //Comprobamos si las notificaciones estan activadas
                 Log.d("Logs", "estado notificaciones: " + activadas);
-                if (activadas) {
+                if (activadas) { //Si tenemos las notif activadas, lanzamos la notificacion
                     NotificationManager elManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     NotificationCompat.Builder elBuilder = new NotificationCompat.Builder(this, "IdCanal");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,8 +58,8 @@ public class ServicioFirebaseMensajes extends FirebaseMessagingService {
 
                     elBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_notif))
                             .setSmallIcon(R.drawable.ic_notif)
-                            .setContentTitle(remoteMessage.getNotification().getTitle())
-                            .setContentText(remoteMessage.getNotification().getBody())
+                            .setContentTitle(remoteMessage.getNotification().getTitle()) //Cogemos el titulo
+                            .setContentText(remoteMessage.getNotification().getBody()) //Cogemos el cuerpo
                             .setVibrate(new long[]{0, 1000, 500, 1000})
                             .setAutoCancel(true)
                             .setContentIntent(pendingIntent);

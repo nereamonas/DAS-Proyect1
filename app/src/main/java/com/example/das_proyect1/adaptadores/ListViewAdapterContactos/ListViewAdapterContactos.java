@@ -19,7 +19,7 @@ public class ListViewAdapterContactos extends BaseAdapter {
 
     private Context contexto;
     private LayoutInflater inflater;
-    private ArrayList<Contacto> contactos;
+    private ArrayList<Contacto> contactos;  //Guardamos la lista d contactos
 
     public ListViewAdapterContactos(Context context, ArrayList<Contacto> contactos) {
         this.contexto=context;

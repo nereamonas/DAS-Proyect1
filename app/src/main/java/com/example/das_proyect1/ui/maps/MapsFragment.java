@@ -149,8 +149,9 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         if (savedInstanceState != null) {
             mapBundle = savedInstanceState.getBundle("MapViewBundleKey");
         }
+        //Primero pedimos permiso para leer las cordenadas
         permisoCordenadas();
-        if (continua) {
+        if (continua) { //Si el permiso esta concedido, podemos empezar a cargar las cosas
             empezar();
         }
 
@@ -200,7 +201,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         dialogo.show();
     }
 
-    public void permisoCordenadas() {
+    public void permisoCordenadas() { //Pedimos permiso para acceder a la ubicacion del usuario
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             Log.d("Logs", "NO ESTA CONCEDIDO");
@@ -214,7 +215,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                 Log.d("Logs", "NO SE HA CONCEDIDO");
             }
             //PEDIR EL PERMISO
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ACTIVITY_RECOGNITION
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);  //ponemos request code para recibir cuando se realice la accion
             Log.d("Logs", "PEDIR PERMISO");
 
         } else {
@@ -227,17 +228,17 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        if (requestCode == 1) {
+        if (requestCode == 1) { //Ya se ha respondido al permiso
             if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                continua = true;
-                empezar();
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) { //Si se ha aceptado el permiso
+                continua = true; //Continuar=true.
+                empezar(); //cargamos los datos iniciales
             }
             return;
         }
     }
 
-    public Double[] getCordenadas() {  //Metodo que returnea las cordenadas
+    public Double[] getCordenadas() {  //Metodo que returnea las cordenadas actuales del usu
         Double[] cordenadas = new Double[2];
         cordenadas[0] = Double.valueOf(43.0504629);  //Ponemos unas por defecto
         cordenadas[1] = Double.valueOf(-3.0070026);  //Ponemos una x defecto
@@ -254,11 +255,11 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            Log.d("Logs", "BN");
+                            Log.d("Logs", "Localización conseguida");
                             LatLng posicion = new LatLng(location.getLatitude(), location.getLongitude());
                             crearPuntoIni(posicion);
                         } else {
-                            Log.d("Logs", "BN PERO MAL");
+                            Log.d("Logs", "No se ha coonseguido la localizacion");
                         }
                     }
                 })
@@ -284,20 +285,18 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                 public void onLocationResult(LocationResult locationResult) {
                     super.onLocationResult(locationResult);
                     if (locationResult != null) {
-                        Log.d("Logs", "DOS - BN");
                         cordenadas[0] = locationResult.getLastLocation().getLatitude();
                         cordenadas[1] = locationResult.getLastLocation().getLongitude();
                         Log.d("Logs", "" + cordenadas[0] + "  " + cordenadas[1]);
                         actualizarPunto(cordenadas);
                     } else {
-                        Log.d("Logs", "DOS - BN PERO MAL");
+                        Log.d("Logs", "NO se ha actualizado la loc");
                     }
                 }
             };
 
             proveedordelocalizacion.requestLocationUpdates(peticion, actualizador, null);
 
-        Log.d("Logs", "antes del return: " + cordenadas[0] + "  " + cordenadas[1]);
         return cordenadas;
 
     }
@@ -336,20 +335,18 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
                         posUsuario.longitude
                 ));  //Marcamos cual es el origen
 
-        Log.d("Logs", "calculateDirections: destination: " + destination.toString());
         directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
-            public void onResult(DirectionsResult result) {
-                Log.d("Logs", "calculateDirections: routes: " + result.routes[0].toString());
-                Log.d("Logs", "calculateDirections: duration: " + result.routes[0].legs[0].duration);
-                Log.d("Logs", "calculateDirections: distance: " + result.routes[0].legs[0].distance);
-                Log.d("Logs", "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
+            public void onResult(DirectionsResult result) { //Printeamos todos los datos para ver la informacion del polyline
+                Log.d("Logs", "Direccion: ruta: " + result.routes[0].toString());
+                Log.d("Logs", "Direccion: duración: " + result.routes[0].legs[0].duration);
+                Log.d("Logs", "Direccion: distancia: " + result.routes[0].legs[0].distance);
                 addPolylinesToMap(result); //Añadimos el polyline
             }
 
             @Override
             public void onFailure(Throwable e) { //si falla mostramos log
-                Log.e("Logs", "calculateDirections: Failed to get directions: " + e.getMessage() );
+                Log.e("Logs", "No se ha podido conseguir la direccion " + e.getMessage() );
             }
         });
     }
@@ -358,14 +355,13 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Log.d("Logs", "run: result routes: " + result.routes.length);
+                Log.d("Logs", "Rutas encontradas: " + result.routes.length);
 
-                if(mPolylineData.size()>0){
-                    mPolylineData= new ArrayList<>();
-                }
+                //if(mPolylineData.size()>0){ //Si tenemos ya guardadas x lineas, eliminamos las guardadas actualmente y creamos un nuevo array.
+                //    mPolylineData= new ArrayList<>();
+                //}
                 int cont=1;
                 for(DirectionsRoute route: result.routes){  //Recorremos todas las rutas posibles que tengamos
-                    Log.d("Logs", "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
@@ -426,7 +422,7 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         super.onDetach();
     }
 
-    public void cancelarTodo(){
+    public void cancelarTodo(){ //Cancelamos to dos los elementos que tenemos inicializados para que no salten errores
         map=null;
         mGeoApiContext=null;
         posUsuario=null;
@@ -440,6 +436,5 @@ public class MapsFragment extends BaseFragment implements GoogleMap.OnPolylineCl
         peticion=null;
     }
 
-    //https://gist.github.com/mitchtabian/33d78c511fdb82694296ecf3ab3a05ce#file-addpolylinestomap-java
 
 }

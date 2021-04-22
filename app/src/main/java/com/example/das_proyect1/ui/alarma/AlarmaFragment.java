@@ -59,7 +59,7 @@ public class AlarmaFragment  extends BaseFragment {
         View root = inflater.inflate(R.layout.fragment_alarma, container, false);
 
 
-
+        //Recogemos todos los elementos
         horas= root.findViewById(R.id.editTextHoras);
         minutos= root.findViewById(R.id.editTextMinutos);
         mensaje=root.findViewById(R.id.editTextMensajeAlarma);
@@ -100,7 +100,7 @@ public class AlarmaFragment  extends BaseFragment {
         return root;
     }
 
-    public void dialogoElegirHora(){ //Mostramos un dialogo de reloj
+    public void dialogoElegirHora(){ //Mostramos un dialogo de reloj, para que el usuario pueda elegir la hora. y esta hora elegida, se pondra en los textview de horas y minutos
         calendario=Calendar.getInstance();
         horaActual=calendario.get(Calendar.HOUR_OF_DAY);
         minActual=calendario.get(Calendar.MINUTE);
@@ -114,7 +114,7 @@ public class AlarmaFragment  extends BaseFragment {
     }
 
 
-    public void establecerAlarma(){
+    public void establecerAlarma(){ //Creamos la alarma
         if (!horas.getText().toString().isEmpty()&&!minutos.getText().toString().isEmpty()) { //Si se ha elegido una hora, podemos crear la alarma
             Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM); //Intent de alarma
             intent.putExtra(AlarmClock.EXTRA_HOUR, Integer.parseInt(horas.getText().toString())); //Ponemos la h
@@ -136,18 +136,18 @@ public class AlarmaFragment  extends BaseFragment {
 
     }
 
-    public void crearNotif(){
-        Calendar calendar = Calendar.getInstance();
+    public void crearNotif(){ //Creamos una alarma para la notificacion
+        Calendar calendar = Calendar.getInstance(); //Creamos un calendario para añadir la hora q ha elegido el usuario
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horas.getText().toString()));//hora en formato 24h
         calendar.set(Calendar.MINUTE, Integer.parseInt(minutos.getText().toString())); //minuto
 
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), AlarmNotificationManagerBroadcastReceiver.class);
-        intent.putExtra("titulo",mensaje.getText().toString());
+        intent.putExtra("titulo",mensaje.getText().toString()); //Añadimos el mensaje que ha elegido el usuario
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Toast.makeText(getActivity(), getString(R.string.alarma_notifcacionProgramada), Toast.LENGTH_SHORT).show();
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); //programamos la alarma
+        Toast.makeText(getActivity(), getString(R.string.alarma_notifcacionProgramada), Toast.LENGTH_SHORT).show(); //Mostramos toast diciendo q s ha programado
     }
 
     public void getDiasSeleccionados(){ //Miramos los dias seleccionados con el radio button y los añadimos a la lista en el caso de estar seleccionados

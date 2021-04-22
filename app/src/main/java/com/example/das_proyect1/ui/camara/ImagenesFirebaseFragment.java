@@ -48,7 +48,7 @@ public class ImagenesFirebaseFragment extends BaseFragment {
                     String value = d.getValue(String.class);
                     String[] split = value.split("###");
                     ImagenFirebase img = new ImagenFirebase(split[0], split[1]); //Cogemos sus datos, creamos una imagen y la añadimos a la lista
-                    imagenes.add(img);
+                    imagenes.add(img); //Añadimos a la lista
                 }
                 AdaptadorRecyclerImagenesFirebase eladaptador = new AdaptadorRecyclerImagenesFirebase(getContext(),imagenes);
                 lalista.setAdapter(eladaptador);
